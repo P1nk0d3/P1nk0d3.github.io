@@ -20,23 +20,27 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
 
-    <meta property="og:type" content="website">
-<meta property="og:title" content="Pinkode神秘小作坊">
-<meta property="og:url" content="http://example.com/index.html">
+    <meta name="description" content="Find the Lattice问题分析该挑战涉及一个基于格的加密系统。加密过程使用公钥 (q, h) 加密消息 m，生成密文 e。解密需要私钥 (f, g)。从代码中可知，加密算法满足关系式 f * h ≡ g (mod q)，即存在整数 k 使得 f * h &#x3D; g + k * q。这可以表示为向量关系：[f \cdot (1, h) - k \cdot (0, q) &#x3D; (f, g">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Find the lattice">
+<meta property="og:url" content="http://example.com/2025/12/12/Find-the-lattice/index.html">
 <meta property="og:site_name" content="Pinkode神秘小作坊">
+<meta property="og:description" content="Find the Lattice问题分析该挑战涉及一个基于格的加密系统。加密过程使用公钥 (q, h) 加密消息 m，生成密文 e。解密需要私钥 (f, g)。从代码中可知，加密算法满足关系式 f * h ≡ g (mod q)，即存在整数 k 使得 f * h &#x3D; g + k * q。这可以表示为向量关系：[f \cdot (1, h) - k \cdot (0, q) &#x3D; (f, g">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-12-12T06:14:33.000Z">
+<meta property="article:modified_time" content="2025-12-12T06:18:09.952Z">
 <meta property="article:author" content="Mofan">
-<meta property="article:tag" content="CRYPTO,ai安全">
+<meta property="article:tag" content="crypto">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://example.com/">
+<link rel="canonical" href="http://example.com/2025/12/12/Find-the-lattice/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":true,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"index.html","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2025/12/12/Find-the-lattice/","path":"2025/12/12/Find-the-lattice/","title":"Find the lattice"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Pinkode神秘小作坊</title>
+<title>Find the lattice | Pinkode神秘小作坊</title>
   
 
 
@@ -185,7 +189,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">Pinkode神秘小作坊</h1>
+      <p class="site-title">Pinkode神秘小作坊</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">学习记录</p>
@@ -239,7 +243,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -252,6 +256,7 @@ document.addEventListener('DOMContentLoaded', function() {
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Find-the-Lattice"><span class="nav-number">1.</span> <span class="nav-text">Find the Lattice</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E5%88%86%E6%9E%90"><span class="nav-number">1.1.</span> <span class="nav-text">问题分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%94%BB%E5%87%BB%E5%8E%9F%E7%90%86"><span class="nav-number">1.2.</span> <span class="nav-text">攻击原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E6%AD%A5%E9%AA%A4"><span class="nav-number">1.3.</span> <span class="nav-text">算法步骤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.4.</span> <span class="nav-text">代码实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">1.5.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -301,16 +306,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
     </div>
 
-    <div class="main-inner index posts-expand">
+    <div class="main-inner post posts-expand">
 
-    
+
+  
 
 
 <div class="post-block">
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2025/12/12/Find-the-lattice/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -324,13 +330,13 @@ document.addEventListener('DOMContentLoaded', function() {
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Pinkode神秘小作坊">
+      <meta itemprop="name" content="Find the lattice | Pinkode神秘小作坊">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/12/12/Find-the-lattice/" class="post-title-link" itemprop="url">Find the lattice</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          Find the lattice
+        </h1>
 
         <div class="post-meta-container">
           <div class="post-meta">
@@ -354,6 +360,13 @@ document.addEventListener('DOMContentLoaded', function() {
     </span>
 
   
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
 </div>
 
         </div>
@@ -362,8 +375,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     
     
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="Find-the-Lattice"><a href="#Find-the-Lattice" class="headerlink" title="Find the Lattice"></a>Find the Lattice</h1><h2 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a>问题分析</h2><p>该挑战涉及一个基于格的加密系统。加密过程使用公钥 <code>(q, h)</code> 加密消息 <code>m</code>，生成密文 <code>e</code>。解密需要私钥 <code>(f, g)</code>。从代码中可知，加密算法满足关系式 <code>f * h ≡ g (mod q)</code>，即存在整数 <code>k</code> 使得 <code>f * h = g + k * q</code>。这可以表示为向量关系：<br>[<br>f \cdot (1, h) - k \cdot (0, q) &#x3D; (f, g)<br>]<br>因此，向量 <code>(f, g)</code> 是由基向量 <code>(1, h)</code> 和 <code>(0, q)</code> 张成的二维格中的一个短向量。由于 <code>f</code> 和 <code>g</code> 的大小约为 <code>O(\sqrt&#123;q&#125;)</code>，而格的行列式为 <code>q</code>，因此 <code>(f, g)</code> 很可能是格中的一个短向量，可以通过格约化算法找到。</p>
+    <div class="post-body" itemprop="articleBody"><h1 id="Find-the-Lattice"><a href="#Find-the-Lattice" class="headerlink" title="Find the Lattice"></a>Find the Lattice</h1><h2 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a>问题分析</h2><p>该挑战涉及一个基于格的加密系统。加密过程使用公钥 <code>(q, h)</code> 加密消息 <code>m</code>，生成密文 <code>e</code>。解密需要私钥 <code>(f, g)</code>。从代码中可知，加密算法满足关系式 <code>f * h ≡ g (mod q)</code>，即存在整数 <code>k</code> 使得 <code>f * h = g + k * q</code>。这可以表示为向量关系：<br>[<br>f \cdot (1, h) - k \cdot (0, q) &#x3D; (f, g)<br>]<br>因此，向量 <code>(f, g)</code> 是由基向量 <code>(1, h)</code> 和 <code>(0, q)</code> 张成的二维格中的一个短向量。由于 <code>f</code> 和 <code>g</code> 的大小约为 <code>O(\sqrt&#123;q&#125;)</code>，而格的行列式为 <code>q</code>，因此 <code>(f, g)</code> 很可能是格中的一个短向量，可以通过格约化算法找到。</p>
 <h2 id="攻击原理"><a href="#攻击原理" class="headerlink" title="攻击原理"></a>攻击原理</h2><p>使用高斯格约化算法（Gaussian Lattice Reduction）可以将格基约化为最短基向量。在二维格中，该算法能高效找到最短向量。通过将基向量 <code>v1 = (1, h)</code> 和 <code>v2 = (0, q)</code> 约化，我们有望得到向量 <code>(f, g)</code>，从而恢复私钥。</p>
 <h2 id="算法步骤"><a href="#算法步骤" class="headerlink" title="算法步骤"></a>算法步骤</h2><p>高斯格约化算法步骤如下：</p>
 <ol>
@@ -385,7 +397,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本挑战展示了如何利用格约化攻击基于格的加密系统。通过将加密问题转化为格中的短向量问题，并使用高斯约化算法，可以有效地恢复私钥并解密消息。这种方法在密码分析中常见，强调了设计加密系统时避免线性结构的重要性。</p>
 
-      
     </div>
 
     
@@ -393,90 +404,25 @@ document.addEventListener('DOMContentLoaded', function() {
     
 
     <footer class="post-footer">
-        <div class="post-eof"></div>
-      
+          <div class="post-tags">
+              <a href="/tags/crypto/" rel="tag"># crypto</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/12/11/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87blog/" rel="prev" title="我的第一篇blog">
+                  <i class="fa fa-angle-left"></i> 我的第一篇blog
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
     </footer>
   </article>
 </div>
 
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2025/12/11/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87blog/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/1.jpg">
-      <meta itemprop="name" content="Mofan">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Pinkode神秘小作坊">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Pinkode神秘小作坊">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/12/11/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87blog/" class="post-title-link" itemprop="url">我的第一篇blog</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2025-12-11 17:54:28 / 修改时间：18:04:38" itemprop="dateCreated datePublished" datetime="2025-12-11T17:54:28+08:00">2025-12-11</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>你好，世界 👋  </p>
-<hr>
-<h2 id="🧠-关于我"><a href="#🧠-关于我" class="headerlink" title="🧠 关于我"></a>🧠 关于我</h2><p>我是吉林大学 <strong>网络空间安全专业</strong> 的二年级学生，目前主要专注于 <strong>CTF</strong> 中 <strong>Crypto</strong> 方向的学习与分享。</p>
-<h2 id="📝-近期动态"><a href="#📝-近期动态" class="headerlink" title="📝 近期动态"></a>📝 近期动态</h2><ul>
-<li>在我的博客持续更新 <strong>CTF Crypto 题目的 Writeups</strong>，记录解题思路与知识点总结。</li>
-<li>正在尝试入门 <strong>AI 安全</strong>，计划逐步开展一些小项目，探索机器学习与安全的交叉领域。</li>
-</ul>
-<h2 id="🚧-未来计划"><a href="#🚧-未来计划" class="headerlink" title="🚧 未来计划"></a>🚧 未来计划</h2><p>我会继续更新CTF相关的内容，并逐渐加入 AI 安全的学习笔记与实践记录。<br><strong>欢迎关注，一起交流，敬请期待！</strong></p>
-<hr>
-<p><em>📬 联系邮箱：[<a href="mailto:&#x33;&#53;&#x31;&#x33;&#x37;&#50;&#x38;&#50;&#48;&#x33;&#64;&#x71;&#x71;&#x2e;&#x63;&#x6f;&#x6d;">&#x33;&#53;&#x31;&#x33;&#x37;&#50;&#x38;&#50;&#48;&#x33;&#64;&#x71;&#x71;&#x2e;&#x63;&#x6f;&#x6d;</a>]</em></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
 
 
 

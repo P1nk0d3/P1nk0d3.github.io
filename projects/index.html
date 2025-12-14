@@ -81,100 +81,7 @@
 </head>
 
 <script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script>
-<!-- 全局音乐播放器容器 -->
-<div id="global-music-player" style="display: none;">
-  <div id="aplayer"></div>
-</div>
-
-<!-- 音乐控制按钮 -->
-<div id="music-control-btn" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999;">
-  <button onclick="toggleMusicPlayer()" style="background: #37c6c0; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; font-size: 20px;">
-    🎵
-  </button>
-</div>
-<script>
-// 全局音乐播放器配置
-let globalAP = null;
-let isMusicInitialized = false;
-
-// 初始化音乐播放器
-function initMusicPlayer() {
-  if (isMusicInitialized) return;
-  
-  // 确保 APlayer 已加载
-  if (typeof APlayer === 'undefined') {
-    console.log('APlayer 未加载，等待重试...');
-    setTimeout(initMusicPlayer, 500);
-    return;
-  }
-  
-  try {
-    globalAP = new APlayer({
-      container: document.getElementById('aplayer'),
-      fixed: true,
-      autoplay: false,
-      audio: [{
-        name: 'My Foolish Heart~',
-        artist: '椎名林檎',
-        url: '/music/bg-music.mp3',
-        cover: '/images/music-cover.jpg'
-      }]
-    });
-    
-    isMusicInitialized = true;
-    console.log('音乐播放器初始化成功');
-    
-  } catch (error) {
-    console.error('音乐播放器初始化失败:', error);
-  }
-}
-
-// 切换播放器显示/隐藏
-function toggleMusicPlayer() {
-  const playerContainer = document.getElementById('global-music-player');
-  const controlBtn = document.getElementById('music-control-btn');
-  
-  if (playerContainer.style.display === 'none') {
-    playerContainer.style.display = 'block';
-    controlBtn.innerHTML = '<button onclick="toggleMusicPlayer()" style="background: #ff6b6b; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; font-size: 20px;">❌</button>';
-    
-    // 延迟初始化，确保DOM已更新
-    setTimeout(initMusicPlayer, 100);
-  } else {
-    playerContainer.style.display = 'none';
-    controlBtn.innerHTML = '<button onclick="toggleMusicPlayer()" style="background: #37c6c0; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; font-size: 20px;">🎵</button>';
-    
-    if (globalAP) {
-      globalAP.pause();
-    }
-  }
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-  const ap = new APlayer({
-    container: document.getElementById('aplayer'),
-    fixed: true,
-    autoplay: false,
-    mini: false,
-    // 移除音频封面
-    theme: '#37c6c0',
-    loop: 'all',
-    order: 'list',
-    preload: 'auto',
-    volume: 0.7,
-    mutex: true,
-    lrcType: 0, // 禁用歌词
-    audio: [{
-      name: 'My Foolish Heart~',          // 改为你的真实歌曲名
-      artist: '椎名林檎',  // 改为真实歌手名
-      url: '/music/bg-music.mp3'
-      // 不包含cover和lrc
-    }]
-  });
-  
-  window.globalAP = ap;
-});
-</script>
+<div id="aplayer"></div>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
   <div class="headband"></div>
@@ -386,16 +293,101 @@ document.addEventListener('DOMContentLoaded', function() {
     <span class="toggle-line"></span>
   </div>
   <div class="sidebar-dimmer"></div>
-  <div class="back-to-top" role="button" aria-label="返回顶部">
-    <i class="fa fa-arrow-up fa-lg"></i>
-    <span>0%</span>
-  </div>
   <div class="reading-progress-bar"></div>
   <a role="button" class="book-mark-link book-mark-link-fixed"></a>
 
 <noscript>
   <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
 </noscript>
+<!-- 全局音乐播放器 -->
+<script>
+// 等待页面和APlayer资源加载完成
+document.addEventListener('DOMContentLoaded', function() {
+  // 延迟初始化，确保所有资源已加载
+  setTimeout(initMusicPlayer, 500);
+});
 
+function initMusicPlayer() {
+  // 检查是否已存在播放器
+  if (window.aplayerInstance) {
+    console.log('APlayer实例已存在');
+    return;
+  }
+  
+  // 检查APlayer是否已加载
+  if (typeof APlayer === 'undefined') {
+    console.error('APlayer未加载，尝试动态加载');
+    loadAPlayerResources();
+    return;
+  }
+  
+  // 创建播放器实例
+  try {
+    window.aplayerInstance = new APlayer({
+      container: document.getElementById('aplayer'),
+      fixed: true,
+      autoplay: false,
+      theme: '#37c6c0',
+      loop: 'all',
+      order: 'list',
+      preload: 'auto',
+      volume: 0.7,
+      mutex: true,
+      lrcType: 0,
+      audio: [{
+        name: 'My Foolish Heart~',
+        artist: '椎名林檎',
+        url: '/music/bg-music.mp3',
+        cover: '/images/music-covers/R.jpg',
+        theme: '#37c6c0'
+      }]
+    });
+    
+    console.log('APlayer初始化成功');
+    
+    // 确保播放器在底部
+    const playerEl = document.querySelector('.aplayer');
+    if (playerEl) {
+      playerEl.style.position = 'fixed';
+      playerEl.style.bottom = '0';
+      playerEl.style.left = '0';
+      playerEl.style.right = '0';
+      playerEl.style.zIndex = '9999';
+    }
+    
+  } catch (error) {
+    console.error('APlayer初始化失败:', error);
+  }
+}
+
+// 动态加载APlayer资源（备用方案）
+function loadAPlayerResources() {
+  // 加载CSS
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = 'https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css';
+  document.head.appendChild(link);
+  
+  // 加载JS
+  const script = document.createElement('script');
+  script.src = 'https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js';
+  script.onload = initMusicPlayer;
+  script.onerror = function() {
+    console.error('APlayer资源加载失败');
+  };
+  document.head.appendChild(script);
+}
+
+// 解决浏览器自动播放限制
+document.addEventListener('click', function() {
+  const audioElements = document.querySelectorAll('audio');
+  audioElements.forEach(audio => {
+    audio.volume = 0.5; // 设置默认音量
+  });
+}, { once: true });
+</script>
+
+<!-- 播放器容器 -->
+<div id="aplayer"></div>
 </body>
 </html>

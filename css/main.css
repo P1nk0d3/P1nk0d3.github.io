@@ -1251,7 +1251,7 @@ pre code {
     vertical-align: middle;
   }
   .links-of-author a::before {
-    background: #7dff1c;
+    background: #d9c9ff;
     display: inline-block;
     margin-right: 3px;
     transform: translateY(-2px);
@@ -1682,49 +1682,6 @@ pre code {
   50%, 70% {
     transform: scale(1.1);
   }
-}
-.back-to-top {
-  font-size: 12px;
-  align-items: center;
-  bottom: -100px;
-  color: #fff;
-  display: flex;
-  height: 26px;
-  transition: 0.2s ease-in-out;
-  transition-property: bottom;
-  background: #222;
-  cursor: pointer;
-  opacity: 0.6;
-  position: fixed;
-  z-index: 30;
-  left: 30px;
-}
-.back-to-top span {
-  margin-right: 8px;
-  display: none;
-}
-.back-to-top .fa {
-  text-align: center;
-  width: 26px;
-}
-@media (max-width: 991px) {
-  .back-to-top {
-    left: 20px;
-  }
-}
-.back-to-top:hover {
-  opacity: 0.8;
-}
-@media (max-width: 991px) {
-  .back-to-top {
-    opacity: 0.8;
-  }
-}
-.back-to-top:hover {
-  color: #fc6423;
-}
-.back-to-top.back-to-top-on {
-  bottom: 30px;
 }
 .reading-progress-bar {
   --progress: 0;
@@ -2779,5 +2736,146 @@ header.header {
 @media (max-width: 767px) {
   .pagination {
     margin-bottom: 10px;
+  }
+}
+/* 在styles.styl中添加移动端优化 */
+@media (max-width: 768px) {
+  .home-hero {
+    padding: 40px 0 20px !important;
+    min-height: 180px !important;
+  }
+  .home-hero h1 {
+    font-size: 2em !important;
+  }
+  .home-hero .button-group {
+    flex-direction: column;
+    gap: 10px !important;
+  }
+  .home-hero a {
+    min-width: 100% !important;
+  }
+}
+/* 横幅区域动画效果 */
+.home-hero .container::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.03) 50%, transparent 70%);
+  animation: shine 8s infinite linear;
+  z-index: 1;
+}
+/* 按钮悬浮效果增强 */
+.home-hero a:hover::before {
+  left: 0;
+}
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .home-hero h1 {
+    font-size: 2.5em !important;
+  }
+  .home-hero p {
+    font-size: 1.1em !important;
+  }
+  .home-hero a {
+    padding: 12px 25px !important;
+    font-size: 1em !important;
+  }
+}
+/* 全宽度搜索长条响应式样式 */
+@media (max-width: 768px) {
+  .full-width-search {
+    padding: 30px 0 !important;
+  }
+  .full-width-search h2 {
+    font-size: 1.8em !important;
+  }
+  .full-width-search .full-search-form {
+    flex-direction: column !important;
+    border-radius: 20px !important;
+    padding: 0 !important;
+    background: none !important;
+    box-shadow: none !important;
+  }
+  .full-width-search .full-search-form input {
+    border-radius: 25px !important;
+    margin-bottom: 10px !important;
+    padding: 16px 20px !important;
+    background: #fff !important;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1) !important;
+  }
+  .full-width-search .full-search-form button {
+    border-radius: 25px !important;
+    padding: 16px !important;
+    min-width: auto !important;
+    width: 100% !important;
+  }
+}
+/* 搜索框动画效果 */
+.full-search-form:focus-within {
+  animation: searchGlow 2s ease-in-out infinite;
+}
+/* 热门标签悬停效果 */
+.full-width-search a:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2) !important;
+}
+body {
+  padding-bottom: 70px !important;
+}
+/* APlayer 基本样式调整 */
+.aplayer {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 9999 !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+}
+/* 确保播放器不遮挡内容 */
+body {
+  padding-bottom: 66px !important;
+}
+/* 文章内容避开播放器 */
+.post-body {
+  margin-bottom: 20px !important;
+}
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .aplayer {
+    font-size: 14px !important;
+  }
+  body {
+    padding-bottom: 80px !important;
+  }
+}
+/* 修复可能的样式冲突 */
+.aplayer .aplayer-info {
+  border-bottom: none !important;
+}
+.aplayer .aplayer-lrc:before,
+.aplayer .aplayer-lrc:after {
+  display: none !important;
+}
+@keyframes shine {
+  0% {
+    transform: translateX(-100%) translateY(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) translateY(100%) rotate(45deg);
+  }
+}
+@keyframes searchGlow {
+  0% {
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  }
+  50% {
+    box-shadow: 0 15px 40px rgba(102,126,234,0.3);
+  }
+  100% {
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
   }
 }

@@ -20,27 +20,28 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"giscus","storage":true,"lazyload":true,"nav":{"giscus":{"text":"GitHub 评论","order":1}}},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="你好，世界 👋    🧠 关于我我是吉林大学 网络空间安全专业 的二年级学生，目前主要专注于 CTF 中 Crypto 方向的学习与分享。 📝 近期动态 在我的博客持续更新 CTF Crypto 题目的 Writeups，记录解题思路与知识点总结。 正在尝试入门 AI 安全，计划逐步开展一些小项目，探索机器学习与安全的交叉领域。  🚧 未来计划我会继续更新CTF相关的内容，并逐渐加入 AI">
+    <meta name="description" content="babyrsa（攻防世界）a1d729b93242433e86305169bf4765a9 (2).txt 题目描述题目提供了以下信息：  模数 n 加密指数 e &#x3D; 0x10001 密文 c  服务器提供了一个”奇偶性预言机”（Parity Oracle）服务，当用户发送密文（十六进制格式）时，服务器会返回解密后明文的奇偶性（even或odd），然后立即断开连接。 目标是通过利用这个奇偶性预言机">
 <meta property="og:type" content="article">
-<meta property="og:title" content="我的第一篇blog">
-<meta property="og:url" content="http://example.com/2025/12/11/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87blog/index.html">
+<meta property="og:title" content="babyrsa（攻防世界）">
+<meta property="og:url" content="http://example.com/2025/12/14/babyrsa%EF%BC%88%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%EF%BC%89/index.html">
 <meta property="og:site_name" content="Pinkode神秘小作坊">
-<meta property="og:description" content="你好，世界 👋    🧠 关于我我是吉林大学 网络空间安全专业 的二年级学生，目前主要专注于 CTF 中 Crypto 方向的学习与分享。 📝 近期动态 在我的博客持续更新 CTF Crypto 题目的 Writeups，记录解题思路与知识点总结。 正在尝试入门 AI 安全，计划逐步开展一些小项目，探索机器学习与安全的交叉领域。  🚧 未来计划我会继续更新CTF相关的内容，并逐渐加入 AI">
+<meta property="og:description" content="babyrsa（攻防世界）a1d729b93242433e86305169bf4765a9 (2).txt 题目描述题目提供了以下信息：  模数 n 加密指数 e &#x3D; 0x10001 密文 c  服务器提供了一个”奇偶性预言机”（Parity Oracle）服务，当用户发送密文（十六进制格式）时，服务器会返回解密后明文的奇偶性（even或odd），然后立即断开连接。 目标是通过利用这个奇偶性预言机">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2025-12-11T09:54:28.000Z">
-<meta property="article:modified_time" content="2025-12-14T13:42:48.668Z">
+<meta property="article:published_time" content="2025-12-14T15:31:39.000Z">
+<meta property="article:modified_time" content="2025-12-14T16:05:39.831Z">
 <meta property="article:author" content="Mofan">
-<meta property="article:tag" content="第一篇blog">
+<meta property="article:tag" content="crypto">
+<meta property="article:tag" content="标签1">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://example.com/2025/12/11/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87blog/">
+<link rel="canonical" href="http://example.com/2025/12/14/babyrsa%EF%BC%88%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%EF%BC%89/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2025/12/11/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87blog/","path":"2025/12/11/我的第一篇blog/","title":"我的第一篇blog"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2025/12/14/babyrsa%EF%BC%88%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%EF%BC%89/","path":"2025/12/14/babyrsa（攻防世界）/","title":"babyrsa（攻防世界）"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>我的第一篇blog | Pinkode神秘小作坊</title>
+<title>babyrsa（攻防世界） | Pinkode神秘小作坊</title>
   
 
 
@@ -79,7 +80,119 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-</head>
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
 
 <script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script>
 <div id="aplayer"></div>
@@ -169,7 +282,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%A7%A0-%E5%85%B3%E4%BA%8E%E6%88%91"><span class="nav-number">1.</span> <span class="nav-text">🧠 关于我</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%93%9D-%E8%BF%91%E6%9C%9F%E5%8A%A8%E6%80%81"><span class="nav-number">2.</span> <span class="nav-text">📝 近期动态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%9A%A7-%E6%9C%AA%E6%9D%A5%E8%AE%A1%E5%88%92"><span class="nav-number">3.</span> <span class="nav-text">🚧 未来计划</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#babyrsa%EF%BC%88%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">babyrsa（攻防世界）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0"><span class="nav-number">1.1.</span> <span class="nav-text">题目描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF"><span class="nav-number">1.2.</span> <span class="nav-text">解题思路</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#RSA%E5%A5%87%E5%81%B6%E6%80%A7%E6%94%BB%E5%87%BB%E5%8E%9F%E7%90%86"><span class="nav-number">1.2.1.</span> <span class="nav-text">RSA奇偶性攻击原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%94%BB%E5%87%BB%E6%AD%A5%E9%AA%A4"><span class="nav-number">1.2.2.</span> <span class="nav-text">攻击步骤</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%8C%E6%95%B4%E6%94%BB%E5%87%BB%E4%BB%A3%E7%A0%81"><span class="nav-number">1.3.</span> <span class="nav-text">完整攻击代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%A7%E8%A1%8C%E7%BB%93%E6%9E%9C"><span class="nav-number">1.4.</span> <span class="nav-text">执行结果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">1.5.</span> <span class="nav-text"></span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -231,7 +344,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2025/12/11/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87blog/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/12/14/babyrsa%EF%BC%88%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/1.jpg">
@@ -244,12 +357,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="我的第一篇blog | Pinkode神秘小作坊">
+      <meta itemprop="name" content="babyrsa（攻防世界） | Pinkode神秘小作坊">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          我的第一篇blog
+          babyrsa（攻防世界）
         </h1>
 
         <div class="post-meta-container">
@@ -260,14 +373,23 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2025-12-11 17:54:28" itemprop="dateCreated datePublished" datetime="2025-12-11T17:54:28+08:00">2025-12-11</time>
+      <time title="创建时间：2025-12-14 23:31:39" itemprop="dateCreated datePublished" datetime="2025-12-14T23:31:39+08:00">2025-12-14</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-12-14 21:42:48" itemprop="dateModified" datetime="2025-12-14T21:42:48+08:00">2025-12-14</time>
+      <time title="修改时间：2025-12-15 00:05:39" itemprop="dateModified" datetime="2025-12-15T00:05:39+08:00">2025-12-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CRYPTO/" itemprop="url" rel="index"><span itemprop="name">CRYPTO</span></a>
+        </span>
     </span>
 
   
@@ -286,17 +408,59 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>你好，世界 👋  </p>
-<hr>
-<h2 id="🧠-关于我"><a href="#🧠-关于我" class="headerlink" title="🧠 关于我"></a>🧠 关于我</h2><p>我是吉林大学 <strong>网络空间安全专业</strong> 的二年级学生，目前主要专注于 <strong>CTF</strong> 中 <strong>Crypto</strong> 方向的学习与分享。</p>
-<h2 id="📝-近期动态"><a href="#📝-近期动态" class="headerlink" title="📝 近期动态"></a>📝 近期动态</h2><ul>
-<li>在我的博客持续更新 <strong>CTF Crypto 题目的 Writeups</strong>，记录解题思路与知识点总结。</li>
-<li>正在尝试入门 <strong>AI 安全</strong>，计划逐步开展一些小项目，探索机器学习与安全的交叉领域。</li>
+    <div class="post-body" itemprop="articleBody"><h1 id="babyrsa（攻防世界）"><a href="#babyrsa（攻防世界）" class="headerlink" title="babyrsa（攻防世界）"></a>babyrsa（攻防世界）</h1><p><a href="attachment:22e56407-c86e-4573-8ba4-a26015f4a4db:a1d729b93242433e86305169bf4765a9_(2).txt">a1d729b93242433e86305169bf4765a9 (2).txt</a></p>
+<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>题目提供了以下信息：</p>
+<ul>
+<li>模数 n</li>
+<li>加密指数 e = 0x10001</li>
+<li>密文 c</li>
 </ul>
-<h2 id="🚧-未来计划"><a href="#🚧-未来计划" class="headerlink" title="🚧 未来计划"></a>🚧 未来计划</h2><p>我会继续更新CTF相关的内容，并逐渐加入 AI 安全的学习笔记与实践记录。<br><strong>欢迎关注，一起交流，敬请期待！</strong></p>
-<hr>
-<p><em>📬 联系邮箱：[<a href="mailto:&#51;&#x35;&#x31;&#51;&#55;&#50;&#x38;&#x32;&#x30;&#51;&#64;&#x71;&#x71;&#46;&#x63;&#x6f;&#x6d;">&#51;&#x35;&#x31;&#51;&#55;&#50;&#x38;&#x32;&#x30;&#51;&#64;&#x71;&#x71;&#46;&#x63;&#x6f;&#x6d;</a>]</em></p>
+<p>服务器提供了一个”奇偶性预言机”（Parity Oracle）服务，当用户发送密文（十六进制格式）时，服务器会返回解密后明文的奇偶性（even或odd），然后立即断开连接。</p>
+<p>目标是通过利用这个奇偶性预言机，恢复原始明文m，从而获取flag。</p>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><h3 id="RSA奇偶性攻击原理"><a href="#RSA奇偶性攻击原理" class="headerlink" title="RSA奇偶性攻击原理"></a>RSA奇偶性攻击原理</h3><p>RSA加密具有同态性质，即：</p>
+<ul>
+<li>如果密文c对应明文m，那么密文c’ = c × 2^e mod n对应的明文是m’ = 2m mod n</li>
+</ul>
+<p>利用这个性质，我们可以构造一系列查询，通过分析2m mod n的奇偶性来推断m相对于n/2的大小关系：</p>
+<ol>
+<li>如果2m mod n是偶数 → 2m &lt; n → m &lt; n/2</li>
+<li>如果2m mod n是奇数 → 2m ≥ n → m ≥ n/2</li>
+</ol>
+<p>通过多次这样的查询，我们可以使用二分搜索法逐步缩小m的可能范围，最终精确确定m的值。</p>
+<h3 id="攻击步骤"><a href="#攻击步骤" class="headerlink" title="攻击步骤"></a>攻击步骤</h3><ol>
+<li><strong>初始化参数</strong>：<ul>
+<li>已知n、e、c</li>
+<li>设置初始搜索区间[0, n]</li>
+</ul>
+</li>
+<li><strong>二分搜索攻击</strong>：<ul>
+<li>对于每个比特位（共需log₂n次查询）：<ul>
+<li>计算新密文c’ = c × (2^e)^k mod n（其中k是查询次数）</li>
+<li>发送c’给服务器，获取奇偶性</li>
+<li>根据奇偶性更新搜索区间：<ul>
+<li>偶数：m在左半区间 → high = mid</li>
+<li>奇数：m在右半区间 → low = mid</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>恢复明文</strong>：<ul>
+<li>搜索完成后，区间边界收敛到m</li>
+<li>将m转换为字节串，得到flag</li>
+</ul>
+</li>
+</ol>
+<h2 id="完整攻击代码"><a href="#完整攻击代码" class="headerlink" title="完整攻击代码"></a>完整攻击代码</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line">import socket</span><br><span class="line">from time import sleep</span><br><span class="line">from Crypto.Util.number import long_to_bytes</span><br><span class="line"></span><br><span class="line">def parse_parameters(data):</span><br><span class="line">    e = 0x10001</span><br><span class="line">    n = 0x0b765daa79117afe1a77da7ff8122872bbcbddb322bb078fe0786dc40c9033fadd639adc48c3f2627fb7cb59bb0658707fe516967464439bdec2d6479fa3745f57c0a5ca255812f0884978b2a8aaeb750e0228cbe28a1e5a63bf0309b32a577eecea66f7610a9a4e720649129e9dc2115db9d4f34dc17f8b0806213c035e22f2c5054ae584b440def00afbccd458d020cae5fd1138be6507bc0b1a10da7e75def484c5fc1fcb13d11be691670cf38b487de9c4bde6c2c689be5adab08b486599b619a0790c0b2d70c9c461346966bcbae53c5007d0146fc520fa6e3106fbfc89905220778870a7119831c17f98628563ca020652d18d72203529a784ca73716db</span><br><span class="line">    c = 0x4f377296a19b3a25078d614e1c92ff632d3e3ded772c4445b75e468a9405de05d15c77532964120ae11f8655b68a630607df0568a7439bc694486ae50b5c0c8507e5eecdea4654eeff3e75fb8396e505a36b0af40bd5011990663a7655b91c9e6ed2d770525e4698dec9455db17db38fa4b99b53438b9e09000187949327980ca903d0eef114afc42b771657ea5458a4cb399212e943d139b7ceb6d5721f546b75cd53d65e025f4df7eb8637152ecbb6725962c7f66b714556d754f41555c691a34a798515f1e2a69c129047cb29a9eef466c206a7f4dbc2cea1a46a39ad3349a7db56c1c997dc181b1afcb76fa1bbbf118a4ab5c515e274ab2250dba1872be0</span><br><span class="line">    return n, e, c</span><br><span class="line"></span><br><span class="line">def main():</span><br><span class="line">    host = "61.147.171.105"</span><br><span class="line">    port = 62308</span><br><span class="line">    num_queries = 0</span><br><span class="line"></span><br><span class="line">    # 第一步：获取初始参数</span><br><span class="line">    s = socket.socket()</span><br><span class="line">    s.connect((host, port))</span><br><span class="line">    data = s.recv(4096).decode()</span><br><span class="line">    n, e, c = parse_parameters(data)</span><br><span class="line">    s.close()</span><br><span class="line"></span><br><span class="line">    print(f"Got parameters: n={n}\ne={e}\nc={c}")</span><br><span class="line"></span><br><span class="line">    # 初始化攻击参数</span><br><span class="line">    low = 0</span><br><span class="line">    high = n</span><br><span class="line">    multiplier = 1</span><br><span class="line">    two_e = pow(2, e, n)</span><br><span class="line">    bit_length = n.bit_length()</span><br><span class="line"></span><br><span class="line">    print(f"Starting attack, requires {bit_length} queries...")</span><br><span class="line"></span><br><span class="line">    # 进行二分搜索攻击</span><br><span class="line">    for i in range(bit_length):</span><br><span class="line">        multiplier = (multiplier * two_e) % n</span><br><span class="line">        current_ct = (c * multiplier) % n</span><br><span class="line">        hex_ct = format(current_ct, 'x')</span><br><span class="line"></span><br><span class="line">        # 连接服务器并发送查询</span><br><span class="line">        while True:</span><br><span class="line">            try:</span><br><span class="line">                s = socket.socket()</span><br><span class="line">                s.connect((host, port))</span><br><span class="line">                s.recv(1024)</span><br><span class="line">                s.send(hex_ct.encode() + b'\n')</span><br><span class="line">                response = s.recv(1024).decode()</span><br><span class="line">                s.close()</span><br><span class="line"></span><br><span class="line">                if 'even' in response:</span><br><span class="line">                    parity = 0</span><br><span class="line">                elif 'odd' in response:</span><br><span class="line">                    parity = 1</span><br><span class="line">                else:</span><br><span class="line">                    print(f"Unexpected response: {response}")</span><br><span class="line">                    continue</span><br><span class="line"></span><br><span class="line">                num_queries += 1</span><br><span class="line">                if num_queries % 50 == 0:</span><br><span class="line">                    print(f"Query {num_queries}/{bit_length}, parity={parity}")</span><br><span class="line"></span><br><span class="line">                # 更新搜索区间</span><br><span class="line">                mid = (low + high) // 2</span><br><span class="line">                if parity == 0:</span><br><span class="line">                    high = mid</span><br><span class="line">                else:</span><br><span class="line">                    low = mid</span><br><span class="line">                break</span><br><span class="line"></span><br><span class="line">            except Exception as e:</span><br><span class="line">                print(f"Error: {e}, retrying...")</span><br><span class="line">                sleep(1)</span><br><span class="line"></span><br><span class="line">    m = high</span><br><span class="line">    print(f"\nAttack completed after {num_queries} queries")</span><br><span class="line">    print(f"Recovered m: {m}")</span><br><span class="line"></span><br><span class="line">    flag = long_to_bytes(m).decode()</span><br><span class="line">    print(flag)</span><br><span class="line"></span><br><span class="line">if __name__ == "__main__":</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
 
+<h2 id="执行结果"><a href="#执行结果" class="headerlink" title="执行结果"></a>执行结果</h2><p>运行攻击脚本后，程序会进行约2048次查询（对于2048位的RSA模数n），最终恢复出明文m，转换为字符串后得到flag：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">QCTF{RSA_parity_oracle_is_funa</span><br></pre></td></tr></table></figure>
+
+<p>根据flag的语义和常见格式，可以推断完整flag应为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">QCTF{RSA_parity_oracle_is_fun}</span><br></pre></td></tr></table></figure>
+
+<h2 id=""><a href="#" class="headerlink" title=""></a></h2>
     </div>
 
     
@@ -305,18 +469,19 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E7%AC%AC%E4%B8%80%E7%AF%87blog/" rel="tag"># 第一篇blog</a>
+              <a href="/tags/crypto/" rel="tag"># crypto</a>
+              <a href="/tags/%E6%A0%87%E7%AD%BE1/" rel="tag"># 标签1</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
+                <a href="/2025/12/14/%E7%AE%80%E5%8D%95%E7%9A%84rsa%EF%BC%88%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%EF%BC%89/" rel="prev" title="简单的rsa（攻防世界）">
+                  <i class="fa fa-angle-left"></i> 简单的rsa（攻防世界）
+                </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2025/12/12/Find-the-lattice/" rel="next" title="Find the lattice">
-                  Find the lattice <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>

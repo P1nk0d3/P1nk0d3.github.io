@@ -1,21 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>我的第一篇blog</title>
-    <url>/2025/12/11/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87blog/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>你好，世界 👋  </p>
-<hr>
-<h2 id="🧠-关于我"><a href="#🧠-关于我" class="headerlink" title="🧠 关于我"></a>🧠 关于我</h2><p>我是吉林大学 <strong>网络空间安全专业</strong> 的二年级学生，目前主要专注于 <strong>CTF</strong> 中 <strong>Crypto</strong> 方向的学习与分享。</p>
-<h2 id="📝-近期动态"><a href="#📝-近期动态" class="headerlink" title="📝 近期动态"></a>📝 近期动态</h2><ul>
-<li>在我的博客持续更新 <strong>CTF Crypto 题目的 Writeups</strong>，记录解题思路与知识点总结。</li>
-<li>正在尝试入门 <strong>AI 安全</strong>，计划逐步开展一些小项目，探索机器学习与安全的交叉领域。</li>
-</ul>
-<h2 id="🚧-未来计划"><a href="#🚧-未来计划" class="headerlink" title="🚧 未来计划"></a>🚧 未来计划</h2><p>我会继续更新CTF相关的内容，并逐渐加入 AI 安全的学习笔记与实践记录。<br><strong>欢迎关注，一起交流，敬请期待！</strong></p>
-<hr>
-<p><em>📬 联系邮箱：[<a href="mailto:&#x33;&#53;&#x31;&#51;&#55;&#x32;&#x38;&#x32;&#48;&#51;&#x40;&#x71;&#x71;&#46;&#99;&#x6f;&#x6d;">&#x33;&#53;&#x31;&#51;&#55;&#x32;&#x38;&#x32;&#48;&#51;&#x40;&#x71;&#x71;&#46;&#99;&#x6f;&#x6d;</a>]</em></p>
-]]></content>
+    <title>Backpack Cryptography</title>
+    <url>/2025/12/14/Backpack-Cryptography/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="Backpack-Cryptography"><a href="#Backpack-Cryptography" class="headerlink" title="Backpack Cryptography"></a>Backpack Cryptography</h1><p><strong>Challenge files:</strong></p>
+<p>   -<a href="https://cryptohack.org/static/challenges/source_83f1e856dc3e1d8c6628abb227a797cb.py">source.py</a></p>
+<p>   -<a href="https://cryptohack.org/static/challenges/output_e2fe6134f7dd580dcedacdbe71846d0e.txt">output.txt</a></p>
+<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>这是一个背包密码系统（Backpack Cryptography）的破解问题。题目提供了加密算法的源代码和输出结果，需要从公钥和加密后的flag中恢复原始消息。</p>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>背包密码系统基于超递增序列，通过模数q和乘数r进行伪装。攻击的基本思想是使用格基约化（LLL算法）来寻找短向量，从而恢复明文，而不需要找出正确的模数q和乘数r。</p>
+<p>简单来说LLL硬上就结束了。</p>
+<h2 id="解题过程"><a href="#解题过程" class="headerlink" title="解题过程"></a>解题过程</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">from sage.all import *</span><br><span class="line"></span><br><span class="line"># 从output.txt读取数据</span><br><span class="line">with open('output.txt', 'r') as f:</span><br><span class="line">    data = f.read()</span><br><span class="line"></span><br><span class="line"># 解析公钥和加密的flag</span><br><span class="line">public_key = eval(data.split('Public key:')[1].split('Encrypted Flag:')[0].strip())</span><br><span class="line">encrypted_flag = int(data.split('Encrypted Flag:')[1].strip())</span><br><span class="line"></span><br><span class="line">n = len(public_key)</span><br><span class="line"></span><br><span class="line"># 构造格基</span><br><span class="line">M = matrix(ZZ, n+1, n+1)</span><br><span class="line">for i in range(n):</span><br><span class="line">    M[i, i] = 2</span><br><span class="line">    M[i, n] = public_key[i]</span><br><span class="line">M[n, :n] = 1</span><br><span class="line">M[n, n] = encrypted_flag</span><br><span class="line"></span><br><span class="line"># 应用LLL算法</span><br><span class="line">M_lll = M.LLL()</span><br><span class="line"></span><br><span class="line"># 寻找包含解的行</span><br><span class="line">for row in M_lll:</span><br><span class="line">    if row[-1] == 0:</span><br><span class="line">        # 提取比特位</span><br><span class="line">        bits = []</span><br><span class="line">        for i in range(n):</span><br><span class="line">            if abs(row[i]) == 1:</span><br><span class="line">                bits.append(1 if row[i] &gt; 0 else 0)</span><br><span class="line">            else:</span><br><span class="line">                bits.append(0)</span><br><span class="line"></span><br><span class="line">        # 转换为字节</span><br><span class="line">        flag = 0</span><br><span class="line">        for i in range(n):</span><br><span class="line">            flag |= bits[i] &lt;&lt; i</span><br><span class="line"></span><br><span class="line">        # 转换为字符串</span><br><span class="line">        try:</span><br><span class="line">            flag_bytes = int.to_bytes(flag, (n+7)//8, 'little')</span><br><span class="line">            flag_str = flag_bytes.decode('ascii')</span><br><span class="line">            if 'crypto{' in flag_str:</span><br><span class="line">                print(f"Found flag: {flag_str}")</span><br><span class="line">                break</span><br><span class="line">        except:</span><br><span class="line">            continue</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>CRYPTO</category>
+      </categories>
       <tags>
-        <tag>第一篇blog</tag>
+        <tag>crypto</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Crossed Wires</title>
+    <url>/2025/12/14/Crossed-Wires/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="Crossed-Wires"><a href="#Crossed-Wires" class="headerlink" title="Crossed Wires"></a>Crossed Wires</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p><strong>Challenge files:</strong></p>
+<p>-<a href="https://cryptohack.org/static/challenges/source_b3c3c786c649d363d27995545cf95dab.py">source.py</a></p>
+<p>-<a href="https://cryptohack.org/static/challenges/output_434cbf2b937bac1177bed299b2049a92.txt">output.txt</a></p>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><ol>
+<li>利用已知的私钥(N, d)分解N，得到p和q</li>
+<li>计算欧拉函数φ(N) = (p-1)*(q-1)</li>
+<li>对朋友公钥列表进行反向操作，依次解密</li>
+<li>最终得到原始flag</li>
+</ol>
+<h2 id="解题过程"><a href="#解题过程" class="headerlink" title="解题过程"></a>解题过程</h2><h3 id="步骤1：分析加密过程"><a href="#步骤1：分析加密过程" class="headerlink" title="步骤1：分析加密过程"></a>步骤1：分析加密过程</h3><p>从源代码分析加密流程：</p>
+<ul>
+<li>原始flag先被转换为大整数</li>
+<li>然后依次使用5个朋友的公钥进行RSA加密</li>
+<li>每个朋友使用相同的N但不同的e（17位素数）</li>
+</ul>
+<h3 id="步骤2：已知d分解N的算法"><a href="#步骤2：已知d分解N的算法" class="headerlink" title="步骤2：已知d分解N的算法"></a>步骤2：已知d分解N的算法</h3><p>使用标准的已知d分解N算法：<a href="https://di-mgt.com.au/rsa_factorize_n.html">RSA: how to factorize N given d</a></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1. 设 k=e⋅d−1</span><br><span class="line">2. 随机选择 g∈{2,…,N−1}</span><br><span class="line">3. 将 k 表示为 k=2s⋅t，其中 t 为奇数</span><br><span class="line">4. 计算 x=gtmodN</span><br><span class="line">5. 如果 x!=1 且 gcd(x−1,N)&gt;1，则找到因子</span><br><span class="line">6. 否则继续尝试不同的 g</span><br></pre></td></tr></table></figure>
+<h3 id="步骤3：实现解密代码"><a href="#步骤3：实现解密代码" class="headerlink" title="步骤3：实现解密代码"></a>步骤3：实现解密代码</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">from Crypto.Util.number import long_to_bytes</span><br><span class="line">import math</span><br><span class="line">from sympy import nextprime, gcd</span><br><span class="line"></span><br><span class="line"># 从output.txt读取数据</span><br><span class="line">with open('output.txt', 'r') as f:</span><br><span class="line">    data = f.read()</span><br><span class="line"></span><br><span class="line"># 解析数据</span><br><span class="line">my_key = eval(data.split("My private key:")[1].split("My Friend's public keys:")[0].strip())</span><br><span class="line">friend_keys = eval(data.split("My Friend's public keys:")[1].split("Encrypted flag:")[0].strip())</span><br><span class="line">encrypted_flag = int(data.split("Encrypted flag:")[1].strip())</span><br><span class="line"></span><br><span class="line">N, d = my_key</span><br><span class="line">e = 0x10001  # 65537</span><br><span class="line"></span><br><span class="line"># 已知d分解N的算法</span><br><span class="line">def factorize_N(N, e, d):</span><br><span class="line">    k = e * d - 1</span><br><span class="line">    g = 2</span><br><span class="line">    while True:</span><br><span class="line">        # 将k表示为k = 2^s * t，其中t为奇数</span><br><span class="line">        t = k</span><br><span class="line">        while t % 2 == 0:</span><br><span class="line">            t //= 2</span><br><span class="line">            x = pow(g, t, N)</span><br><span class="line">            y = gcd(x - 1, N)</span><br><span class="line">            if y &gt; 1 and y &lt; N:</span><br><span class="line">                p = y</span><br><span class="line">                q = N // y</span><br><span class="line">                return p, q</span><br><span class="line">        g = nextprime(g)</span><br><span class="line"></span><br><span class="line"># 分解N得到p和q</span><br><span class="line">p, q = factorize_N(N, e, d)</span><br><span class="line">print(f"Found factors: p={p}, q={q}")</span><br><span class="line"></span><br><span class="line"># 计算欧拉函数</span><br><span class="line">phi = (p - 1) * (q - 1)</span><br><span class="line"></span><br><span class="line"># 反向解密（从最后一个朋友开始）</span><br><span class="line">friend_keys.reverse()</span><br><span class="line">current = encrypted_flag</span><br><span class="line">for _, friend_e in friend_keys:</span><br><span class="line">    # 计算朋友的私钥指数</span><br><span class="line">    friend_d = pow(friend_e, -1, phi)</span><br><span class="line">    # 解密</span><br><span class="line">    current = pow(current, friend_d, N)</span><br><span class="line"></span><br><span class="line"># 转换为字节</span><br><span class="line">flag = long_to_bytes(current)</span><br><span class="line">print(f"Flag: {flag.decode()}")</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>CRYPTO</category>
+      </categories>
+      <tags>
+        <tag>crypto</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SuanP01y</title>
+    <url>/2025/12/14/SuanP01y/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="RCTF-2025-SuanP01y"><a href="#RCTF-2025-SuanP01y" class="headerlink" title="RCTF 2025 SuanP01y"></a>RCTF 2025 SuanP01y</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>这是一个基于多项式环和有理重构的密码分析问题。题目涉及在有限域GF(2)上的多项式环中解决有理重构问题，并利用重构结果进行AES解密。</p>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><ol>
+<li>分析题目中的多项式环结构和有理重构问题</li>
+<li>实现多项式有理重构算法</li>
+<li>利用重构结果生成AES密钥</li>
+<li>通过穷举循环平移找到正确的解密密钥</li>
+</ol>
+<h2 id="解题过程"><a href="#解题过程" class="headerlink" title="解题过程"></a>解题过程</h2><h3 id="步骤1：理解多项式环结构"><a href="#步骤1：理解多项式环结构" class="headerlink" title="步骤1：理解多项式环结构"></a>步骤1：理解多项式环结构</h3><p>题目工作在有限域GF(2)上的多项式环，模数为m(x)=xr−1，其中r=16381。</p>
+<p>数学表示：</p>
+<ul>
+<li>基础环：R=GF(2)[x]</li>
+<li>商环：S=R/⟨xr−1⟩</li>
+</ul>
+<h3 id="步骤2：多项式有理重构原理"><a href="#步骤2：多项式有理重构原理" class="headerlink" title="步骤2：多项式有理重构原理"></a>步骤2：多项式有理重构原理</h3><p>有理重构问题：给定模多项式M(x)和多项式H(x)，寻找A(x)和B(x)满足：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">H(x)≡B(x)A(x)(modM(x))</span><br></pre></td></tr></table></figure>
+
+<p>其中：</p>
+<ol>
+<li>gcd(B(x),M(x))=1</li>
+<li>A(x)和B(x)的次数限制较小（本题中汉明重量d=41）</li>
+</ol>
+<h3 id="步骤3：扩展欧几里得算法实现"><a href="#步骤3：扩展欧几里得算法实现" class="headerlink" title="步骤3：扩展欧几里得算法实现"></a>步骤3：扩展欧几里得算法实现</h3><p>使用扩展欧几里得算法进行有理重构：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">def rational_reconstruction(hint_poly):</span><br><span class="line">    r0, r1 = m, R(hint_poly)</span><br><span class="line">    t0, t1 = R(0), R(1)</span><br><span class="line">    step = 0</span><br><span class="line"></span><br><span class="line">    while r1 != 0:</span><br><span class="line">        q = r0 // r1</span><br><span class="line">        r0, r1 = r1, r0 + q * r1  # 在GF(2)上，加法等同于异或</span><br><span class="line">        t0, t1 = t1, t0 + q * t1</span><br><span class="line">        step += 1</span><br><span class="line"></span><br><span class="line">        if hwt(r0) == d and hwt(t0) == d:</span><br><span class="line">            return r0, t0</span><br><span class="line"></span><br><span class="line">    print("Fail")</span><br><span class="line">    return None, None</span><br></pre></td></tr></table></figure>
+
+<p>算法步骤详解：</p>
+<ol>
+<li><strong>初始化</strong>：r0=M(x), r1=H(x), t0=0, t1=1</li>
+<li><strong>迭代计算</strong>：<ul>
+<li>计算商式：q=r0÷r1</li>
+<li>更新余数：r0,r1=r1,r0−q⋅r1</li>
+<li>更新系数：t0,t1=t1,t0−q⋅t1</li>
+</ul>
+</li>
+<li><strong>终止条件</strong>：当r0和t0的汉明重量都等于d=41时返回</li>
+</ol>
+<h3 id="步骤4：汉明重量计算"><a href="#步骤4：汉明重量计算" class="headerlink" title="步骤4：汉明重量计算"></a>步骤4：汉明重量计算</h3><p>汉明重量定义为多项式中非零系数的个数：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">def hwt(poly):</span><br><span class="line">    return len(poly.exponents())</span><br></pre></td></tr></table></figure>
+
+<p>在GF(2)上，非零系数即为1，因此汉明重量就是多项式中项的数量。</p>
+<h3 id="步骤5：多项式解析"><a href="#步骤5：多项式解析" class="headerlink" title="步骤5：多项式解析"></a>步骤5：多项式解析</h3><p>从字符串形式解析多项式：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hint_str = lines[0].split('=')[1].strip()</span><br><span class="line">exps = []</span><br><span class="line">for term in hint_str.split('+'):</span><br><span class="line">    term = term.strip()</span><br><span class="line">    if not term:</span><br><span class="line">        continue</span><br><span class="line">    if term == '1':</span><br><span class="line">        exps.append(0)</span><br><span class="line">    elif term == 'X':</span><br><span class="line">        exps.append(1)</span><br><span class="line">    elif term.startswith('X^'):</span><br><span class="line">        exps.append(int(term[2:]))</span><br><span class="line"></span><br><span class="line">hint_poly = sum(x**e for e in exps)</span><br></pre></td></tr></table></figure>
+
+<p>将形如”1 + X + X^2 + … + X^r”的字符串转换为多项式对象。</p>
+<h3 id="步骤6：循环平移与解密"><a href="#步骤6：循环平移与解密" class="headerlink" title="步骤6：循环平移与解密"></a>步骤6：循环平移与解密</h3><p>对重构得到的B(x)进行所有可能的循环平移：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">B_S = S(B)</span><br><span class="line">nonce = b"suanp01y"</span><br><span class="line"></span><br><span class="line">for k in range(r):</span><br><span class="line">    h0_candidate = B_S * (X**k)  # 循环平移</span><br><span class="line">    key = md5(str(h0_candidate).encode()).digest()</span><br><span class="line"></span><br><span class="line">    try:</span><br><span class="line">        cipher = AES.new(key, AES.MODE_CTR, nonce=nonce)</span><br><span class="line">        flag = cipher.decrypt(ct)</span><br><span class="line">        if flag.startswith(b"RCTF{"):</span><br><span class="line">            print("Success!")</span><br><span class="line">            print(flag)</span><br><span class="line">            return</span><br><span class="line">    except:</span><br><span class="line">        continue</span><br></pre></td></tr></table></figure>
+
+<p>数学原理：在商环S=R/⟨xr−1⟩中，乘以xk相当于循环平移。</p>
+<h3 id="步骤7：完整解题代码"><a href="#步骤7：完整解题代码" class="headerlink" title="步骤7：完整解题代码"></a>步骤7：完整解题代码</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">from Crypto.Cipher import AES</span><br><span class="line">from hashlib import md5</span><br><span class="line"></span><br><span class="line">r = 16381</span><br><span class="line">d = 41</span><br><span class="line"></span><br><span class="line">R.&lt;x&gt; = PolynomialRing(GF(2))</span><br><span class="line">m = x^r - 1</span><br><span class="line">S.&lt;X&gt; = R.quo(m)</span><br><span class="line"></span><br><span class="line">def hwt(poly):</span><br><span class="line">    return len(poly.exponents())</span><br><span class="line"></span><br><span class="line">def rational_reconstruction(hint_poly):</span><br><span class="line">    r0, r1 = m, R(hint_poly)</span><br><span class="line">    t0, t1 = R(0), R(1)</span><br><span class="line">    step = 0</span><br><span class="line"></span><br><span class="line">    while r1 != 0:</span><br><span class="line">        q = r0 // r1</span><br><span class="line">        r0, r1 = r1, r0 + q * r1</span><br><span class="line">        t0, t1 = t1, t0 + q * t1</span><br><span class="line">        step += 1</span><br><span class="line"></span><br><span class="line">        if hwt(r0) == d and hwt(t0) == d:</span><br><span class="line">            return r0, t0</span><br><span class="line"></span><br><span class="line">    print("Fail")</span><br><span class="line">    return None, None</span><br><span class="line"></span><br><span class="line">def solve():</span><br><span class="line">    with open("output.txt", "r") as f:</span><br><span class="line">        lines = f.read().splitlines()</span><br><span class="line"></span><br><span class="line">    hint_str = lines[0].split('=')[1].strip()</span><br><span class="line">    exps = []</span><br><span class="line"></span><br><span class="line">    for term in hint_str.split('+'):</span><br><span class="line">        term = term.strip()</span><br><span class="line">        if not term:</span><br><span class="line">            continue</span><br><span class="line">        if term == '1':</span><br><span class="line">            exps.append(0)</span><br><span class="line">        elif term == 'X':</span><br><span class="line">            exps.append(1)</span><br><span class="line">        elif term.startswith('X^'):</span><br><span class="line">            exps.append(int(term[2:]))</span><br><span class="line"></span><br><span class="line">    hint_poly = sum(x**e for e in exps)</span><br><span class="line">    ct = bytes.fromhex(lines[1])</span><br><span class="line"></span><br><span class="line">    A, B = rational_reconstruction(hint_poly)</span><br><span class="line"></span><br><span class="line">    if B is None:</span><br><span class="line">        print("Fail")</span><br><span class="line">        return</span><br><span class="line"></span><br><span class="line">    B_S = S(B)</span><br><span class="line">    nonce = b"suanp01y"</span><br><span class="line"></span><br><span class="line">    for k in range(r):</span><br><span class="line">        h0_candidate = B_S * (X**k)</span><br><span class="line">        key = md5(str(h0_candidate).encode()).digest()</span><br><span class="line"></span><br><span class="line">        try:</span><br><span class="line">            cipher = AES.new(key, AES.MODE_CTR, nonce=nonce)</span><br><span class="line">            flag = cipher.decrypt(ct)</span><br><span class="line">            if flag.startswith(b"RCTF{"):</span><br><span class="line">                print("Success!")</span><br><span class="line">                print(flag)</span><br><span class="line">                return</span><br><span class="line">        except:</span><br><span class="line">            continue</span><br><span class="line"></span><br><span class="line">if __name__ == '__main__':</span><br><span class="line">    solve()</span><br></pre></td></tr></table></figure>
+
+<h2 id="数学原理详解"><a href="#数学原理详解" class="headerlink" title="数学原理详解"></a>数学原理详解</h2><h3 id="多项式环与商环"><a href="#多项式环与商环" class="headerlink" title="多项式环与商环"></a>多项式环与商环</h3><ul>
+<li><strong>多项式环</strong>：GF(2)[x]表示系数在GF(2)上的多项式环</li>
+<li><strong>商环构造</strong>：S=R/⟨m(x)⟩，其中m(x)=xr−1</li>
+<li><strong>循环性质</strong>：在商环S中，xr≡1，因此乘以xk实现循环平移</li>
+</ul>
+<h3 id="有理重构的数学基础"><a href="#有理重构的数学基础" class="headerlink" title="有理重构的数学基础"></a>有理重构的数学基础</h3><p>有理重构问题等价于寻找满足以下条件的多项式：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">H(x)⋅B(x)≡A(x)(modM(x))</span><br></pre></td></tr></table></figure>
+
+<p>其中A(x)和B(x)满足特定的大小约束（本题中为汉明重量约束）。</p>
+<h3 id="扩展欧几里得算法"><a href="#扩展欧几里得算法" class="headerlink" title="扩展欧几里得算法"></a>扩展欧几里得算法</h3><p>算法保证在有限步内找到满足条件的A(x)和B(x)，当满足：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">deg(A)+deg(B)≤deg(M)</span><br></pre></td></tr></table></figure>
+
+<p>时，解是唯一的。</p>
+]]></content>
+      <categories>
+        <category>CRYPTO</category>
+      </categories>
+      <tags>
+        <tag>crypto</tag>
       </tags>
   </entry>
   <entry>
@@ -27,6 +127,129 @@
       </categories>
       <tags>
         <tag>评论功能测试</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>我的第一篇blog</title>
+    <url>/2025/12/11/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87blog/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>你好，世界 👋  </p>
+<hr>
+<h2 id="🧠-关于我"><a href="#🧠-关于我" class="headerlink" title="🧠 关于我"></a>🧠 关于我</h2><p>我是吉林大学 <strong>网络空间安全专业</strong> 的二年级学生，目前主要专注于 <strong>CTF</strong> 中 <strong>Crypto</strong> 方向的学习与分享。</p>
+<h2 id="📝-近期动态"><a href="#📝-近期动态" class="headerlink" title="📝 近期动态"></a>📝 近期动态</h2><ul>
+<li>在我的博客持续更新 <strong>CTF Crypto 题目的 Writeups</strong>，记录解题思路与知识点总结。</li>
+<li>正在尝试入门 <strong>AI 安全</strong>，计划逐步开展一些小项目，探索机器学习与安全的交叉领域。</li>
+</ul>
+<h2 id="🚧-未来计划"><a href="#🚧-未来计划" class="headerlink" title="🚧 未来计划"></a>🚧 未来计划</h2><p>我会继续更新CTF相关的内容，并逐渐加入 AI 安全的学习笔记与实践记录。<br><strong>欢迎关注，一起交流，敬请期待！</strong></p>
+<hr>
+<p><em>📬 联系邮箱：[<a href="mailto:&#51;&#x35;&#x31;&#51;&#55;&#50;&#x38;&#x32;&#x30;&#51;&#64;&#x71;&#x71;&#46;&#x63;&#x6f;&#x6d;">&#51;&#x35;&#x31;&#51;&#55;&#50;&#x38;&#x32;&#x30;&#51;&#64;&#x71;&#x71;&#46;&#x63;&#x6f;&#x6d;</a>]</em></p>
+]]></content>
+      <tags>
+        <tag>第一篇blog</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>babyrsa（攻防世界）</title>
+    <url>/2025/12/14/babyrsa%EF%BC%88%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%EF%BC%89/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="babyrsa（攻防世界）"><a href="#babyrsa（攻防世界）" class="headerlink" title="babyrsa（攻防世界）"></a>babyrsa（攻防世界）</h1><p><a href="attachment:22e56407-c86e-4573-8ba4-a26015f4a4db:a1d729b93242433e86305169bf4765a9_(2).txt">a1d729b93242433e86305169bf4765a9 (2).txt</a></p>
+<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>题目提供了以下信息：</p>
+<ul>
+<li>模数 n</li>
+<li>加密指数 e = 0x10001</li>
+<li>密文 c</li>
+</ul>
+<p>服务器提供了一个”奇偶性预言机”（Parity Oracle）服务，当用户发送密文（十六进制格式）时，服务器会返回解密后明文的奇偶性（even或odd），然后立即断开连接。</p>
+<p>目标是通过利用这个奇偶性预言机，恢复原始明文m，从而获取flag。</p>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><h3 id="RSA奇偶性攻击原理"><a href="#RSA奇偶性攻击原理" class="headerlink" title="RSA奇偶性攻击原理"></a>RSA奇偶性攻击原理</h3><p>RSA加密具有同态性质，即：</p>
+<ul>
+<li>如果密文c对应明文m，那么密文c’ = c × 2^e mod n对应的明文是m’ = 2m mod n</li>
+</ul>
+<p>利用这个性质，我们可以构造一系列查询，通过分析2m mod n的奇偶性来推断m相对于n/2的大小关系：</p>
+<ol>
+<li>如果2m mod n是偶数 → 2m &lt; n → m &lt; n/2</li>
+<li>如果2m mod n是奇数 → 2m ≥ n → m ≥ n/2</li>
+</ol>
+<p>通过多次这样的查询，我们可以使用二分搜索法逐步缩小m的可能范围，最终精确确定m的值。</p>
+<h3 id="攻击步骤"><a href="#攻击步骤" class="headerlink" title="攻击步骤"></a>攻击步骤</h3><ol>
+<li><strong>初始化参数</strong>：<ul>
+<li>已知n、e、c</li>
+<li>设置初始搜索区间[0, n]</li>
+</ul>
+</li>
+<li><strong>二分搜索攻击</strong>：<ul>
+<li>对于每个比特位（共需log₂n次查询）：<ul>
+<li>计算新密文c’ = c × (2^e)^k mod n（其中k是查询次数）</li>
+<li>发送c’给服务器，获取奇偶性</li>
+<li>根据奇偶性更新搜索区间：<ul>
+<li>偶数：m在左半区间 → high = mid</li>
+<li>奇数：m在右半区间 → low = mid</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>恢复明文</strong>：<ul>
+<li>搜索完成后，区间边界收敛到m</li>
+<li>将m转换为字节串，得到flag</li>
+</ul>
+</li>
+</ol>
+<h2 id="完整攻击代码"><a href="#完整攻击代码" class="headerlink" title="完整攻击代码"></a>完整攻击代码</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import socket</span><br><span class="line">from time import sleep</span><br><span class="line">from Crypto.Util.number import long_to_bytes</span><br><span class="line"></span><br><span class="line">def parse_parameters(data):</span><br><span class="line">    e = 0x10001</span><br><span class="line">    n = 0x0b765daa79117afe1a77da7ff8122872bbcbddb322bb078fe0786dc40c9033fadd639adc48c3f2627fb7cb59bb0658707fe516967464439bdec2d6479fa3745f57c0a5ca255812f0884978b2a8aaeb750e0228cbe28a1e5a63bf0309b32a577eecea66f7610a9a4e720649129e9dc2115db9d4f34dc17f8b0806213c035e22f2c5054ae584b440def00afbccd458d020cae5fd1138be6507bc0b1a10da7e75def484c5fc1fcb13d11be691670cf38b487de9c4bde6c2c689be5adab08b486599b619a0790c0b2d70c9c461346966bcbae53c5007d0146fc520fa6e3106fbfc89905220778870a7119831c17f98628563ca020652d18d72203529a784ca73716db</span><br><span class="line">    c = 0x4f377296a19b3a25078d614e1c92ff632d3e3ded772c4445b75e468a9405de05d15c77532964120ae11f8655b68a630607df0568a7439bc694486ae50b5c0c8507e5eecdea4654eeff3e75fb8396e505a36b0af40bd5011990663a7655b91c9e6ed2d770525e4698dec9455db17db38fa4b99b53438b9e09000187949327980ca903d0eef114afc42b771657ea5458a4cb399212e943d139b7ceb6d5721f546b75cd53d65e025f4df7eb8637152ecbb6725962c7f66b714556d754f41555c691a34a798515f1e2a69c129047cb29a9eef466c206a7f4dbc2cea1a46a39ad3349a7db56c1c997dc181b1afcb76fa1bbbf118a4ab5c515e274ab2250dba1872be0</span><br><span class="line">    return n, e, c</span><br><span class="line"></span><br><span class="line">def main():</span><br><span class="line">    host = "61.147.171.105"</span><br><span class="line">    port = 62308</span><br><span class="line">    num_queries = 0</span><br><span class="line"></span><br><span class="line">    # 第一步：获取初始参数</span><br><span class="line">    s = socket.socket()</span><br><span class="line">    s.connect((host, port))</span><br><span class="line">    data = s.recv(4096).decode()</span><br><span class="line">    n, e, c = parse_parameters(data)</span><br><span class="line">    s.close()</span><br><span class="line"></span><br><span class="line">    print(f"Got parameters: n={n}\ne={e}\nc={c}")</span><br><span class="line"></span><br><span class="line">    # 初始化攻击参数</span><br><span class="line">    low = 0</span><br><span class="line">    high = n</span><br><span class="line">    multiplier = 1</span><br><span class="line">    two_e = pow(2, e, n)</span><br><span class="line">    bit_length = n.bit_length()</span><br><span class="line"></span><br><span class="line">    print(f"Starting attack, requires {bit_length} queries...")</span><br><span class="line"></span><br><span class="line">    # 进行二分搜索攻击</span><br><span class="line">    for i in range(bit_length):</span><br><span class="line">        multiplier = (multiplier * two_e) % n</span><br><span class="line">        current_ct = (c * multiplier) % n</span><br><span class="line">        hex_ct = format(current_ct, 'x')</span><br><span class="line"></span><br><span class="line">        # 连接服务器并发送查询</span><br><span class="line">        while True:</span><br><span class="line">            try:</span><br><span class="line">                s = socket.socket()</span><br><span class="line">                s.connect((host, port))</span><br><span class="line">                s.recv(1024)</span><br><span class="line">                s.send(hex_ct.encode() + b'\n')</span><br><span class="line">                response = s.recv(1024).decode()</span><br><span class="line">                s.close()</span><br><span class="line"></span><br><span class="line">                if 'even' in response:</span><br><span class="line">                    parity = 0</span><br><span class="line">                elif 'odd' in response:</span><br><span class="line">                    parity = 1</span><br><span class="line">                else:</span><br><span class="line">                    print(f"Unexpected response: {response}")</span><br><span class="line">                    continue</span><br><span class="line"></span><br><span class="line">                num_queries += 1</span><br><span class="line">                if num_queries % 50 == 0:</span><br><span class="line">                    print(f"Query {num_queries}/{bit_length}, parity={parity}")</span><br><span class="line"></span><br><span class="line">                # 更新搜索区间</span><br><span class="line">                mid = (low + high) // 2</span><br><span class="line">                if parity == 0:</span><br><span class="line">                    high = mid</span><br><span class="line">                else:</span><br><span class="line">                    low = mid</span><br><span class="line">                break</span><br><span class="line"></span><br><span class="line">            except Exception as e:</span><br><span class="line">                print(f"Error: {e}, retrying...")</span><br><span class="line">                sleep(1)</span><br><span class="line"></span><br><span class="line">    m = high</span><br><span class="line">    print(f"\nAttack completed after {num_queries} queries")</span><br><span class="line">    print(f"Recovered m: {m}")</span><br><span class="line"></span><br><span class="line">    flag = long_to_bytes(m).decode()</span><br><span class="line">    print(flag)</span><br><span class="line"></span><br><span class="line">if __name__ == "__main__":</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+<h2 id="执行结果"><a href="#执行结果" class="headerlink" title="执行结果"></a>执行结果</h2><p>运行攻击脚本后，程序会进行约2048次查询（对于2048位的RSA模数n），最终恢复出明文m，转换为字符串后得到flag：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">QCTF{RSA_parity_oracle_is_funa</span><br></pre></td></tr></table></figure>
+
+<p>根据flag的语义和常见格式，可以推断完整flag应为：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">QCTF{RSA_parity_oracle_is_fun}</span><br></pre></td></tr></table></figure>
+
+<h2 id=""><a href="#" class="headerlink" title=""></a></h2>]]></content>
+      <categories>
+        <category>CRYPTO</category>
+      </categories>
+      <tags>
+        <tag>crypto</tag>
+        <tag>标签1</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>简单的rsa（攻防世界）</title>
+    <url>/2025/12/14/%E7%AE%80%E5%8D%95%E7%9A%84rsa%EF%BC%88%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%EF%BC%89/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="简单的rsa（攻防世界）"><a href="#简单的rsa（攻防世界）" class="headerlink" title="简单的rsa（攻防世界）"></a>简单的rsa（攻防世界）</h1><p><a href="attachment:9a753b99-785a-485f-a250-f550d436a9de:7634d7960e85494bb9ae648ea871f085.py">7634d7960e85494bb9ae648ea871f085.py</a></p>
+<h2 id="题目分析"><a href="#题目分析" class="headerlink" title="题目分析"></a>题目分析</h2><p>这是一个基于RSA加密系统的密码题目，主要特点如下：</p>
+<ol>
+<li>首先生成标准的RSA参数（p, q, n, e, d）</li>
+<li>然后对原始素数p和q进行”破坏”处理</li>
+<li>使用破坏后的新素数生成新的RSA模数进行加密</li>
+</ol>
+<h3 id="关键代码分析"><a href="#关键代码分析" class="headerlink" title="关键代码分析"></a>关键代码分析</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">def destory(x, num):</span><br><span class="line">    while True:</span><br><span class="line">        dt = getRandomNBitInteger(num)  # 生成num位的随机数</span><br><span class="line">        r = x ^ dt  # 与原素数异或</span><br><span class="line">        if isPrime(r):  # 确保结果是素数</span><br><span class="line">            return r</span><br></pre></td></tr></table></figure>
+
+<p>破坏函数将原始素数p和q分别与900位的随机数进行异或操作，确保结果是素数。</p>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><h3 id="第一步：分解原始n"><a href="#第一步：分解原始n" class="headerlink" title="第一步：分解原始n"></a>第一步：分解原始n</h3><p>题目给出了原始的n, e, d，我们可以利用这些信息分解n：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">def factorize_n_with_d(n, e, d):</span><br><span class="line">    k = e * d - 1</span><br><span class="line">    s = 0</span><br><span class="line">    t = k</span><br><span class="line">    while t % 2 == 0:</span><br><span class="line">        s += 1</span><br><span class="line">        t //= 2</span><br><span class="line"></span><br><span class="line">    for _ in range(100):</span><br><span class="line">        g = 2</span><br><span class="line">        y = pow(g, t, n)</span><br><span class="line">        if y == 1 or y == n-1:</span><br><span class="line">            continue</span><br><span class="line">        for _ in range(s-1):</span><br><span class="line">            x = pow(y, 2, n)</span><br><span class="line">            if x == 1:</span><br><span class="line">                p = sympy.gcd(y-1, n)</span><br><span class="line">                if p != 1 and p != n and n % p == 0:</span><br><span class="line">                    q = n // p</span><br><span class="line">                    return p, q</span><br><span class="line">            elif x == n-1:</span><br><span class="line">                break</span><br><span class="line">            y = x</span><br><span class="line">        g = nextprime(g)</span><br></pre></td></tr></table></figure>
+
+<h3 id="第二步：利用Coppersmith攻击"><a href="#第二步：利用Coppersmith攻击" class="headerlink" title="第二步：利用Coppersmith攻击"></a>第二步：利用Coppersmith攻击</h3><p>由于破坏操作只改变了p和q的低900位，高位保持不变，我们可以使用Coppersmith方法进行攻击：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">p_high = int(bin(p)[2:2050-900],2)  # 提取p的高位(2048-900=1148位)</span><br><span class="line">p = p_high &lt;&lt; 900  # 左移900位，低位补0</span><br><span class="line"></span><br><span class="line">PR.&lt;x&gt; = PolynomialRing(Zmod(new_n))</span><br><span class="line">f = x + p  # 构造多项式f(x) = x + p_high*2^900</span><br><span class="line">roots = f.small_roots(X=2**900, beta=0.4)  # 寻找小根</span><br></pre></td></tr></table></figure>
+
+<h3 id="第三步：恢复新素数并解密"><a href="#第三步：恢复新素数并解密" class="headerlink" title="第三步：恢复新素数并解密"></a>第三步：恢复新素数并解密</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">if roots:</span><br><span class="line">    p += int(roots[0])  # 恢复完整的new_p</span><br><span class="line">    assert new_n % p == 0</span><br><span class="line">    q = new_n // p  # 计算new_q</span><br><span class="line"></span><br><span class="line">    phi = (p - 1) * (q - 1)</span><br><span class="line">    d = pow(e, -1, phi)  # 计算私钥</span><br><span class="line">    m = pow(enc_flag, d, new_n)  # 解密</span><br><span class="line">    print(long_to_bytes(m).decode())</span><br></pre></td></tr></table></figure>
+
+<h2 id="数学原理"><a href="#数学原理" class="headerlink" title="数学原理"></a>数学原理</h2><p>Coppersmith方法的核心思想是：如果知道一个数的高位，可以在多项式时间内恢复其低位。在这个题目中：</p>
+<ul>
+<li>我们知道原始素数p</li>
+<li>新素数new_p = p ⊕ dt，其中dt是900位的随机数</li>
+<li>因此new_p和p只有低900位不同，高位完全相同</li>
+<li>我们可以构造多项式f(x) = p_high × 2^900 + x，在模new_n下寻找小根x</li>
+</ul>
+<h2 id="解题代码"><a href="#解题代码" class="headerlink" title="解题代码"></a>解题代码</h2><p>完整的解题代码如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import sympy</span><br><span class="line">from Crypto.Util.number import long_to_bytes</span><br><span class="line">from sympy import nextprime</span><br><span class="line"></span><br><span class="line"># 第一步：分解原始n</span><br><span class="line">def factorize_n_with_d(n, e, d):</span><br><span class="line">    k = e * d - 1</span><br><span class="line">    s = 0</span><br><span class="line">    t = k</span><br><span class="line">    while t % 2 == 0:</span><br><span class="line">        s += 1</span><br><span class="line">        t //= 2</span><br><span class="line"></span><br><span class="line">    g = 2</span><br><span class="line">    for _ in range(100):</span><br><span class="line">        y = pow(g, t, n)</span><br><span class="line">        if y == 1 or y == n-1:</span><br><span class="line">            continue</span><br><span class="line">        for _ in range(s-1):</span><br><span class="line">            x = pow(y, 2, n)</span><br><span class="line">            if x == 1:</span><br><span class="line">                p = sympy.gcd(y-1, n)</span><br><span class="line">                if p != 1 and p != n and n % p == 0:</span><br><span class="line">                    q = n // p</span><br><span class="line">                    return p, q</span><br><span class="line">            elif x == n-1:</span><br><span class="line">                break</span><br><span class="line">            y = x</span><br><span class="line">        g = nextprime(g)</span><br><span class="line"></span><br><span class="line"># 给定参数</span><br><span class="line">n = 0x73cec712124b33c0294e01eb52e8c3cd2fe9ddbcbf457b3b950360063dfae42cbbe9855bd986bcfea0948fadfb252f5e2ff3c982ff47afb6596a496636f1fc5ecfe9f5db7620b23fe9e30d230aa9299ab9a78bfb5e0630fd1149259b2b2104ea65d2e27b89785e4bf01d0594d9f94575cbcc3383f63c5aabe4d5b48eb761cce3ab21689b3f3155b5f15efee240d5ac149318ff80bd72a75fccdc57402aa197b472d98758019df8e9edb31bda82967dc66bcad845df824775eeb66ee304664d7929e8405122f9b0a5406887729dbe9760eb62dd7018087723c07c07082d1d51035fb211a9fc6d8fb5b3ee5bb91af5e3d0b89addce289041a5683a1fe7dc06a3bae283062ba3febdd987b5ac9b9a8ae4b8b02b804accc0a413bb144680fd8d0d8d8bebe176e5a9121f7653c31ede984d234ccce50e688f7048a0bfdfc84004c006ae912c4d4e514c200883e8dabaeb4bf57a5f628eb4bd2e6688d9b7688bc3eed4ce03831be5044dedbd5fddc43a3274b26c990a0e444fcf4a607de59c4906dfd1ea111920c38b4a365c5838e9cf1a22b146aa7afbc6e2e29ebe35aee4bf4d2fbe186c0f359c71f80b8f6298ad38619168d5986a857f558017c546d6df896c690896601aabd48398e957b77ef0e15d6cda339050b74cda3328c34c889306d089efc95ff467a4a775d3e104642cd9819f002b5db8c5f39b4e8d1a83007276b8a0b7</span><br><span class="line">e = 0x10001</span><br><span class="line">d = 0x37f2646fd190ad1e9f95c50d97cf4590a21e1c766bfd382cafafa2bb41442ce9839aac47944e288de6abfec1b17be4675f492a47f3e600f85a3823df9299d32f46c8a372f39d961f9471914e257f55cf1ef3d7878783fc34b61e1d61da332879c8d9597b0f0dac988916ac349e1d73b615cfbfef778ceeccee4f63dc32b1b7d7213c9199b6acb1d8a5141c94d777a29b89f8e0aea457788eaa9ca43626a24c74ebab355c89e3747626d4899745d148500c91416c782f2b30c9332f5cd32a4d3144d2a407ce9acc00f99dc619d425586285350cff734cdba9d4fad636d7fcbabfa382965005d8343e36ffe72604e557bae5044435ad990b6dca6d922e64387cee4abc0574d2eeeb42dda977be1e1064f6a6b00e78db75a7bf8e6e0c2ac3c6a52b2e6670cad3c907d990e53a7a311ef7b097c7644ff6f2bf96573e47d33031eeabf22620bdbc254a8fff8b0fa6f90d320c45e8d9094c26401f78560e16f77d6e09bc219c9849f1b68dc84ed36eb0cec7df16c4672c16a6b704ef2185ce04539f08688b72d48f9491e55be0095ee74f9622e8ae6835381e2efcd520cd02d1eeeb09bc11ab75bc903053102bc92718f2bf8691561a40026e53e950674f712aaef8cc69360df54c1af8b1f4aef997371b8a108e9b193a51002fe8d61f3991153e7ebd9593d68cd03b2f252c3d9d7a5bf802dcd150bd86028bd3b07cb415b767d716c1</span><br><span class="line"></span><br><span class="line">new_n = 0x73cec712124b33c0294e01eb52e8c3cd2fe9ddbcbf457b3b950360063dfae42cbbe9855bd986bcfea0948fadfb252f5e2ff3c982ff47afb6596a496636f1fc5ecfe9f5db7620b23fe9e30d230aa9299ab9a78bfb5e0630fd1149259b2b2104ea65d2e27b89785e4bf01d0594d9f94575cbcc3383f63c5aabe4d5b48eb761cce3ab21689b3f3155b5f15efee240d5ac11cee2acbd019de7c06f607ea618b5cd735b5a6972d2b446a12ff58cf8314822fa5ea09d0963acd00441b2a1b37aca01d7f39052927db98a0bd5ca1c49a7ad67923e3aac30ecd33cc8b4b30a40cdb3acc721ee5da53a02977cee959affe672a668525eb78df96af0a14f4ac04fab68efa8eabe9535e1064a5fc2ff7cac9520210311db0c3bf91101bc55a67a81e4f69364c724ee6ad6bdc301df642c9392e9befa4ff0d65481adb6feac251cd207044587da9710809700246cb3c63e659a97249f5e7418568e37db2fb2c1115e719d6682bb2e89b4e23d40ba4c532f289e10e0b89a5647c486a09b9e376844171b229d74f871004d4945a702a391a04ac704f43809e972891e6ab33b3c0f03f0b6f9ae005b26be6e647a1865c727277423f59a595187ffbfea13501e23b6b57ef115eaa6febcb207a3112628652a39578847241c33989e84607b0f683b30ddf773348b07360b063d9120a397809591ca18a04cd32ad9cbfe0494ed3ae8d2c5b43fdb51cb</span><br><span class="line">enc_flag = 0x3b0487110b2d61683fc9e65717d6431281c25ceda38915c9c2ff16013066e8cbe9d5f6c1f05988333d96e861f1b216f85d537aa70f603b3d20487a18c5e0d3a03556be88f984f508803f4bb25300149e805204c91f7aea038e545cf588a29bcb20113f81b16d9aacdbd820aa48615a5227ab2f329423da0a254c8f318dff4a7b75cf48e5ac18abc2975fee111ee56297fd7778b49320f6427227f21c08391d7429c49b399c366db38467a339229048e50735dff071bf89dbbab22997071a6b5a16935f5b65032f2cefb9c670cddd1470f6bf16d7c46d0fff22b82b2c1d867f4faa60e5daaad35a15ac0413a17beb5371a06f22c646336ae5e5738cfc5e997860056fb8bf1e02f27031ecd2b7983df510c4cdebbc644ea49e99e2376b89a90be8c89e4995c6689cc39d01fcc8ffef416e49684c0a01fdffab4613cb8eddbfa9e14d9b2daca6ad57c4e440a049d04b915ecfd64095c549bb9d22fb502a740a7373c1961c8cb7a58604bcbca3e5a97e28d5f498061db7cfbf07085ec84f47856e88992ab08870cbdb050431260861d0bcc9bbdf9a4164b8581f1f67e86ab854db1769418e300d73cf902509c76969473d0ee1b70c3b24085942fa9782507b359ffe049b18832610b4555b9bfe8eeae14cec53ab21881475f81069a6a33d6e38e3825eeb13874da8f0c91160712090a092286ea3838d88020e459f795783ad099367</span><br><span class="line"></span><br><span class="line"># 分解原始n得到p和q</span><br><span class="line">p, q = factorize_n_with_d(n, e, d)</span><br><span class="line"></span><br><span class="line"># 第二步：使用Coppersmith攻击</span><br><span class="line">p_high = int(bin(p)[2:2050-900],2)  # 提取p的高1148位</span><br><span class="line">p_val = p_high &lt;&lt; 900  # 左移900位</span><br><span class="line"></span><br><span class="line"># 在SageMath环境中使用Coppersmith方法</span><br><span class="line"># PR.&lt;x&gt; = PolynomialRing(Zmod(new_n))</span><br><span class="line"># f = x + p_val</span><br><span class="line"># roots = f.small_roots(X=2**900, beta=0.4)</span><br><span class="line"></span><br><span class="line"># 第三步：恢复新素数并解密</span><br><span class="line"># if roots:</span><br><span class="line">#     new_p = p_val + int(roots[0])</span><br><span class="line">#     new_q = new_n // new_p</span><br><span class="line">#     phi = (new_p - 1) * (new_q - 1)</span><br><span class="line">#     d_new = pow(e, -1, phi)</span><br><span class="line">#     m = pow(enc_flag, d_new, new_n)</span><br><span class="line">#     flag = long_to_bytes(m).decode()</span><br><span class="line">#     print(flag)</span><br></pre></td></tr></table></figure>
+
+<h2 id="最终结果"><a href="#最终结果" class="headerlink" title="最终结果"></a>最终结果</h2><p>成功解密后得到flag：<code>flag{6b1ff461dc15e5476cafe887189178e3924dad84}</code></p>
+<p>事后发现new_n可直接分解hhhhhh</p>
+]]></content>
+      <categories>
+        <category>CRYPTO</category>
+      </categories>
+      <tags>
+        <tag>crypto</tag>
       </tags>
   </entry>
   <entry>

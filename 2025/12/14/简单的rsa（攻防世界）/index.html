@@ -20,25 +20,27 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"giscus","storage":true,"lazyload":true,"nav":{"giscus":{"text":"GitHub 评论","order":1}}},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
 
-    <meta property="og:type" content="article">
-<meta property="og:title" content="评论功能测试">
-<meta property="og:url" content="http://example.com/2025/12/14/%E8%AF%84%E8%AE%BA%E5%8A%9F%E8%83%BD%E6%B5%8B%E8%AF%95/index.html">
+    <meta name="description" content="简单的rsa（攻防世界）7634d7960e85494bb9ae648ea871f085.py 题目分析这是一个基于RSA加密系统的密码题目，主要特点如下：  首先生成标准的RSA参数（p, q, n, e, d） 然后对原始素数p和q进行”破坏”处理 使用破坏后的新素数生成新的RSA模数进行加密  关键代码分析123456def destory(x, num):    while True:">
+<meta property="og:type" content="article">
+<meta property="og:title" content="简单的rsa（攻防世界）">
+<meta property="og:url" content="http://example.com/2025/12/14/%E7%AE%80%E5%8D%95%E7%9A%84rsa%EF%BC%88%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%EF%BC%89/index.html">
 <meta property="og:site_name" content="Pinkode神秘小作坊">
+<meta property="og:description" content="简单的rsa（攻防世界）7634d7960e85494bb9ae648ea871f085.py 题目分析这是一个基于RSA加密系统的密码题目，主要特点如下：  首先生成标准的RSA参数（p, q, n, e, d） 然后对原始素数p和q进行”破坏”处理 使用破坏后的新素数生成新的RSA模数进行加密  关键代码分析123456def destory(x, num):    while True:">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2025-12-14T13:41:15.000Z">
-<meta property="article:modified_time" content="2025-12-14T14:50:47.266Z">
+<meta property="article:published_time" content="2025-12-14T15:31:23.000Z">
+<meta property="article:modified_time" content="2025-12-14T16:04:45.975Z">
 <meta property="article:author" content="Mofan">
-<meta property="article:tag" content="评论功能测试">
+<meta property="article:tag" content="crypto">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://example.com/2025/12/14/%E8%AF%84%E8%AE%BA%E5%8A%9F%E8%83%BD%E6%B5%8B%E8%AF%95/">
+<link rel="canonical" href="http://example.com/2025/12/14/%E7%AE%80%E5%8D%95%E7%9A%84rsa%EF%BC%88%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%EF%BC%89/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2025/12/14/%E8%AF%84%E8%AE%BA%E5%8A%9F%E8%83%BD%E6%B5%8B%E8%AF%95/","path":"2025/12/14/评论功能测试/","title":"评论功能测试"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2025/12/14/%E7%AE%80%E5%8D%95%E7%9A%84rsa%EF%BC%88%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%EF%BC%89/","path":"2025/12/14/简单的rsa（攻防世界）/","title":"简单的rsa（攻防世界）"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>评论功能测试 | Pinkode神秘小作坊</title>
+<title>简单的rsa（攻防世界） | Pinkode神秘小作坊</title>
   
 
 
@@ -266,7 +268,7 @@ mjx-container[display="true"] + br {
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -279,6 +281,7 @@ mjx-container[display="true"] + br {
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E7%9A%84rsa%EF%BC%88%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">简单的rsa（攻防世界）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E5%88%86%E6%9E%90"><span class="nav-number">1.1.</span> <span class="nav-text">题目分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90"><span class="nav-number">1.1.1.</span> <span class="nav-text">关键代码分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF"><span class="nav-number">1.2.</span> <span class="nav-text">解题思路</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%9A%E5%88%86%E8%A7%A3%E5%8E%9F%E5%A7%8Bn"><span class="nav-number">1.2.1.</span> <span class="nav-text">第一步：分解原始n</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%EF%BC%9A%E5%88%A9%E7%94%A8Coppersmith%E6%94%BB%E5%87%BB"><span class="nav-number">1.2.2.</span> <span class="nav-text">第二步：利用Coppersmith攻击</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E6%AD%A5%EF%BC%9A%E6%81%A2%E5%A4%8D%E6%96%B0%E7%B4%A0%E6%95%B0%E5%B9%B6%E8%A7%A3%E5%AF%86"><span class="nav-number">1.2.3.</span> <span class="nav-text">第三步：恢复新素数并解密</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E5%AD%A6%E5%8E%9F%E7%90%86"><span class="nav-number">1.3.</span> <span class="nav-text">数学原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E9%A2%98%E4%BB%A3%E7%A0%81"><span class="nav-number">1.4.</span> <span class="nav-text">解题代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E7%BB%88%E7%BB%93%E6%9E%9C"><span class="nav-number">1.5.</span> <span class="nav-text">最终结果</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -340,7 +343,7 @@ mjx-container[display="true"] + br {
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2025/12/14/%E8%AF%84%E8%AE%BA%E5%8A%9F%E8%83%BD%E6%B5%8B%E8%AF%95/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/12/14/%E7%AE%80%E5%8D%95%E7%9A%84rsa%EF%BC%88%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/1.jpg">
@@ -353,12 +356,12 @@ mjx-container[display="true"] + br {
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="评论功能测试 | Pinkode神秘小作坊">
+      <meta itemprop="name" content="简单的rsa（攻防世界） | Pinkode神秘小作坊">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          评论功能测试
+          简单的rsa（攻防世界）
         </h1>
 
         <div class="post-meta-container">
@@ -368,9 +371,15 @@ mjx-container[display="true"] + br {
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2025-12-14 21:41:15 / 修改时间：22:50:47" itemprop="dateCreated datePublished" datetime="2025-12-14T21:41:15+08:00">2025-12-14</time>
+      <time title="创建时间：2025-12-14 23:31:23" itemprop="dateCreated datePublished" datetime="2025-12-14T23:31:23+08:00">2025-12-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-12-15 00:04:45" itemprop="dateModified" datetime="2025-12-15T00:04:45+08:00">2025-12-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -378,7 +387,7 @@ mjx-container[display="true"] + br {
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E8%AF%84%E8%AE%BA%E5%8A%9F%E8%83%BD%E6%B5%8B%E8%AF%95/" itemprop="url" rel="index"><span itemprop="name">评论功能测试</span></a>
+          <a href="/categories/CRYPTO/" itemprop="url" rel="index"><span itemprop="name">CRYPTO</span></a>
         </span>
     </span>
 
@@ -398,7 +407,37 @@ mjx-container[display="true"] + br {
     
     
     
-    <div class="post-body" itemprop="articleBody">
+    <div class="post-body" itemprop="articleBody"><h1 id="简单的rsa（攻防世界）"><a href="#简单的rsa（攻防世界）" class="headerlink" title="简单的rsa（攻防世界）"></a>简单的rsa（攻防世界）</h1><p><a href="attachment:9a753b99-785a-485f-a250-f550d436a9de:7634d7960e85494bb9ae648ea871f085.py">7634d7960e85494bb9ae648ea871f085.py</a></p>
+<h2 id="题目分析"><a href="#题目分析" class="headerlink" title="题目分析"></a>题目分析</h2><p>这是一个基于RSA加密系统的密码题目，主要特点如下：</p>
+<ol>
+<li>首先生成标准的RSA参数（p, q, n, e, d）</li>
+<li>然后对原始素数p和q进行”破坏”处理</li>
+<li>使用破坏后的新素数生成新的RSA模数进行加密</li>
+</ol>
+<h3 id="关键代码分析"><a href="#关键代码分析" class="headerlink" title="关键代码分析"></a>关键代码分析</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">def destory(x, num):</span><br><span class="line">    while True:</span><br><span class="line">        dt = getRandomNBitInteger(num)  # 生成num位的随机数</span><br><span class="line">        r = x ^ dt  # 与原素数异或</span><br><span class="line">        if isPrime(r):  # 确保结果是素数</span><br><span class="line">            return r</span><br></pre></td></tr></table></figure>
+
+<p>破坏函数将原始素数p和q分别与900位的随机数进行异或操作，确保结果是素数。</p>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><h3 id="第一步：分解原始n"><a href="#第一步：分解原始n" class="headerlink" title="第一步：分解原始n"></a>第一步：分解原始n</h3><p>题目给出了原始的n, e, d，我们可以利用这些信息分解n：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">def factorize_n_with_d(n, e, d):</span><br><span class="line">    k = e * d - 1</span><br><span class="line">    s = 0</span><br><span class="line">    t = k</span><br><span class="line">    while t % 2 == 0:</span><br><span class="line">        s += 1</span><br><span class="line">        t //= 2</span><br><span class="line"></span><br><span class="line">    for _ in range(100):</span><br><span class="line">        g = 2</span><br><span class="line">        y = pow(g, t, n)</span><br><span class="line">        if y == 1 or y == n-1:</span><br><span class="line">            continue</span><br><span class="line">        for _ in range(s-1):</span><br><span class="line">            x = pow(y, 2, n)</span><br><span class="line">            if x == 1:</span><br><span class="line">                p = sympy.gcd(y-1, n)</span><br><span class="line">                if p != 1 and p != n and n % p == 0:</span><br><span class="line">                    q = n // p</span><br><span class="line">                    return p, q</span><br><span class="line">            elif x == n-1:</span><br><span class="line">                break</span><br><span class="line">            y = x</span><br><span class="line">        g = nextprime(g)</span><br></pre></td></tr></table></figure>
+
+<h3 id="第二步：利用Coppersmith攻击"><a href="#第二步：利用Coppersmith攻击" class="headerlink" title="第二步：利用Coppersmith攻击"></a>第二步：利用Coppersmith攻击</h3><p>由于破坏操作只改变了p和q的低900位，高位保持不变，我们可以使用Coppersmith方法进行攻击：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">p_high = int(bin(p)[2:2050-900],2)  # 提取p的高位(2048-900=1148位)</span><br><span class="line">p = p_high &lt;&lt; 900  # 左移900位，低位补0</span><br><span class="line"></span><br><span class="line">PR.&lt;x&gt; = PolynomialRing(Zmod(new_n))</span><br><span class="line">f = x + p  # 构造多项式f(x) = x + p_high*2^900</span><br><span class="line">roots = f.small_roots(X=2**900, beta=0.4)  # 寻找小根</span><br></pre></td></tr></table></figure>
+
+<h3 id="第三步：恢复新素数并解密"><a href="#第三步：恢复新素数并解密" class="headerlink" title="第三步：恢复新素数并解密"></a>第三步：恢复新素数并解密</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">if roots:</span><br><span class="line">    p += int(roots[0])  # 恢复完整的new_p</span><br><span class="line">    assert new_n % p == 0</span><br><span class="line">    q = new_n // p  # 计算new_q</span><br><span class="line"></span><br><span class="line">    phi = (p - 1) * (q - 1)</span><br><span class="line">    d = pow(e, -1, phi)  # 计算私钥</span><br><span class="line">    m = pow(enc_flag, d, new_n)  # 解密</span><br><span class="line">    print(long_to_bytes(m).decode())</span><br></pre></td></tr></table></figure>
+
+<h2 id="数学原理"><a href="#数学原理" class="headerlink" title="数学原理"></a>数学原理</h2><p>Coppersmith方法的核心思想是：如果知道一个数的高位，可以在多项式时间内恢复其低位。在这个题目中：</p>
+<ul>
+<li>我们知道原始素数p</li>
+<li>新素数new_p = p ⊕ dt，其中dt是900位的随机数</li>
+<li>因此new_p和p只有低900位不同，高位完全相同</li>
+<li>我们可以构造多项式f(x) = p_high × 2^900 + x，在模new_n下寻找小根x</li>
+</ul>
+<h2 id="解题代码"><a href="#解题代码" class="headerlink" title="解题代码"></a>解题代码</h2><p>完整的解题代码如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">import sympy</span><br><span class="line">from Crypto.Util.number import long_to_bytes</span><br><span class="line">from sympy import nextprime</span><br><span class="line"></span><br><span class="line"># 第一步：分解原始n</span><br><span class="line">def factorize_n_with_d(n, e, d):</span><br><span class="line">    k = e * d - 1</span><br><span class="line">    s = 0</span><br><span class="line">    t = k</span><br><span class="line">    while t % 2 == 0:</span><br><span class="line">        s += 1</span><br><span class="line">        t //= 2</span><br><span class="line"></span><br><span class="line">    g = 2</span><br><span class="line">    for _ in range(100):</span><br><span class="line">        y = pow(g, t, n)</span><br><span class="line">        if y == 1 or y == n-1:</span><br><span class="line">            continue</span><br><span class="line">        for _ in range(s-1):</span><br><span class="line">            x = pow(y, 2, n)</span><br><span class="line">            if x == 1:</span><br><span class="line">                p = sympy.gcd(y-1, n)</span><br><span class="line">                if p != 1 and p != n and n % p == 0:</span><br><span class="line">                    q = n // p</span><br><span class="line">                    return p, q</span><br><span class="line">            elif x == n-1:</span><br><span class="line">                break</span><br><span class="line">            y = x</span><br><span class="line">        g = nextprime(g)</span><br><span class="line"></span><br><span class="line"># 给定参数</span><br><span class="line">n = 0x73cec712124b33c0294e01eb52e8c3cd2fe9ddbcbf457b3b950360063dfae42cbbe9855bd986bcfea0948fadfb252f5e2ff3c982ff47afb6596a496636f1fc5ecfe9f5db7620b23fe9e30d230aa9299ab9a78bfb5e0630fd1149259b2b2104ea65d2e27b89785e4bf01d0594d9f94575cbcc3383f63c5aabe4d5b48eb761cce3ab21689b3f3155b5f15efee240d5ac149318ff80bd72a75fccdc57402aa197b472d98758019df8e9edb31bda82967dc66bcad845df824775eeb66ee304664d7929e8405122f9b0a5406887729dbe9760eb62dd7018087723c07c07082d1d51035fb211a9fc6d8fb5b3ee5bb91af5e3d0b89addce289041a5683a1fe7dc06a3bae283062ba3febdd987b5ac9b9a8ae4b8b02b804accc0a413bb144680fd8d0d8d8bebe176e5a9121f7653c31ede984d234ccce50e688f7048a0bfdfc84004c006ae912c4d4e514c200883e8dabaeb4bf57a5f628eb4bd2e6688d9b7688bc3eed4ce03831be5044dedbd5fddc43a3274b26c990a0e444fcf4a607de59c4906dfd1ea111920c38b4a365c5838e9cf1a22b146aa7afbc6e2e29ebe35aee4bf4d2fbe186c0f359c71f80b8f6298ad38619168d5986a857f558017c546d6df896c690896601aabd48398e957b77ef0e15d6cda339050b74cda3328c34c889306d089efc95ff467a4a775d3e104642cd9819f002b5db8c5f39b4e8d1a83007276b8a0b7</span><br><span class="line">e = 0x10001</span><br><span class="line">d = 0x37f2646fd190ad1e9f95c50d97cf4590a21e1c766bfd382cafafa2bb41442ce9839aac47944e288de6abfec1b17be4675f492a47f3e600f85a3823df9299d32f46c8a372f39d961f9471914e257f55cf1ef3d7878783fc34b61e1d61da332879c8d9597b0f0dac988916ac349e1d73b615cfbfef778ceeccee4f63dc32b1b7d7213c9199b6acb1d8a5141c94d777a29b89f8e0aea457788eaa9ca43626a24c74ebab355c89e3747626d4899745d148500c91416c782f2b30c9332f5cd32a4d3144d2a407ce9acc00f99dc619d425586285350cff734cdba9d4fad636d7fcbabfa382965005d8343e36ffe72604e557bae5044435ad990b6dca6d922e64387cee4abc0574d2eeeb42dda977be1e1064f6a6b00e78db75a7bf8e6e0c2ac3c6a52b2e6670cad3c907d990e53a7a311ef7b097c7644ff6f2bf96573e47d33031eeabf22620bdbc254a8fff8b0fa6f90d320c45e8d9094c26401f78560e16f77d6e09bc219c9849f1b68dc84ed36eb0cec7df16c4672c16a6b704ef2185ce04539f08688b72d48f9491e55be0095ee74f9622e8ae6835381e2efcd520cd02d1eeeb09bc11ab75bc903053102bc92718f2bf8691561a40026e53e950674f712aaef8cc69360df54c1af8b1f4aef997371b8a108e9b193a51002fe8d61f3991153e7ebd9593d68cd03b2f252c3d9d7a5bf802dcd150bd86028bd3b07cb415b767d716c1</span><br><span class="line"></span><br><span class="line">new_n = 0x73cec712124b33c0294e01eb52e8c3cd2fe9ddbcbf457b3b950360063dfae42cbbe9855bd986bcfea0948fadfb252f5e2ff3c982ff47afb6596a496636f1fc5ecfe9f5db7620b23fe9e30d230aa9299ab9a78bfb5e0630fd1149259b2b2104ea65d2e27b89785e4bf01d0594d9f94575cbcc3383f63c5aabe4d5b48eb761cce3ab21689b3f3155b5f15efee240d5ac11cee2acbd019de7c06f607ea618b5cd735b5a6972d2b446a12ff58cf8314822fa5ea09d0963acd00441b2a1b37aca01d7f39052927db98a0bd5ca1c49a7ad67923e3aac30ecd33cc8b4b30a40cdb3acc721ee5da53a02977cee959affe672a668525eb78df96af0a14f4ac04fab68efa8eabe9535e1064a5fc2ff7cac9520210311db0c3bf91101bc55a67a81e4f69364c724ee6ad6bdc301df642c9392e9befa4ff0d65481adb6feac251cd207044587da9710809700246cb3c63e659a97249f5e7418568e37db2fb2c1115e719d6682bb2e89b4e23d40ba4c532f289e10e0b89a5647c486a09b9e376844171b229d74f871004d4945a702a391a04ac704f43809e972891e6ab33b3c0f03f0b6f9ae005b26be6e647a1865c727277423f59a595187ffbfea13501e23b6b57ef115eaa6febcb207a3112628652a39578847241c33989e84607b0f683b30ddf773348b07360b063d9120a397809591ca18a04cd32ad9cbfe0494ed3ae8d2c5b43fdb51cb</span><br><span class="line">enc_flag = 0x3b0487110b2d61683fc9e65717d6431281c25ceda38915c9c2ff16013066e8cbe9d5f6c1f05988333d96e861f1b216f85d537aa70f603b3d20487a18c5e0d3a03556be88f984f508803f4bb25300149e805204c91f7aea038e545cf588a29bcb20113f81b16d9aacdbd820aa48615a5227ab2f329423da0a254c8f318dff4a7b75cf48e5ac18abc2975fee111ee56297fd7778b49320f6427227f21c08391d7429c49b399c366db38467a339229048e50735dff071bf89dbbab22997071a6b5a16935f5b65032f2cefb9c670cddd1470f6bf16d7c46d0fff22b82b2c1d867f4faa60e5daaad35a15ac0413a17beb5371a06f22c646336ae5e5738cfc5e997860056fb8bf1e02f27031ecd2b7983df510c4cdebbc644ea49e99e2376b89a90be8c89e4995c6689cc39d01fcc8ffef416e49684c0a01fdffab4613cb8eddbfa9e14d9b2daca6ad57c4e440a049d04b915ecfd64095c549bb9d22fb502a740a7373c1961c8cb7a58604bcbca3e5a97e28d5f498061db7cfbf07085ec84f47856e88992ab08870cbdb050431260861d0bcc9bbdf9a4164b8581f1f67e86ab854db1769418e300d73cf902509c76969473d0ee1b70c3b24085942fa9782507b359ffe049b18832610b4555b9bfe8eeae14cec53ab21881475f81069a6a33d6e38e3825eeb13874da8f0c91160712090a092286ea3838d88020e459f795783ad099367</span><br><span class="line"></span><br><span class="line"># 分解原始n得到p和q</span><br><span class="line">p, q = factorize_n_with_d(n, e, d)</span><br><span class="line"></span><br><span class="line"># 第二步：使用Coppersmith攻击</span><br><span class="line">p_high = int(bin(p)[2:2050-900],2)  # 提取p的高1148位</span><br><span class="line">p_val = p_high &lt;&lt; 900  # 左移900位</span><br><span class="line"></span><br><span class="line"># 在SageMath环境中使用Coppersmith方法</span><br><span class="line"># PR.&lt;x&gt; = PolynomialRing(Zmod(new_n))</span><br><span class="line"># f = x + p_val</span><br><span class="line"># roots = f.small_roots(X=2**900, beta=0.4)</span><br><span class="line"></span><br><span class="line"># 第三步：恢复新素数并解密</span><br><span class="line"># if roots:</span><br><span class="line">#     new_p = p_val + int(roots[0])</span><br><span class="line">#     new_q = new_n // new_p</span><br><span class="line">#     phi = (new_p - 1) * (new_q - 1)</span><br><span class="line">#     d_new = pow(e, -1, phi)</span><br><span class="line">#     m = pow(enc_flag, d_new, new_n)</span><br><span class="line">#     flag = long_to_bytes(m).decode()</span><br><span class="line">#     print(flag)</span><br></pre></td></tr></table></figure>
+
+<h2 id="最终结果"><a href="#最终结果" class="headerlink" title="最终结果"></a>最终结果</h2><p>成功解密后得到flag：<code>flag{6b1ff461dc15e5476cafe887189178e3924dad84}</code></p>
+<p>事后发现new_n可直接分解hhhhhh</p>
+
     </div>
 
     
@@ -407,20 +446,20 @@ mjx-container[display="true"] + br {
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E8%AF%84%E8%AE%BA%E5%8A%9F%E8%83%BD%E6%B5%8B%E8%AF%95/" rel="tag"># 评论功能测试</a>
+              <a href="/tags/crypto/" rel="tag"># crypto</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2025/12/12/Find-the-lattice/" rel="prev" title="Find the lattice">
-                  <i class="fa fa-angle-left"></i> Find the lattice
+                <a href="/2025/12/14/SuanP01y/" rel="prev" title="SuanP01y">
+                  <i class="fa fa-angle-left"></i> SuanP01y
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2025/12/14/Backpack-Cryptography/" rel="next" title="Backpack Cryptography">
-                  Backpack Cryptography <i class="fa fa-angle-right"></i>
+                <a href="/2025/12/14/babyrsa%EF%BC%88%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%EF%BC%89/" rel="next" title="babyrsa（攻防世界）">
+                  babyrsa（攻防世界） <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>

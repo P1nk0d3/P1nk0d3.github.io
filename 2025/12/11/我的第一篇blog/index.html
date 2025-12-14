@@ -295,7 +295,7 @@
 </ul>
 <h2 id="🚧-未来计划"><a href="#🚧-未来计划" class="headerlink" title="🚧 未来计划"></a>🚧 未来计划</h2><p>我会继续更新CTF相关的内容，并逐渐加入 AI 安全的学习笔记与实践记录。<br><strong>欢迎关注，一起交流，敬请期待！</strong></p>
 <hr>
-<p><em>📬 联系邮箱：[<a href="mailto:&#x33;&#x35;&#49;&#x33;&#55;&#x32;&#x38;&#x32;&#x30;&#x33;&#64;&#x71;&#x71;&#46;&#99;&#x6f;&#109;">&#x33;&#x35;&#49;&#x33;&#55;&#x32;&#x38;&#x32;&#x30;&#x33;&#64;&#x71;&#x71;&#46;&#99;&#x6f;&#109;</a>]</em></p>
+<p><em>📬 联系邮箱：[<a href="mailto:&#x33;&#53;&#x31;&#51;&#55;&#x32;&#x38;&#x32;&#48;&#51;&#x40;&#x71;&#x71;&#46;&#99;&#x6f;&#x6d;">&#x33;&#53;&#x31;&#51;&#55;&#x32;&#x38;&#x32;&#48;&#51;&#x40;&#x71;&#x71;&#46;&#99;&#x6f;&#x6d;</a>]</em></p>
 
     </div>
 
@@ -387,70 +387,11 @@
         async>
       </script>
     </div>
-  </section>
-    
-    <div id="giscus-debug" style="
-      margin-top: 20px;
-      padding: 15px;
-      background: #fff3cd;
-      border: 1px solid #ffeaa7;
-      border-radius: 5px;
-      font-size: 0.9em;
-      color: #856404;
-    ">
-      <strong>💡 评论功能提示：</strong>
-      <div id="debug-info">检查评论功能状态...</div>
-    </div>
-  </div>
-</section>
+
 
 <script>
-// Giscus 调试脚本
-document.addEventListener('DOMContentLoaded', function() {
-  const debugInfo = document.getElementById('debug-info');
-  
-  // 检查 Giscus iframe 加载状态
-  const checkGiscus = setInterval(() => {
-    const iframe = document.querySelector('iframe.giscus-frame');
-    if (iframe) {
-      clearInterval(checkGiscus);
-      
-      // 监听 Giscus 消息
-      window.addEventListener('message', (event) => {
-        if (event.origin === 'https://giscus.app') {
-          const message = event.data;
-          
-          if (message.giscus && message.giscus.error) {
-            debugInfo.innerHTML = `❌ 错误: ${message.giscus.error}`;
-          } else if (message.giscus && message.giscus.discussion) {
-            debugInfo.innerHTML = `✅ 评论功能正常 - 讨论ID: ${message.giscus.discussion.id}`;
-          }
-        }
-      });
-      
-      // 发送获取状态消息
-      iframe.contentWindow.postMessage({ 
-        giscus: { 
-          setConfig: {
-            repo: 'P1nk0d3/P1nk0d3.github.io',
-            repoId: 'R_kgDOQm6oMw',
-            category: 'Announcements',
-            categoryId: 'DIC_kwDOQm6oM84CzxkR',
-            mapping: 'pathname'
-          }
-        }
-      }, 'https://giscus.app');
-    }
-  }, 1000);
-  
-  // 10秒后超时
-  setTimeout(() => {
-    if (debugInfo.innerHTML.includes('检查')) {
-      debugInfo.innerHTML = '❌ Giscus 加载超时，请检查控制台错误信息';
-    }
-  }, 10000);
-});
-</script>
+
+ 
   
 
 

@@ -528,6 +528,69 @@ mjx-container[display="true"] + br {
       </script>
     </div>
   </section>
+    
+    <div id="giscus-debug" style="
+      margin-top: 20px;
+      padding: 15px;
+      background: #fff3cd;
+      border: 1px solid #ffeaa7;
+      border-radius: 5px;
+      font-size: 0.9em;
+      color: #856404;
+    ">
+      <strong>💡 评论功能提示：</strong>
+      <div id="debug-info">检查评论功能状态...</div>
+    </div>
+  </div>
+</section>
+
+<script>
+// Giscus 调试脚本
+document.addEventListener('DOMContentLoaded', function() {
+  const debugInfo = document.getElementById('debug-info');
+  
+  // 检查 Giscus iframe 加载状态
+  const checkGiscus = setInterval(() => {
+    const iframe = document.querySelector('iframe.giscus-frame');
+    if (iframe) {
+      clearInterval(checkGiscus);
+      
+      // 监听 Giscus 消息
+      window.addEventListener('message', (event) => {
+        if (event.origin === 'https://giscus.app') {
+          const message = event.data;
+          
+          if (message.giscus && message.giscus.error) {
+            debugInfo.innerHTML = `❌ 错误: ${message.giscus.error}`;
+          } else if (message.giscus && message.giscus.discussion) {
+            debugInfo.innerHTML = `✅ 评论功能正常 - 讨论ID: ${message.giscus.discussion.id}`;
+          }
+        }
+      });
+      
+      // 发送获取状态消息
+      iframe.contentWindow.postMessage({ 
+        giscus: { 
+          setConfig: {
+            repo: 'P1nk0d3/P1nk0d3.github.io',
+            repoId: 'R_kgDOQm6oMw',
+            category: 'Announcements',
+            categoryId: 'DIC_kwDOQm6oM84CzxkR',
+            mapping: 'pathname'
+          }
+        }
+      }, 'https://giscus.app');
+    }
+  }, 1000);
+  
+  // 10秒后超时
+  setTimeout(() => {
+    if (debugInfo.innerHTML.includes('检查')) {
+      debugInfo.innerHTML = '❌ Giscus 加载超时，请检查控制台错误信息';
+    }
+  }, 10000);
+});
+</script>
   
 
 

@@ -1251,7 +1251,7 @@ pre code {
     vertical-align: middle;
   }
   .links-of-author a::before {
-    background: #d9c9ff;
+    background: #b5bf4e;
     display: inline-block;
     margin-right: 3px;
     transform: translateY(-2px);
@@ -2859,6 +2859,60 @@ body {
 .aplayer .aplayer-lrc:before,
 .aplayer .aplayer-lrc:after {
   display: none !important;
+}
+/* Giscus 评论系统样式优化 */
+.giscus,
+.giscus-frame {
+  width: 100% !important;
+  border: none !important;
+}
+/* 评论区域样式 */
+.comments {
+  margin-top: 40px;
+  padding-top: 30px;
+  border-top: 1px solid #eaecef;
+}
+/* 评论标题 */
+.comments-heading {
+  font-size: 1.5em;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #2d3748;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.comments-heading::before {
+  content: "💬";
+  font-size: 1.2em;
+}
+/* 评论容器 */
+.comments-container {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+}
+/* 暗色主题支持 */
+@media (prefers-color-scheme: dark) {
+  .comments-heading {
+    color: #e2e8f0;
+  }
+  .comments-container {
+    background: #2d3748;
+    border-color: #4a5568;
+  }
+}
+/* 移动端优化 */
+@media (max-width: 768px) {
+  .comments {
+    margin-top: 30px;
+    padding-top: 20px;
+  }
+  .comments-container {
+    padding: 15px;
+    margin: 15px 0;
+  }
 }
 @keyframes shine {
   0% {

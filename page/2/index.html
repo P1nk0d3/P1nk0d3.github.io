@@ -22,7 +22,7 @@
 
     <meta property="og:type" content="website">
 <meta property="og:title" content="Pinkode神秘小作坊">
-<meta property="og:url" content="http://example.com/archives/2025/index.html">
+<meta property="og:url" content="http://example.com/page/2/index.html">
 <meta property="og:site_name" content="Pinkode神秘小作坊">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:author" content="Mofan">
@@ -30,13 +30,13 @@
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://example.com/archives/2025/">
+<link rel="canonical" href="http://example.com/page/2/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"archives/2025/index.html","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":true,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"page/2/index.html","title":""}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>归档 | Pinkode神秘小作坊</title>
+<title>Pinkode神秘小作坊</title>
   
 
 
@@ -214,209 +214,351 @@
 
     </div>
 
-    <div class="main-inner archive posts-collapse">
+    <div class="main-inner index posts-expand">
 
 
+<!-- 优化后的黑白简约风格横幅 -->
+<section class="home-hero" style="
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 25%, #2d2d2d 50%, #1a1a1a 75%, #0a0a0a 100%);
+  color: white;
+  padding: 80px 0 60px; /* 降低高度：减少上下内边距 */
+  text-align: center;
+  margin-bottom: 30px;
+  position: relative;
+  overflow: hidden;
+  min-height: 200px; /* 设置最小高度避免过小 */
+">
   
+  <!-- 几何线条装饰 - 左上角 -->
+  <div style="
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    width: 80px;
+    height: 80px;
+    border-top: 2px solid rgba(255,255,255,0.1);
+    border-left: 2px solid rgba(255,255,255,0.1);
+  "></div>
   
+  <!-- 几何线条装饰 - 右上角 -->
+  <div style="
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 80px;
+    height: 80px;
+    border-top: 2px solid rgba(255,255,255,0.1);
+    border-right: 2px solid rgba(255,255,255,0.1);
+  "></div>
   
-  <div class="post-block">
-    <div class="post-content">
-      <div class="collection-title">
-        <span class="collection-header">嗯..! 目前共计 11 篇日志。 继续努力。</span>
-      </div>
-
+  <!-- 动态网格背景 -->
+  <div style="
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.3;
+  "></div>
+  
+  <div class="container" style="position: relative; z-index: 2;">
+    <!-- 网站标题 - 使用与导航栏相同的字体并加粗 -->
+    <h1 style="
+      font-size: 2.5em; /* 适当调整大小 */
+      font-weight: 700; /* 加粗，使用700代替bold */
+      margin-bottom: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif; /* 使用系统字体，与导航栏一致 */
+      color: #fff;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      line-height: 1.2;
+    ">
+      Pinkode神秘小作坊
+    </h1>
+    
+    <!-- 副标题 -->
+    <p style="
+      font-size: 1.1em;
+      opacity: 0.8;
+      margin-bottom: 25px;
+      letter-spacing: 1.5px;
+      font-weight: 300;
+      color: #ccc;
+      font-family: inherit; /* 继承相同字体 */
+    ">
+      学习记录
+    </p>
+    
+    <!-- 按钮区域 - 调整对称性 -->
+    <div style="
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    ">
       
-    <div class="collection-year">
-      <span class="collection-header">2025<span class="collection-year-count">9</span></span>
+      <!-- 关于我按钮 - 统一样式 -->
+      <a href="/about" style="
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        color: white;
+        border: 1.5px solid rgba(255,255,255,0.4);
+        padding: 10px 28px;
+        text-decoration: none;
+        border-radius: 2px;
+        font-size: 0.95em;
+        font-weight: 400;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        transition: all 0.3s ease;
+        min-width: 120px; /* 统一最小宽度 */
+        height: 44px; /* 统一高度 */
+        font-family: inherit;
+      " 
+      onmouseover="
+        this.style.background = 'rgba(255,255,255,0.1)';
+        this.style.borderColor = 'rgba(255,255,255,0.8)';
+        this.style.transform = 'translateY(-1px)';
+      " 
+      onmouseout="
+        this.style.background = 'transparent';
+        this.style.borderColor = 'rgba(255,255,255,0.4)';
+        this.style.transform = 'translateY(0)';
+      ">
+        关于我
+      </a>
+      
+      <!-- 文章归档按钮 - 统一样式 -->
+      <a href="/archives" style="
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255,255,255,0.1);
+        color: white;
+        border: 1.5px solid rgba(255,255,255,0.2);
+        padding: 10px 28px;
+        text-decoration: none;
+        border-radius: 2px;
+        font-size: 0.95em;
+        font-weight: 400;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        transition: all 0.3s ease;
+        min-width: 120px; /* 统一最小宽度 */
+        height: 44px; /* 统一高度 */
+        font-family: inherit;
+        backdrop-filter: blur(5px);
+      " 
+      onmouseover="
+        this.style.background = 'rgba(255,255,255,0.15)';
+        this.style.borderColor = 'rgba(255,255,255,0.4)';
+        this.style.transform = 'translateY(-1px)';
+      " 
+      onmouseout="
+        this.style.background = 'rgba(255,255,255,0.1)';
+        this.style.borderColor = 'rgba(255,255,255,0.2)';
+        this.style.transform = 'translateY(0)';
+      ">
+        文章归档
+      </a>
     </div>
+    
+    <!-- 已删除向下箭头 -->
+  </div>
+</section>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2025-12-15T12:45:46+08:00"
-              content="2025-12-15">
-          12-15
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2025/12/15/Codeforces-Round-1070-Div-2-C-Odd-Process/" itemprop="url">
-            <span itemprop="name">Codeforces Round 1070 (Div. 2) C. Odd Process</span>
-          </a>
-      </div>
-
+<!-- 修改后的搜索长条 - 与主题色协调 -->
+<section class="full-width-search" style="
+  background: #f8f9fa;  /* 使用浅灰色背景，与大多数网站协调 */
+  padding: 50px 0;
+  margin: 40px 0;
+  border-top: 1px solid #e9ecef;
+  border-bottom: 1px solid #e9ecef;
+">
+  <div class="container" style="max-width: 800px; margin: 0 auto; padding: 0 20px;">
+    <div style="text-align: center; margin-bottom: 30px;">
+      <h2 style="color: #333; font-size: 2.2em; margin-bottom: 10px;">
+        🔍 搜索博客内容
+      </h2>
+      <p style="color: #666; font-size: 1.1em; margin: 0;">
+        快速查找技术文章、教程和资源
+      </p>
+    </div>
+    
+    <!-- 搜索表单 -->
+    <form action="/search" method="get" class="full-search-form" style="
+      display: flex;
+      background: white;
+      border-radius: 8px;
+      padding: 0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+      max-width: 700px;
+      margin: 0 auto;
+      border: 1px solid #e9ecef;
+    ">
       
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2025-12-14T23:31:39+08:00"
-              content="2025-12-14">
-          12-14
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2025/12/14/babyrsa%EF%BC%88%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%EF%BC%89/" itemprop="url">
-            <span itemprop="name">babyrsa（攻防世界）</span>
-          </a>
-      </div>
-
+      <input 
+        type="text" 
+        name="q" 
+        placeholder="输入关键词搜索文章、教程、代码示例..." 
+        style="
+          flex: 1;
+          border: none;
+          outline: none;
+          padding: 16px 20px;
+          font-size: 16px;
+          background: transparent;
+          border-radius: 8px 0 0 8px;
+          color: #333;
+        "
+      >
       
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2025-12-14T23:31:23+08:00"
-              content="2025-12-14">
-          12-14
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2025/12/14/%E7%AE%80%E5%8D%95%E7%9A%84rsa%EF%BC%88%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%EF%BC%89/" itemprop="url">
-            <span itemprop="name">简单的rsa（攻防世界）</span>
-          </a>
-      </div>
-
+      <button 
+        type="submit" 
+        style="
+          background: #37c6c0;
+          color: white;
+          border: none;
+          padding: 0 25px;
+          border-radius: 0 8px 8px 0;
+          cursor: pointer;
+          font-size: 16px;
+          font-weight: 600;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          transition: all 0.3s ease;
+          min-width: 100px;
+        "
+        onmouseover="this.style.background='#2aa79f';"
+        onmouseout="this.style.background='#37c6c0';"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.3-4.3"></path>
+        </svg>
+        <span>搜索</span>
+      </button>
+    </form>
+  </div>
+</section>        
       
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2025-12-14T23:31:08+08:00"
-              content="2025-12-14">
-          12-14
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2025/12/14/SuanP01y/" itemprop="url">
-            <span itemprop="name">SuanP01y</span>
-          </a>
-      </div>
-
+<!-- 热门文章区域 -->
+<section class="hot-posts" style="padding: 60px 0;">
+  <div class="container">
+    <h2 style="text-align: center; font-size: 2em; margin-bottom: 40px;">🔥 推荐阅读</h2>
+    
+    <!-- 这里可以手动指定热门文章，或者显示最新文章 -->
+    <div style="
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+    ">
       
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2025-12-14T23:24:41+08:00"
-              content="2025-12-14">
-          12-14
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2025/12/14/Crossed-Wires/" itemprop="url">
-            <span itemprop="name">Crossed Wires</span>
-          </a>
-      </div>
-
       
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2025-12-14T23:23:09+08:00"
-              content="2025-12-14">
-          12-14
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2025/12/14/Backpack-Cryptography/" itemprop="url">
-            <span itemprop="name">Backpack Cryptography</span>
+      <article class="featured-post" style="
+        background: white;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        transition: transform 0.3s;
+      " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+        <h3 style="margin-top: 0;">
+          <a href="/2025/12/11/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87blog/" style="color: #333; text-decoration: none;">
+            我的第一篇blog
           </a>
-      </div>
-
+        </h3>
+        
+        <div style="color: #666; font-size: 0.9em; margin: 10px 0;">
+          <time>2025-12-11</time>
+          
+        </div>
+        
+        <div style="color: #555; line-height: 1.6; margin: 15px 0;">
+          你好，世界 👋 🧠 关于我我是吉林大学 网络空间安全专业 的二年级学生，目前主要专注于 CTF 中 Crypto 方向的学习与分享。 📝 近期动态 在我的博客持续更新 CTF Crypto...
+        </div>
+        
+        <a href="/2025/12/11/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87blog/" style="
+          color: #37c6c0;
+          text-decoration: none;
+          font-weight: bold;
+        ">阅读更多 →</a>
+      </article>
       
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2025-12-14T21:41:15+08:00"
-              content="2025-12-14">
-          12-14
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2025/12/14/%E8%AF%84%E8%AE%BA%E5%8A%9F%E8%83%BD%E6%B5%8B%E8%AF%95/" itemprop="url">
-            <span itemprop="name">评论功能测试</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2025-12-12T14:14:33+08:00"
-              content="2025-12-12">
-          12-12
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2025/12/12/Find-the-lattice/" itemprop="url">
-            <span itemprop="name">Find the lattice</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2025-12-11T17:54:28+08:00"
-              content="2025-12-11">
-          12-11
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2025/12/11/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87blog/" itemprop="url">
-            <span itemprop="name">我的第一篇blog</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-
     </div>
   </div>
-  
-  
-  
+</section>
+
+<!-- 最新文章区域 -->
+<section class="recent-posts" style="padding: 60px 0; background: #f8f9fa;">
+  <div class="container">
+    <h2 style="text-align: center; font-size: 2em; margin-bottom: 40px;">📖 最新文章</h2>
+    
+    <div class="post-list">
+      
+      
+      <article class="post-item" style="
+        background: white;
+        padding: 25px;
+        margin-bottom: 25px;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      ">
+        <h3 style="margin-top: 0;">
+          <a href="/2025/12/11/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87blog/" style="color: #333; text-decoration: none;">
+            我的第一篇blog
+          </a>
+        </h3>
+        
+        <div style="color: #666; font-size: 0.9em; margin: 10px 0;">
+          <time>2025-12-11</time>
+          
+        </div>
+        
+        <div style="color: #555; line-height: 1.6; margin: 15px 0;">
+          你好，世界 👋 🧠 关于我我是吉林大学 网络空间安全专业 的二年级学生，目前主要专注于 CTF 中 Crypto 方向的学习与分享。 📝 近期动态 在我的博客持续更新 CTF Crypto 题目的 Writeups，记录解题思路与知识点总结。 正在尝试入门 AI...
+        </div>
+        
+        <div style="margin-top: 15px;">
+          
+          
+          <a href="/" style="
+            display: inline-block;
+            background: #f1f3f4;
+            color: #666;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 0.8em;
+            margin-right: 5px;
+            text-decoration: none;
+          "></a>
+          
+          
+        </div>
+      </article>
+      
+    </div>
+    
+    <!-- 分页导航 -->
+    
+    <nav class="pagination" style="text-align: center; margin-top: 40px;">
+      <a class="extend prev" rel="prev" href="/">← 上一页</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+    </nav>
+    
+  </div>
+</section>
+
 
 </div>
   </main>

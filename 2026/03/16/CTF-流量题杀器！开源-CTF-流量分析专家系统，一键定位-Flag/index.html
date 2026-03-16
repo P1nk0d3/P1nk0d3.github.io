@@ -20,27 +20,28 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"giscus","storage":true,"lazyload":true,"nav":{"giscus":{"text":"GitHub 评论","order":1}}},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="解题报告：C. Odd Process题目概述You have n coins with denominations a1,a2,…,an and a natural number k. You also have a bag, which is initially empty, where you can place coins. You need to perform exactly k ac">
+    <meta name="description" content="CTF流量题杀器！在线即用的CTF流量分析专家系统，一键定位Flag做CTF流量分析题的你，是不是也踩过这些坑：  对着Wireshark几万条数据包翻到眼瞎，找不到关键明文 遇到URL&#x2F;Base64&#x2F;Hex多层套娃编码，手动解码解到崩溃 用大模型分析疯狂幻觉，把测试内容编造成Flag，完全不可信 分析过程黑盒化，出了问题根本不知道哪个环节错了 新手入门门槛高，本地环境配置半天搞不定，还没开始分析">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Codeforces Round 1070 (Div. 2) C. Odd Process">
-<meta property="og:url" content="http://example.com/2025/12/15/Codeforces-Round-1070-Div-2-C-Odd-Process/index.html">
+<meta property="og:title" content="CTF 流量题杀器！开源 CTF 流量分析专家系统，一键定位 Flag">
+<meta property="og:url" content="http://example.com/2026/03/16/CTF-%E6%B5%81%E9%87%8F%E9%A2%98%E6%9D%80%E5%99%A8%EF%BC%81%E5%BC%80%E6%BA%90-CTF-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E4%B8%93%E5%AE%B6%E7%B3%BB%E7%BB%9F%EF%BC%8C%E4%B8%80%E9%94%AE%E5%AE%9A%E4%BD%8D-Flag/index.html">
 <meta property="og:site_name" content="Pinkode神秘小作坊">
-<meta property="og:description" content="解题报告：C. Odd Process题目概述You have n coins with denominations a1,a2,…,an and a natural number k. You also have a bag, which is initially empty, where you can place coins. You need to perform exactly k ac">
+<meta property="og:description" content="CTF流量题杀器！在线即用的CTF流量分析专家系统，一键定位Flag做CTF流量分析题的你，是不是也踩过这些坑：  对着Wireshark几万条数据包翻到眼瞎，找不到关键明文 遇到URL&#x2F;Base64&#x2F;Hex多层套娃编码，手动解码解到崩溃 用大模型分析疯狂幻觉，把测试内容编造成Flag，完全不可信 分析过程黑盒化，出了问题根本不知道哪个环节错了 新手入门门槛高，本地环境配置半天搞不定，还没开始分析">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2025-12-15T04:45:46.000Z">
-<meta property="article:modified_time" content="2025-12-15T05:00:36.802Z">
+<meta property="article:published_time" content="2026-03-16T02:45:03.000Z">
+<meta property="article:modified_time" content="2026-03-16T02:47:33.238Z">
 <meta property="article:author" content="Mofan">
-<meta property="article:tag" content="算法">
+<meta property="article:tag" content="agent">
+<meta property="article:tag" content="流量分析">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://example.com/2025/12/15/Codeforces-Round-1070-Div-2-C-Odd-Process/">
+<link rel="canonical" href="http://example.com/2026/03/16/CTF-%E6%B5%81%E9%87%8F%E9%A2%98%E6%9D%80%E5%99%A8%EF%BC%81%E5%BC%80%E6%BA%90-CTF-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E4%B8%93%E5%AE%B6%E7%B3%BB%E7%BB%9F%EF%BC%8C%E4%B8%80%E9%94%AE%E5%AE%9A%E4%BD%8D-Flag/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2025/12/15/Codeforces-Round-1070-Div-2-C-Odd-Process/","path":"2025/12/15/Codeforces-Round-1070-Div-2-C-Odd-Process/","title":"Codeforces Round 1070 (Div. 2) C. Odd Process"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2026/03/16/CTF-%E6%B5%81%E9%87%8F%E9%A2%98%E6%9D%80%E5%99%A8%EF%BC%81%E5%BC%80%E6%BA%90-CTF-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E4%B8%93%E5%AE%B6%E7%B3%BB%E7%BB%9F%EF%BC%8C%E4%B8%80%E9%94%AE%E5%AE%9A%E4%BD%8D-Flag/","path":"2026/03/16/CTF-流量题杀器！开源-CTF-流量分析专家系统，一键定位-Flag/","title":"CTF 流量题杀器！开源 CTF 流量分析专家系统，一键定位 Flag"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Codeforces Round 1070 (Div. 2) C. Odd Process | Pinkode神秘小作坊</title>
+<title>CTF 流量题杀器！开源 CTF 流量分析专家系统，一键定位 Flag | Pinkode神秘小作坊</title>
   
 
 
@@ -281,7 +282,7 @@ mjx-container[display="true"] + br {
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A7%A3%E9%A2%98%E6%8A%A5%E5%91%8A%EF%BC%9AC-Odd-Process"><span class="nav-number">1.</span> <span class="nav-text">解题报告：C. Odd Process</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E6%A6%82%E8%BF%B0"><span class="nav-number">1.1.</span> <span class="nav-text">题目概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E5%88%86%E6%9E%90"><span class="nav-number">1.2.</span> <span class="nav-text">问题分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E8%A7%82%E5%AF%9F"><span class="nav-number">1.3.</span> <span class="nav-text">关键观察</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1"><span class="nav-number">1.4.</span> <span class="nav-text">算法设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.5.</span> <span class="nav-text">代码实现</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#CTF%E6%B5%81%E9%87%8F%E9%A2%98%E6%9D%80%E5%99%A8%EF%BC%81%E5%9C%A8%E7%BA%BF%E5%8D%B3%E7%94%A8%E7%9A%84CTF%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E4%B8%93%E5%AE%B6%E7%B3%BB%E7%BB%9F%EF%BC%8C%E4%B8%80%E9%94%AE%E5%AE%9A%E4%BD%8DFlag"><span class="nav-number">1.</span> <span class="nav-text">CTF流量题杀器！在线即用的CTF流量分析专家系统，一键定位Flag</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE%E7%AE%80%E4%BB%8B"><span class="nav-number">1.1.</span> <span class="nav-text">项目简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E4%BA%AE%E7%82%B9"><span class="nav-number">1.2.</span> <span class="nav-text">核心亮点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%BC%80%E7%AE%B1%E5%8D%B3%E7%94%A8%EF%BC%8C%E9%9B%B6%E9%97%A8%E6%A7%9B%E4%B8%8A%E6%89%8B"><span class="nav-number">1.2.1.</span> <span class="nav-text">1. 开箱即用，零门槛上手</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E8%BF%90%E7%BB%B4%E7%BA%A7%E5%85%A8%E9%93%BE%E8%B7%AF%E6%B5%81%E6%B0%B4%E7%BA%BF%EF%BC%8C%E5%85%A8%E7%A8%8B%E5%8F%AF%E8%BF%BD%E6%BA%AF"><span class="nav-number">1.2.2.</span> <span class="nav-text">2. 运维级全链路流水线，全程可追溯</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%A4%9AAgent%E5%BE%AE%E6%8E%A8%E7%90%86%E6%9E%B6%E6%9E%84%EF%BC%8C%E5%BD%BB%E5%BA%95%E6%A0%B9%E6%B2%BBAI%E5%B9%BB%E8%A7%89"><span class="nav-number">1.2.3.</span> <span class="nav-text">3. 多Agent微推理架构，彻底根治AI幻觉</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E8%B6%85%E5%BC%BA%E6%B5%81%E9%87%8F%E6%8F%90%E5%8F%96%E8%83%BD%E5%8A%9B%EF%BC%8C%E4%B8%8D%E6%BC%8F%E6%8E%89%E4%BB%BB%E4%BD%95%E5%85%B3%E9%94%AE%E6%98%8E%E6%96%87"><span class="nav-number">1.2.4.</span> <span class="nav-text">4. 超强流量提取能力，不漏掉任何关键明文</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E5%85%A8%E8%87%AA%E5%8A%A8%E5%A4%9A%E5%B1%82%E8%BF%AD%E4%BB%A3%E8%A7%A3%E7%A0%81%EF%BC%8C%E6%90%9E%E5%AE%9A%E5%A5%97%E5%A8%83%E7%BC%96%E7%A0%81"><span class="nav-number">1.2.5.</span> <span class="nav-text">5. 全自动多层迭代解码，搞定套娃编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-%E5%AE%8C%E5%85%A8%E5%BC%80%E6%BA%90%E5%85%8D%E8%B4%B9%EF%BC%8C%E5%8F%AF%E6%89%A9%E5%B1%95%E6%80%A7%E6%8B%89%E6%BB%A1"><span class="nav-number">1.2.6.</span> <span class="nav-text">6. 完全开源免费，可扩展性拉满</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B"><span class="nav-number">1.3.</span> <span class="nav-text">快速上手</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E5%BC%8F%E4%B8%80%EF%BC%9A%E5%9C%A8%E7%BA%BF%E4%B8%80%E9%94%AE%E4%BD%BF%E7%94%A8%EF%BC%88%E6%8E%A8%E8%8D%90%EF%BC%8C%E9%9B%B6%E9%97%A8%E6%A7%9B%EF%BC%89"><span class="nav-number">1.3.1.</span> <span class="nav-text">方式一：在线一键使用（推荐，零门槛）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E5%BC%8F%E4%BA%8C%EF%BC%9A%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2%E8%BF%90%E8%A1%8C"><span class="nav-number">1.3.2.</span> <span class="nav-text">方式二：本地部署运行</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%82%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">1.4.</span> <span class="nav-text">适用场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%99%E5%9C%A8%E6%9C%80%E5%90%8E"><span class="nav-number">1.5.</span> <span class="nav-text">写在最后</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -343,7 +344,7 @@ mjx-container[display="true"] + br {
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2025/12/15/Codeforces-Round-1070-Div-2-C-Odd-Process/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2026/03/16/CTF-%E6%B5%81%E9%87%8F%E9%A2%98%E6%9D%80%E5%99%A8%EF%BC%81%E5%BC%80%E6%BA%90-CTF-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E4%B8%93%E5%AE%B6%E7%B3%BB%E7%BB%9F%EF%BC%8C%E4%B8%80%E9%94%AE%E5%AE%9A%E4%BD%8D-Flag/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/1.jpg">
@@ -356,12 +357,12 @@ mjx-container[display="true"] + br {
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="Codeforces Round 1070 (Div. 2) C. Odd Process | Pinkode神秘小作坊">
+      <meta itemprop="name" content="CTF 流量题杀器！开源 CTF 流量分析专家系统，一键定位 Flag | Pinkode神秘小作坊">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Codeforces Round 1070 (Div. 2) C. Odd Process
+          CTF 流量题杀器！开源 CTF 流量分析专家系统，一键定位 Flag
         </h1>
 
         <div class="post-meta-container">
@@ -373,7 +374,7 @@ mjx-container[display="true"] + br {
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2025-12-15 12:45:46 / 修改时间：13:00:36" itemprop="dateCreated datePublished" datetime="2025-12-15T12:45:46+08:00">2025-12-15</time>
+      <time title="创建时间：2026-03-16 10:45:03 / 修改时间：10:47:33" itemprop="dateCreated datePublished" datetime="2026-03-16T10:45:03+08:00">2026-03-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -381,7 +382,7 @@ mjx-container[display="true"] + br {
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+          <a href="/categories/%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90agent/" itemprop="url" rel="index"><span itemprop="name">流量分析agent</span></a>
         </span>
     </span>
 
@@ -401,23 +402,78 @@ mjx-container[display="true"] + br {
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="解题报告：C-Odd-Process"><a href="#解题报告：C-Odd-Process" class="headerlink" title="解题报告：C. Odd Process"></a>解题报告：C. <a target="_blank" rel="noopener" href="https://codeforces.com/contest/2176/problem/C">Odd Process</a></h1><h2 id="题目概述"><a href="#题目概述" class="headerlink" title="题目概述"></a>题目概述</h2><p>You have n coins with denominations a1,a2,…,an and a natural number k. You also have a bag, which is initially empty, where you can place coins. You need to perform exactly k actions. In each action, you take one coin from those you have left and put it in your bag. After that, you can no longer take that coin.</p>
-<p>At the same time, you have a cat that loves even numbers, so every time the sum of the denominations of the coins in your bag becomes even, your cat empties the bag, meaning it takes all the coins to a place known only to it, and the bag is empty again. Note that the bag is emptied every time the sum becomes even during the process of adding coins, not just at the very last moment.</p>
-<p>Let your score be the sum of the denominations of the coins in the bag. Your task is to perform k actions such that your final score is maximized. Find the answer for all 1≤k≤n.</p>
-<h2 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a>问题分析</h2><p>我们需要选择硬币的放入顺序，以最大化最终得分。关键在于理解奇偶性的变化规律：</p>
+    <div class="post-body" itemprop="articleBody"><h1 id="CTF流量题杀器！在线即用的CTF流量分析专家系统，一键定位Flag"><a href="#CTF流量题杀器！在线即用的CTF流量分析专家系统，一键定位Flag" class="headerlink" title="CTF流量题杀器！在线即用的CTF流量分析专家系统，一键定位Flag"></a>CTF流量题杀器！在线即用的CTF流量分析专家系统，一键定位Flag</h1><p>做CTF流量分析题的你，是不是也踩过这些坑：</p>
 <ul>
-<li>奇数 + 奇数 = 偶数</li>
-<li>偶数 + 偶数 = 偶数</li>
-<li>奇数 + 偶数 = 奇数</li>
+<li>对着Wireshark几万条数据包翻到眼瞎，找不到关键明文</li>
+<li>遇到URL/Base64/Hex多层套娃编码，手动解码解到崩溃</li>
+<li>用大模型分析疯狂幻觉，把测试内容编造成Flag，完全不可信</li>
+<li>分析过程黑盒化，出了问题根本不知道哪个环节错了</li>
+<li>新手入门门槛高，本地环境配置半天搞不定，还没开始分析就先劝退</li>
 </ul>
-<p>放入硬币后，如果总和为偶数，袋子被清空（总和变为 0）。因此，为了在操作结束时袋子不为空，最后一次操作后的总和必须是奇数。</p>
-<h2 id="关键观察"><a href="#关键观察" class="headerlink" title="关键观察"></a>关键观察</h2><ol>
-<li><strong>最终得分非零的条件</strong>：必须至少使用一个奇数，且最后一段（最后一次清空之后的操作序列，或从开始就没有清空）只能包含一个奇数和若干个偶数（因为再放入一个奇数会触发清空）。</li>
-<li><strong>构造方式</strong>：先将最大的奇数和较大的偶数依次放入，若偶数放完，保证接下来放入的奇数个数为偶数，否则将最小的偶数换为奇数。</li>
+<p>今天给大家带来一款<strong>专为CTF流量题打造、开箱即用的运维级全链路流量分析专家系统</strong>，从PCAP解析到Flag定位全流程自动化，彻底解决流量分析的所有痛点。<strong>无需下载、无需配置环境、无需写一行代码，直接打开浏览器就能用</strong>！</p>
+<p>👉 <strong>直接点击访问，一键开启分析</strong>：<br><strong><a target="_blank" rel="noopener" href="https://ctf-flow-analyzer-kaltvwcieujshk8924meuh.streamlit.app/">CTF流量分析专家系统 - 在线版</a></strong><br><code>https://ctf-flow-analyzer-kaltvwcieujshk8924meuh.streamlit.app/</code></p>
+<h2 id="项目简介"><a href="#项目简介" class="headerlink" title="项目简介"></a>项目简介</h2><p>这是一套<strong>专为CTF流量分析场景深度优化</strong>的自动化分析工具，基于Python开发，采用「自动化引擎做重活+多Agent做微推理」的架构设计，彻底摒弃了单一大模型包办一切的黑盒模式。</p>
+<ul>
+<li>90%的基础工作由自动化引擎完成，稳定、可复现、无幻觉</li>
+<li>10%的推理工作由多个微型Agent分工完成，每个AI只做一件极小的事，精准可控</li>
+<li>全链路每个环节都有完整的日志和输出，运维级可追踪、可调试</li>
+<li>支持<strong>在线Web可视化界面</strong>+本地命令行双模式，兼顾新手友好度和老手效率</li>
+</ul>
+<p>现在你无需任何本地部署，直接访问上面的在线地址，就能使用全部功能！</p>
+<h2 id="核心亮点"><a href="#核心亮点" class="headerlink" title="核心亮点"></a>核心亮点</h2><h3 id="1-开箱即用，零门槛上手"><a href="#1-开箱即用，零门槛上手" class="headerlink" title="1. 开箱即用，零门槛上手"></a>1. 开箱即用，零门槛上手</h3><p>无需安装Python、无需配置依赖、无需解决环境冲突，甚至不用注册登录。<br>只要打开浏览器访问在线地址，输入你的DeepSeek API Key，拖拽上传PCAP/PCAPNG流量包，一键就能启动全链路分析，哪怕是刚接触CTF的纯新手，也能在30秒内上手使用。</p>
+<h3 id="2-运维级全链路流水线，全程可追溯"><a href="#2-运维级全链路流水线，全程可追溯" class="headerlink" title="2. 运维级全链路流水线，全程可追溯"></a>2. 运维级全链路流水线，全程可追溯</h3><p>项目采用固定的8步标准化流水线，每一步的输入、输出、执行状态都完整记录，彻底告别黑盒分析：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">PCAP解析引擎 → 数据提取引擎 → 多层迭代解码引擎 → 本地规则引擎</span><br><span class="line">→ 记忆检索Agent → 环节增强Agent → 防幻觉审查Agent → 全链路报告生成</span><br></pre></td></tr></table></figure>
+<p>哪怕分析出了问题，你也能精准定位到哪个环节出了错，甚至可以单独查看每个环节的输出结果，手动排查关键信息，所有数据都在界面上分标签页清晰展示。</p>
+<h3 id="3-多Agent微推理架构，彻底根治AI幻觉"><a href="#3-多Agent微推理架构，彻底根治AI幻觉" class="headerlink" title="3. 多Agent微推理架构，彻底根治AI幻觉"></a>3. 多Agent微推理架构，彻底根治AI幻觉</h3><p>我们彻底放弃了「一个大模型搞定所有事」的模式，把AI的工作拆解到极致，每个Agent只负责一个极小的推理任务：</p>
+<ul>
+<li><strong>记忆检索Agent</strong>：仅负责匹配历史相似题目，给出参考经验</li>
+<li><strong>环节增强Agent</strong>：仅基于已提取的关键数据，给出解题方向</li>
+<li><strong>防幻觉审查Agent</strong>：仅负责校验AI输出是否符合真实流量数据，杜绝编造内容</li>
+</ul>
+<p>同时所有AI输出都以<strong>本地规则引擎的结果为最高优先级</strong>，本地已经扫描到的Flag，AI绝对不能篡改；本地没有的数据，AI绝对不能编造，从根源上解决幻觉问题。</p>
+<h3 id="4-超强流量提取能力，不漏掉任何关键明文"><a href="#4-超强流量提取能力，不漏掉任何关键明文" class="headerlink" title="4. 超强流量提取能力，不漏掉任何关键明文"></a>4. 超强流量提取能力，不漏掉任何关键明文</h3><p>针对CTF流量题的特性，我们做了深度优化的提取引擎：</p>
+<ul>
+<li>自动完成<strong>TCP流重组</strong>，把分段的数据包拼接成完整的会话内容，不会漏掉分段传输的Flag</li>
+<li>多编码兼容，支持UTF-8/GBK/GB2312/ASCII等多种编码，不会因为编码问题导致明文提取为空</li>
+<li>不过滤非打印字符之外的任何内容，哪怕是特殊格式的载荷，也会完整提取出来</li>
+<li>自动识别IP会话、HTTP请求/响应、TCP明文载荷，分类整理，一目了然</li>
+</ul>
+<h3 id="5-全自动多层迭代解码，搞定套娃编码"><a href="#5-全自动多层迭代解码，搞定套娃编码" class="headerlink" title="5. 全自动多层迭代解码，搞定套娃编码"></a>5. 全自动多层迭代解码，搞定套娃编码</h3><p>CTF流量题最常见的考点就是多层编码套娃，比如两次URL编码、Base64+Hex混合编码，手动解码极其繁琐。<br>项目内置了全自动迭代解码引擎，支持URL/Base64/Hex/Unicode等CTF高频编码格式，自动循环解码，最多支持5层套娃，同时完整记录每一步的解码历史，你可以清晰看到明文的还原过程。</p>
+<h3 id="6-完全开源免费，可扩展性拉满"><a href="#6-完全开源免费，可扩展性拉满" class="headerlink" title="6. 完全开源免费，可扩展性拉满"></a>6. 完全开源免费，可扩展性拉满</h3><p>项目完全基于Python开发，代码结构清晰，模块解耦，你可以轻松扩展新的解码格式、新的规则、新的Agent能力，适配更多CTF场景，甚至可以扩展到日常网络运维、应急响应的流量分析场景。</p>
+<h2 id="快速上手"><a href="#快速上手" class="headerlink" title="快速上手"></a>快速上手</h2><h3 id="方式一：在线一键使用（推荐，零门槛）"><a href="#方式一：在线一键使用（推荐，零门槛）" class="headerlink" title="方式一：在线一键使用（推荐，零门槛）"></a>方式一：在线一键使用（推荐，零门槛）</h3><ol>
+<li>直接点击访问在线地址：<br><strong><a target="_blank" rel="noopener" href="https://ctf-flow-analyzer-kaltvwcieujshk8924meuh.streamlit.app/">CTF流量分析专家系统</a></strong></li>
+<li>在侧边栏输入你的DeepSeek API Key（用于AI增强分析，核心解析功能无需API也能使用）</li>
+<li>点击「Browse files」上传你的PCAP/PCAPNG流量包</li>
+<li>点击「🚀 开始全链路分析」，等待分析完成</li>
+<li>在标签页中查看Flag扫描结果、明文数据、解码历史、解题思路，还能一键下载完整的运维级分析报告</li>
 </ol>
-<h2 id="算法设计"><a href="#算法设计" class="headerlink" title="算法设计"></a>算法设计</h2><p>将数组按奇偶分开从大到小排序，放入顺序为最大奇数，最大偶数，第二大偶数……，注意考虑不存在奇偶数的边界情况。</p>
-<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;functional&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">sas</span><span class="params">(<span class="type">const</span> std::vector&lt;<span class="type">long</span> <span class="type">long</span>&gt;&amp; input, std::vector&lt;<span class="type">long</span> <span class="type">long</span>&gt;&amp; odd, std::vector&lt;<span class="type">long</span> <span class="type">long</span>&gt;&amp; even)</span> </span>{</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">long</span> <span class="type">long</span> num : input) {</span><br><span class="line">        <span class="keyword">if</span> (num % <span class="number">2</span> != <span class="number">0</span>) {</span><br><span class="line">            odd.<span class="built_in">push_back</span>(num);</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">else</span> {</span><br><span class="line">            even.<span class="built_in">push_back</span>(num);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    std::<span class="built_in">sort</span>(odd.<span class="built_in">begin</span>(), odd.<span class="built_in">end</span>(), std::<span class="built_in">greater</span>&lt;<span class="type">long</span> <span class="type">long</span>&gt;());</span><br><span class="line">    std::<span class="built_in">sort</span>(even.<span class="built_in">begin</span>(), even.<span class="built_in">end</span>(), std::<span class="built_in">greater</span>&lt;<span class="type">long</span> <span class="type">long</span>&gt;());</span><br><span class="line">    <span class="keyword">if</span> (even.<span class="built_in">size</span>() == <span class="number">0</span>) {</span><br><span class="line">        even.<span class="built_in">push_back</span>(<span class="number">0</span>);</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="type">long</span> <span class="type">long</span> t;</span><br><span class="line">    std::cin &gt;&gt; t;</span><br><span class="line">    <span class="keyword">while</span> (t--) {</span><br><span class="line">        <span class="type">long</span> <span class="type">long</span> n,i;</span><br><span class="line">        cin &gt;&gt; n;</span><br><span class="line">        <span class="function">std::vector&lt;<span class="type">long</span> <span class="type">long</span>&gt; <span class="title">a</span><span class="params">(n)</span>, odd, even</span>;</span><br><span class="line">        <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n; i++) {</span><br><span class="line">            std::cin &gt;&gt; a[i];</span><br><span class="line"></span><br><span class="line">        }</span><br><span class="line">        <span class="built_in">sas</span>(a, odd, even);</span><br><span class="line">        <span class="keyword">if</span> (odd.<span class="built_in">size</span>() == <span class="number">0</span>) {</span><br><span class="line">            <span class="keyword">for</span> (i = <span class="number">1</span>; i &lt;= n; i++) {</span><br><span class="line">                std::cout &lt;&lt; <span class="number">0</span> &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">            }</span><br><span class="line">            </span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(odd.<span class="built_in">size</span>()%<span class="number">2</span> == <span class="number">1</span>) {</span><br><span class="line">            cout &lt;&lt; odd[<span class="number">0</span>] &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">            <span class="type">long</span> <span class="type">long</span> sum1 = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">if</span> (even[<span class="number">0</span>] != <span class="number">0</span>) {</span><br><span class="line">                <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt;= even.<span class="built_in">size</span>() - <span class="number">1</span>; i++) {</span><br><span class="line">                    <span class="keyword">if</span> (even[i] == <span class="number">0</span>) {</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    }</span><br><span class="line"></span><br><span class="line">                    sum1 += even[i];</span><br><span class="line">                    cout &lt;&lt; sum1 + odd[<span class="number">0</span>] &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">                }</span><br><span class="line">                <span class="keyword">if</span> (odd.<span class="built_in">size</span>() &gt; <span class="number">2</span>) {</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt;= odd.<span class="built_in">size</span>() - <span class="number">2</span>; i++) {</span><br><span class="line">                        <span class="keyword">if</span> (i % <span class="number">2</span> == <span class="number">0</span>) {</span><br><span class="line">                            cout &lt;&lt; sum1 - even[even.<span class="built_in">size</span>() - <span class="number">1</span>] + odd[<span class="number">0</span>] &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">                        }</span><br><span class="line">                        <span class="keyword">else</span> {</span><br><span class="line">                            cout &lt;&lt; sum1 + odd[<span class="number">0</span>] &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">                        }</span><br><span class="line">                    }</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">            <span class="keyword">else</span> {</span><br><span class="line">                <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n - <span class="number">1</span>; i++) {</span><br><span class="line">                    <span class="keyword">if</span> (i % <span class="number">2</span> == <span class="number">0</span>) {</span><br><span class="line">                        cout &lt;&lt; <span class="number">0</span> &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">                    }</span><br><span class="line">                    <span class="keyword">else</span> {</span><br><span class="line">                        cout &lt;&lt; odd[<span class="number">0</span>] &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">                    }</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">            </span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">else</span> {</span><br><span class="line">            cout &lt;&lt; odd[<span class="number">0</span>] &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">            <span class="type">long</span> <span class="type">long</span> sum1 = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">if</span> (even[<span class="number">0</span>] != <span class="number">0</span>) {</span><br><span class="line">                <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt;= even.<span class="built_in">size</span>() - <span class="number">1</span>; i++) {</span><br><span class="line"></span><br><span class="line">                    sum1 += even[i];</span><br><span class="line">                    cout &lt;&lt; sum1 + odd[<span class="number">0</span>] &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">                }</span><br><span class="line">                <span class="keyword">if</span> (odd.<span class="built_in">size</span>() &gt; <span class="number">2</span>) {</span><br><span class="line">                    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt;= odd.<span class="built_in">size</span>() - <span class="number">3</span>; i++) {</span><br><span class="line">                        <span class="keyword">if</span> (i % <span class="number">2</span> == <span class="number">0</span>) {</span><br><span class="line">                            cout &lt;&lt; sum1 - even[even.<span class="built_in">size</span>() - <span class="number">1</span>] + odd[<span class="number">0</span>] &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">                        }</span><br><span class="line">                        <span class="keyword">else</span> {</span><br><span class="line">                            cout &lt;&lt; sum1 + odd[<span class="number">0</span>] &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">                        }</span><br><span class="line">                    }</span><br><span class="line">                    cout &lt;&lt; <span class="number">0</span>;</span><br><span class="line">                }</span><br><span class="line">                <span class="keyword">else</span> {</span><br><span class="line">                    cout &lt;&lt; <span class="number">0</span>;</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">            <span class="keyword">else</span> {</span><br><span class="line">                <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n - <span class="number">1</span>; i++) {</span><br><span class="line">                    <span class="keyword">if</span> (i % <span class="number">2</span> == <span class="number">0</span>) {</span><br><span class="line">                        cout &lt;&lt; <span class="number">0</span> &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">                    }</span><br><span class="line">                    <span class="keyword">else</span> {</span><br><span class="line">                        cout &lt;&lt; odd[<span class="number">0</span>] &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">                    }</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">        </span><br><span class="line">        std::cout &lt;&lt; endl;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<p>比赛时被这题恶心了很久才拉出来的代码，也是能让你们吃上了😀</p>
+<h3 id="方式二：本地部署运行"><a href="#方式二：本地部署运行" class="headerlink" title="方式二：本地部署运行"></a>方式二：本地部署运行</h3><p>如果你想在本地私有化部署，也可以直接克隆开源仓库使用：</p>
+<ol>
+<li><p>克隆项目到本地</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> 【你的GitHub仓库地址】</span><br><span class="line"><span class="built_in">cd</span> ctf-flow-analyzer</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>安装依赖</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -r requirements.txt</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置API Key<br>在项目根目录创建<code>.env</code>文件，写入你的DeepSeek API Key：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DEEPSEEK_API_KEY=你的sk-开头的API Key</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动本地Web界面</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">streamlit run app.py</span><br></pre></td></tr></table></figure>
+<p>启动后浏览器会自动打开<code>http://localhost:8501</code>，和在线版完全一致的使用体验。</p>
+</li>
+<li><p>命令行快速运行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python main.py 你的流量包.pcapng</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h2><ul>
+<li>CTF比赛中的流量分析题目（MISC、Web方向）</li>
+<li>网络安全学习，流量分析入门练习</li>
+<li>日常网络运维，基础流量审计</li>
+<li>应急响应场景，快速提取流量中的可疑特征和明文</li>
+</ul>
+<h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><p>这个项目的初衷，是解决我自己打CTF时遇到的流量分析痛点，也希望能帮到更多刚入门CTF、或者被流量题折磨的小伙伴。</p>
+<p>现在你无需任何部署，直接访问在线地址就能使用全部功能：<br>👉 <strong><a target="_blank" rel="noopener" href="https://ctf-flow-analyzer-kaltvwcieujshk8924meuh.streamlit.app/">CTF流量分析专家系统 - 在线版</a></strong></p>
+<p>项目已经完全开源，仓库地址：【这里填写你的GitHub仓库地址】<br>如果这个项目帮到了你，欢迎给个Star⭐，也欢迎大家提Issue、PR，一起完善这个项目，让它成为CTF流量题的通用杀器。</p>
 
     </div>
 
@@ -427,21 +483,19 @@ mjx-container[display="true"] + br {
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E7%AE%97%E6%B3%95/" rel="tag"># 算法</a>
+              <a href="/tags/agent/" rel="tag"># agent</a>
+              <a href="/tags/%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/" rel="tag"># 流量分析</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2025/12/14/babyrsa%EF%BC%88%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%EF%BC%89/" rel="prev" title="babyrsa（攻防世界）">
-                  <i class="fa fa-angle-left"></i> babyrsa（攻防世界）
+                <a href="/2026/02/08/bad-python/" rel="prev" title="bad_python">
+                  <i class="fa fa-angle-left"></i> bad_python
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2026/02/08/bad-python/" rel="next" title="bad_python">
-                  bad_python <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>

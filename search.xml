@@ -85,79 +85,6 @@
       </tags>
   </entry>
   <entry>
-    <title>SuanP01y</title>
-    <url>/2025/12/14/SuanP01y/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="RCTF-2025-SuanP01y"><a href="#RCTF-2025-SuanP01y" class="headerlink" title="RCTF 2025 SuanP01y"></a>RCTF 2025 SuanP01y</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>这是一个基于多项式环和有理重构的密码分析问题。题目涉及在有限域GF(2)上的多项式环中解决有理重构问题，并利用重构结果进行AES解密。</p>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><ol>
-<li>分析题目中的多项式环结构和有理重构问题</li>
-<li>实现多项式有理重构算法</li>
-<li>利用重构结果生成AES密钥</li>
-<li>通过穷举循环平移找到正确的解密密钥</li>
-</ol>
-<h2 id="解题过程"><a href="#解题过程" class="headerlink" title="解题过程"></a>解题过程</h2><h3 id="步骤1：理解多项式环结构"><a href="#步骤1：理解多项式环结构" class="headerlink" title="步骤1：理解多项式环结构"></a>步骤1：理解多项式环结构</h3><p>题目工作在有限域GF(2)上的多项式环，模数为m(x)=xr−1，其中r=16381。</p>
-<p>数学表示：</p>
-<ul>
-<li>基础环：R=GF(2)[x]</li>
-<li>商环：S=R/⟨xr−1⟩</li>
-</ul>
-<h3 id="步骤2：多项式有理重构原理"><a href="#步骤2：多项式有理重构原理" class="headerlink" title="步骤2：多项式有理重构原理"></a>步骤2：多项式有理重构原理</h3><p>有理重构问题：给定模多项式M(x)和多项式H(x)，寻找A(x)和B(x)满足：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">H(x)≡B(x)A(x)(modM(x))</span><br></pre></td></tr></table></figure>
-
-<p>其中：</p>
-<ol>
-<li>gcd(B(x),M(x))=1</li>
-<li>A(x)和B(x)的次数限制较小（本题中汉明重量d=41）</li>
-</ol>
-<h3 id="步骤3：扩展欧几里得算法实现"><a href="#步骤3：扩展欧几里得算法实现" class="headerlink" title="步骤3：扩展欧几里得算法实现"></a>步骤3：扩展欧几里得算法实现</h3><p>使用扩展欧几里得算法进行有理重构：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">def rational_reconstruction(hint_poly):</span><br><span class="line">    r0, r1 = m, R(hint_poly)</span><br><span class="line">    t0, t1 = R(0), R(1)</span><br><span class="line">    step = 0</span><br><span class="line"></span><br><span class="line">    while r1 != 0:</span><br><span class="line">        q = r0 // r1</span><br><span class="line">        r0, r1 = r1, r0 + q * r1  # 在GF(2)上，加法等同于异或</span><br><span class="line">        t0, t1 = t1, t0 + q * t1</span><br><span class="line">        step += 1</span><br><span class="line"></span><br><span class="line">        if hwt(r0) == d and hwt(t0) == d:</span><br><span class="line">            return r0, t0</span><br><span class="line"></span><br><span class="line">    print("Fail")</span><br><span class="line">    return None, None</span><br></pre></td></tr></table></figure>
-
-<p>算法步骤详解：</p>
-<ol>
-<li><strong>初始化</strong>：r0=M(x), r1=H(x), t0=0, t1=1</li>
-<li><strong>迭代计算</strong>：<ul>
-<li>计算商式：q=r0÷r1</li>
-<li>更新余数：r0,r1=r1,r0−q⋅r1</li>
-<li>更新系数：t0,t1=t1,t0−q⋅t1</li>
-</ul>
-</li>
-<li><strong>终止条件</strong>：当r0和t0的汉明重量都等于d=41时返回</li>
-</ol>
-<h3 id="步骤4：汉明重量计算"><a href="#步骤4：汉明重量计算" class="headerlink" title="步骤4：汉明重量计算"></a>步骤4：汉明重量计算</h3><p>汉明重量定义为多项式中非零系数的个数：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">def hwt(poly):</span><br><span class="line">    return len(poly.exponents())</span><br></pre></td></tr></table></figure>
-
-<p>在GF(2)上，非零系数即为1，因此汉明重量就是多项式中项的数量。</p>
-<h3 id="步骤5：多项式解析"><a href="#步骤5：多项式解析" class="headerlink" title="步骤5：多项式解析"></a>步骤5：多项式解析</h3><p>从字符串形式解析多项式：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hint_str = lines[0].split('=')[1].strip()</span><br><span class="line">exps = []</span><br><span class="line">for term in hint_str.split('+'):</span><br><span class="line">    term = term.strip()</span><br><span class="line">    if not term:</span><br><span class="line">        continue</span><br><span class="line">    if term == '1':</span><br><span class="line">        exps.append(0)</span><br><span class="line">    elif term == 'X':</span><br><span class="line">        exps.append(1)</span><br><span class="line">    elif term.startswith('X^'):</span><br><span class="line">        exps.append(int(term[2:]))</span><br><span class="line"></span><br><span class="line">hint_poly = sum(x**e for e in exps)</span><br></pre></td></tr></table></figure>
-
-<p>将形如”1 + X + X^2 + … + X^r”的字符串转换为多项式对象。</p>
-<h3 id="步骤6：循环平移与解密"><a href="#步骤6：循环平移与解密" class="headerlink" title="步骤6：循环平移与解密"></a>步骤6：循环平移与解密</h3><p>对重构得到的B(x)进行所有可能的循环平移：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">B_S = S(B)</span><br><span class="line">nonce = b"suanp01y"</span><br><span class="line"></span><br><span class="line">for k in range(r):</span><br><span class="line">    h0_candidate = B_S * (X**k)  # 循环平移</span><br><span class="line">    key = md5(str(h0_candidate).encode()).digest()</span><br><span class="line"></span><br><span class="line">    try:</span><br><span class="line">        cipher = AES.new(key, AES.MODE_CTR, nonce=nonce)</span><br><span class="line">        flag = cipher.decrypt(ct)</span><br><span class="line">        if flag.startswith(b"RCTF{"):</span><br><span class="line">            print("Success!")</span><br><span class="line">            print(flag)</span><br><span class="line">            return</span><br><span class="line">    except:</span><br><span class="line">        continue</span><br></pre></td></tr></table></figure>
-
-<p>数学原理：在商环S=R/⟨xr−1⟩中，乘以xk相当于循环平移。</p>
-<h3 id="步骤7：完整解题代码"><a href="#步骤7：完整解题代码" class="headerlink" title="步骤7：完整解题代码"></a>步骤7：完整解题代码</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">from Crypto.Cipher import AES</span><br><span class="line">from hashlib import md5</span><br><span class="line"></span><br><span class="line">r = 16381</span><br><span class="line">d = 41</span><br><span class="line"></span><br><span class="line">R.&lt;x&gt; = PolynomialRing(GF(2))</span><br><span class="line">m = x^r - 1</span><br><span class="line">S.&lt;X&gt; = R.quo(m)</span><br><span class="line"></span><br><span class="line">def hwt(poly):</span><br><span class="line">    return len(poly.exponents())</span><br><span class="line"></span><br><span class="line">def rational_reconstruction(hint_poly):</span><br><span class="line">    r0, r1 = m, R(hint_poly)</span><br><span class="line">    t0, t1 = R(0), R(1)</span><br><span class="line">    step = 0</span><br><span class="line"></span><br><span class="line">    while r1 != 0:</span><br><span class="line">        q = r0 // r1</span><br><span class="line">        r0, r1 = r1, r0 + q * r1</span><br><span class="line">        t0, t1 = t1, t0 + q * t1</span><br><span class="line">        step += 1</span><br><span class="line"></span><br><span class="line">        if hwt(r0) == d and hwt(t0) == d:</span><br><span class="line">            return r0, t0</span><br><span class="line"></span><br><span class="line">    print("Fail")</span><br><span class="line">    return None, None</span><br><span class="line"></span><br><span class="line">def solve():</span><br><span class="line">    with open("output.txt", "r") as f:</span><br><span class="line">        lines = f.read().splitlines()</span><br><span class="line"></span><br><span class="line">    hint_str = lines[0].split('=')[1].strip()</span><br><span class="line">    exps = []</span><br><span class="line"></span><br><span class="line">    for term in hint_str.split('+'):</span><br><span class="line">        term = term.strip()</span><br><span class="line">        if not term:</span><br><span class="line">            continue</span><br><span class="line">        if term == '1':</span><br><span class="line">            exps.append(0)</span><br><span class="line">        elif term == 'X':</span><br><span class="line">            exps.append(1)</span><br><span class="line">        elif term.startswith('X^'):</span><br><span class="line">            exps.append(int(term[2:]))</span><br><span class="line"></span><br><span class="line">    hint_poly = sum(x**e for e in exps)</span><br><span class="line">    ct = bytes.fromhex(lines[1])</span><br><span class="line"></span><br><span class="line">    A, B = rational_reconstruction(hint_poly)</span><br><span class="line"></span><br><span class="line">    if B is None:</span><br><span class="line">        print("Fail")</span><br><span class="line">        return</span><br><span class="line"></span><br><span class="line">    B_S = S(B)</span><br><span class="line">    nonce = b"suanp01y"</span><br><span class="line"></span><br><span class="line">    for k in range(r):</span><br><span class="line">        h0_candidate = B_S * (X**k)</span><br><span class="line">        key = md5(str(h0_candidate).encode()).digest()</span><br><span class="line"></span><br><span class="line">        try:</span><br><span class="line">            cipher = AES.new(key, AES.MODE_CTR, nonce=nonce)</span><br><span class="line">            flag = cipher.decrypt(ct)</span><br><span class="line">            if flag.startswith(b"RCTF{"):</span><br><span class="line">                print("Success!")</span><br><span class="line">                print(flag)</span><br><span class="line">                return</span><br><span class="line">        except:</span><br><span class="line">            continue</span><br><span class="line"></span><br><span class="line">if __name__ == '__main__':</span><br><span class="line">    solve()</span><br></pre></td></tr></table></figure>
-
-<h2 id="数学原理详解"><a href="#数学原理详解" class="headerlink" title="数学原理详解"></a>数学原理详解</h2><h3 id="多项式环与商环"><a href="#多项式环与商环" class="headerlink" title="多项式环与商环"></a>多项式环与商环</h3><ul>
-<li><strong>多项式环</strong>：GF(2)[x]表示系数在GF(2)上的多项式环</li>
-<li><strong>商环构造</strong>：S=R/⟨m(x)⟩，其中m(x)=xr−1</li>
-<li><strong>循环性质</strong>：在商环S中，xr≡1，因此乘以xk实现循环平移</li>
-</ul>
-<h3 id="有理重构的数学基础"><a href="#有理重构的数学基础" class="headerlink" title="有理重构的数学基础"></a>有理重构的数学基础</h3><p>有理重构问题等价于寻找满足以下条件的多项式：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">H(x)⋅B(x)≡A(x)(modM(x))</span><br></pre></td></tr></table></figure>
-
-<p>其中A(x)和B(x)满足特定的大小约束（本题中为汉明重量约束）。</p>
-<h3 id="扩展欧几里得算法"><a href="#扩展欧几里得算法" class="headerlink" title="扩展欧几里得算法"></a>扩展欧几里得算法</h3><p>算法保证在有限步内找到满足条件的A(x)和B(x)，当满足：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">deg(A)+deg(B)≤deg(M)</span><br></pre></td></tr></table></figure>
-
-<p>时，解是唯一的。</p>
-]]></content>
-      <categories>
-        <category>CRYPTO</category>
-      </categories>
-      <tags>
-        <tag>crypto</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Backpack Cryptography</title>
     <url>/2025/12/14/Backpack-Cryptography/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="Backpack-Cryptography"><a href="#Backpack-Cryptography" class="headerlink" title="Backpack Cryptography"></a>Backpack Cryptography</h1><p><strong>Challenge files:</strong></p>
@@ -172,111 +99,6 @@
       </categories>
       <tags>
         <tag>crypto</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>bad_python</title>
-    <url>/2026/02/08/bad-python/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="bad-python-题解-🐱"><a href="#bad-python-题解-🐱" class="headerlink" title="bad_python 题解 🐱"></a>bad_python 题解 🐱</h1><blockquote>
-<p>题目描述：the .pyc is broken ,can you help me recover?</p>
-</blockquote>
-<h2 id="第一步：初见文件-🎀"><a href="#第一步：初见文件-🎀" class="headerlink" title="第一步：初见文件 🎀"></a>第一步：初见文件 🎀</h2><p>下载附件，是一个名为 <code>bdbc0757-1971-4134-8f3c-aa4b0a7add42.zip</code> 的压缩包，解压后得到一个 <code>pyre.cpython-36.pyc</code> 文件。这是一个 Python 3.6 版本的字节码文件，但题目提示它被“破坏”了，需要我们帮忙恢复~</p>
-<p>通常，<code>.pyc</code> 文件是 Python 源码编译后的字节码，可以通过反编译工具将其还原为 Python 代码。但直接反编译可能会失败，因为文件头部可能被破坏了喵~</p>
-<h2 id="第二步：尝试反编译-🛠"><a href="#第二步：尝试反编译-🛠" class="headerlink" title="第二步：尝试反编译 🛠"></a>第二步：尝试反编译 🛠</h2><p>首先，尝试用常用的反编译工具 <code>uncompyle6</code> 来反编译：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pip install uncompyle6</span><br><span class="line">uncompyle6 -o . pyre.cpython-36.pyc</span><br></pre></td></tr></table></figure>
-
-<p>但出现了错误提示：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">KeyError: '3.9.3'</span><br></pre></td></tr></table></figure>
-
-<p>咦？文件名是 <code>cpython-36</code>，说明应该是 Python 3.6 编译的，但工具似乎检测到了不匹配的版本。可能是文件头部的魔数（magic number）不对，导致工具识别错误。</p>
-<h2 id="第三步：修复文件头-🔧"><a href="#第三步：修复文件头-🔧" class="headerlink" title="第三步：修复文件头 🔧"></a>第三步：修复文件头 🔧</h2><p>Python 的 <code>.pyc</code> 文件头部有一个魔数，用来标识 Python 版本。我们需要将其修正为正确的 Python 3.6 的魔数。</p>
-<p>用十六进制编辑器（如 WinHex）打开 <code>pyre.cpython-36.pyc</code>，查看头部。直接修改文件头，仍反编译失败。<br>我们可以在本地用 Python 3.6 编译一个简单的脚本，生成一个正确的 <code>.pyc</code> 文件，比较头部。</p>
-<p>在 Python 3.6 中，<code>.pyc</code> 文件头结构为：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> {</span></span><br><span class="line">    <span class="type">uint32_t</span> magic;      <span class="comment">// 4字节：魔数，标识Python版本</span></span><br><span class="line">    <span class="type">uint32_t</span> bit_field;  <span class="comment">// 4字节：位字段</span></span><br><span class="line">    <span class="type">uint64_t</span> timestamp;  <span class="comment">// 8字节：时间戳</span></span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-
-<p>先写一个1.py，再用以下命令生成它的pyc文件：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">python3.6 -m py_compile 1.py</span><br></pre></td></tr></table></figure>
-
-<p>然后比较两个文件的头部。发现原文件的魔数不正确，于是将原文件的前 16 个字节替换为正确的 Python 3.6 的头部（可以从1.py中复制）。</p>
-<p><img src="attachment:a9b179b9-8725-40d3-8f61-89ec4056f4a3:9a55115c-2f47-4896-9d1b-56c89b117d53.png" alt="9a55115c-2f47-4896-9d1b-56c89b117d53.png"></p>
-<p>修复后，再次使用 <code>uncompyle6</code> 反编译：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">uncompyle6 -o . pyre.cpython-36.pyc</span><br></pre></td></tr></table></figure>
-
-<p><img src="attachment:ba280b01-4ff2-4b29-8a0d-76bbea5e599d:b0ce6f78-41f9-4059-9884-95c249a310eb.png" alt="b0ce6f78-41f9-4059-9884-95c249a310eb.png"></p>
-<p>成功啦！得到了 <code>pyre.py</code> 文件，里面就是被反编译的 Python 源码。</p>
-<h2 id="第四步：分析源码-🧐"><a href="#第四步：分析源码-🧐" class="headerlink" title="第四步：分析源码 🧐"></a>第四步：分析源码 🧐</h2><p>打开 <code>pyre.py</code>，内容如下：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">encrypt</span>(<span class="params">v, k</span>):</span><br><span class="line">    v0 = c_uint32(v[<span class="number">0</span>])</span><br><span class="line">    v1 = c_uint32(v[<span class="number">1</span>])</span><br><span class="line">    sum1 = c_uint32(<span class="number">0</span>)</span><br><span class="line">    delta = <span class="number">195935983</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">32</span>):</span><br><span class="line">        v0.value += (v1.value &lt;&lt; <span class="number">4</span> ^ v1.value &gt;&gt; <span class="number">7</span>) + v1.value ^ sum1.value + k[sum1.value &amp; <span class="number">3</span>]</span><br><span class="line">        sum1.value += delta</span><br><span class="line">        v1.value += (v0.value &lt;&lt; <span class="number">4</span> ^ v0.value &gt;&gt; <span class="number">7</span>) + v0.value ^ sum1.value + k[sum1.value &gt;&gt; <span class="number">9</span> &amp; <span class="number">3</span>]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> (v0.value, v1.value)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    flag = <span class="built_in">input</span>(<span class="string">"please input your flag:"</span>)</span><br><span class="line">    k = [<span class="number">255</span>, <span class="number">187</span>, <span class="number">51</span>, <span class="number">68</span>]</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(flag) != <span class="number">32</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"wrong!"</span>)</span><br><span class="line">        exit(-<span class="number">1</span>)</span><br><span class="line">    a = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="number">32</span>, <span class="number">8</span>):</span><br><span class="line">        v1 = bytes_to_long(<span class="built_in">bytes</span>(flag[i:i + <span class="number">4</span>], <span class="string">"ascii"</span>))</span><br><span class="line">        v2 = bytes_to_long(<span class="built_in">bytes</span>(flag[i + <span class="number">4</span>:i + <span class="number">8</span>], <span class="string">"ascii"</span>))</span><br><span class="line">        a += encrypt([v1, v2], k)</span><br><span class="line"></span><br><span class="line">    enc = [<span class="number">4006073346</span>, <span class="number">2582197823</span>, <span class="number">2235293281</span>, <span class="number">558171287</span>, <span class="number">2425328816</span>, <span class="number">1715140098</span>, <span class="number">986348143</span>, <span class="number">1948615354</span>]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">8</span>):</span><br><span class="line">        <span class="keyword">if</span> enc[i] != a[i]:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">"wrong!"</span>)</span><br><span class="line">            exit(-<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"flag is flag{%s}"</span> % flag)</span><br></pre></td></tr></table></figure>
-
-<p>加密算法是一个类似 XTEA 的分组密码，但有一些变体。我们需要编写解密算法，从密文反推明文。</p>
-<p>注意到该算法的核心是两个<code>bytes_to_long</code>函数，对其逆向即可。</p>
-<h2 id="第五步：编写解密脚本-🐾"><a href="#第五步：编写解密脚本-🐾" class="headerlink" title="第五步：编写解密脚本 🐾"></a>第五步：编写解密脚本 🐾</h2><p>观察加密过程，每轮操作如下：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">v0.value += (v1.value &lt;&lt; <span class="number">4</span> ^ v1.value &gt;&gt; <span class="number">7</span>) + v1.value ^ sum1.value + k[sum1.value &amp; <span class="number">3</span>]</span><br><span class="line">sum1.value += delta</span><br><span class="line">v1.value += (v0.value &lt;&lt; <span class="number">4</span> ^ v0.value &gt;&gt; <span class="number">7</span>) + v0.value ^ sum1.value + k[sum1.value &gt;&gt; <span class="number">9</span> &amp; <span class="number">3</span>]</span><br></pre></td></tr></table></figure>
-
-<p>其中，<code>sum1</code> 初始为 0，每轮加上 <code>delta</code>，共 32 轮。解密时，我们需要从最后一轮开始逆运算，逐步恢复出原始的 <code>v0</code> 和 <code>v1</code>。</p>
-<p>解密脚本如下：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">decrypt_pair</span>(<span class="params">v0, v1, k</span>):</span><br><span class="line">    delta = <span class="number">195935983</span></span><br><span class="line">    mask = <span class="number">0xFFFFFFFF</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">31</span>, -<span class="number">1</span>, -<span class="number">1</span>):</span><br><span class="line">        s_i = (i * delta) &amp; mask</span><br><span class="line">        s_prime = ((i + <span class="number">1</span>) * delta) &amp; mask</span><br><span class="line">        <span class="comment"># 逆向 v1 的更新</span></span><br><span class="line">        g = ((v0 &lt;&lt; <span class="number">4</span>) ^ (v0 &gt;&gt; <span class="number">7</span>)) + v0</span><br><span class="line">        g ^= (s_prime + k[(s_prime &gt;&gt; <span class="number">9</span>) &amp; <span class="number">3</span>])</span><br><span class="line">        g &amp;= mask</span><br><span class="line">        v1 = (v1 - g) &amp; mask</span><br><span class="line">        <span class="comment"># 逆向 v0 的更新</span></span><br><span class="line">        f = ((v1 &lt;&lt; <span class="number">4</span>) ^ (v1 &gt;&gt; <span class="number">7</span>)) + v1</span><br><span class="line">        f ^= (s_i + k[s_i &amp; <span class="number">3</span>])</span><br><span class="line">        f &amp;= mask</span><br><span class="line">        v0 = (v0 - f) &amp; mask</span><br><span class="line">    <span class="keyword">return</span> v0, v1</span><br><span class="line"></span><br><span class="line">k = [<span class="number">255</span>, <span class="number">187</span>, <span class="number">51</span>, <span class="number">68</span>]</span><br><span class="line">enc = [<span class="number">4006073346</span>, <span class="number">2582197823</span>, <span class="number">2235293281</span>, <span class="number">558171287</span>, <span class="number">2425328816</span>, <span class="number">1715140098</span>, <span class="number">986348143</span>, <span class="number">1948615354</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将密文分成四对</span></span><br><span class="line">pairs = [(enc[i], enc[i + <span class="number">1</span>]) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="number">8</span>, <span class="number">2</span>)]</span><br><span class="line"></span><br><span class="line">flag_bytes = <span class="string">b''</span></span><br><span class="line"><span class="keyword">for</span> v0, v1 <span class="keyword">in</span> pairs:</span><br><span class="line">    p0, p1 = decrypt_pair(v0, v1, k)</span><br><span class="line">    flag_bytes += p0.to_bytes(<span class="number">4</span>, <span class="string">'big'</span>)</span><br><span class="line">    flag_bytes += p1.to_bytes(<span class="number">4</span>, <span class="string">'big'</span>)</span><br><span class="line"></span><br><span class="line">flag = flag_bytes.decode(<span class="string">'ascii'</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">"flag is: flag{%s}"</span> % flag) <span class="comment"># flag is: flag{Th1s_1s_A_Easy_Pyth0n__R3veRse_0}</span></span><br></pre></td></tr></table></figure>
-
-<p>好累的说QAQ</p>
-]]></content>
-      <categories>
-        <category>REVERSE</category>
-      </categories>
-      <tags>
-        <tag>reverse</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>新的尝试。。</title>
-    <url>/2026/05/21/%E6%96%B0%E7%9A%84%E5%B0%9D%E8%AF%95%E3%80%82%E3%80%82/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="大二菜鸡的第一次3D游戏尝试：我想做一个能炸掉一切的惠惠模拟器"><a href="#大二菜鸡的第一次3D游戏尝试：我想做一个能炸掉一切的惠惠模拟器" class="headerlink" title="大二菜鸡的第一次3D游戏尝试：我想做一个能炸掉一切的惠惠模拟器"></a>大二菜鸡的第一次3D游戏尝试：我想做一个能炸掉一切的惠惠模拟器</h1><h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>作为一个每天被实验报告、课程设计和各种截止日期追着跑的大二计算机学生，我最近突然陷入了一种很奇怪的状态：每天坐在电脑前，对着屏幕发呆，明明有一堆事情要做，却什么都不想干。</p>
-<p>我问自己：我学计算机到底是为了什么？是为了写永远写不完的CRUD吗？是为了应付一场又一场的考试吗？还是为了做一些真正能让自己开心的东西？</p>
-<p>就在我对着一个写了三天还没写完的数据结构大作业发呆的时候，我突然想到了惠惠。那个每天什么都不干，只想着放爆裂魔法的红魔族少女。</p>
-<p>“如果能把这些讨厌的东西全部炸掉就好了。”</p>
-<p>这个念头一旦产生，就再也挥之不去了。于是，我做了一个决定：暂停所有工作，用两周时间，做一个属于我自己的游戏。</p>
-<hr>
-<h2 id="项目介绍：惠惠爆裂魔法模拟器"><a href="#项目介绍：惠惠爆裂魔法模拟器" class="headerlink" title="项目介绍：惠惠爆裂魔法模拟器"></a>项目介绍：惠惠爆裂魔法模拟器</h2><p>这不是什么高大上的商业游戏，也不是什么复杂的学术项目。它只是一个非常简单、非常纯粹的小玩具：</p>
-<ul>
-<li>你扮演佐藤和真</li>
-<li>你站在山顶上</li>
-<li>惠惠在你身边</li>
-<li>跟惠惠聊聊天</li>
-<li>然后看着惠惠释放爆裂魔法</li>
-</ul>
-<h3 id="核心体验"><a href="#核心体验" class="headerlink" title="核心体验"></a>核心体验</h3><ol>
-<li><strong>第一人称沉浸式视角</strong>：你就是和真，你可以在山顶自由走动，走到惠惠身边和她说话</li>
-<li><strong>AI驱动的魔法</strong>：输入你想说的，AI会生成对应的咒语和魔法效果</li>
-<li><strong>炸掉你的烦恼</strong>：支持拖入任何图片作为地面，PPT、报表、账单、考试卷，想炸什么炸什么</li>
-<li><strong>情绪匹配BGM</strong>：AI会根据你的心情自动选择最合适的背景音乐</li>
-<li><strong>真实的爆炸反馈</strong>：爆炸时你会感受到相机震动、屏幕模糊、耳鸣，就像真的被冲击波掀飞一样</li>
-</ol>
-<h3 id="为什么要做这个项目"><a href="#为什么要做这个项目" class="headerlink" title="为什么要做这个项目"></a>为什么要做这个项目</h3><p>其实很简单，就是为了爽。</p>
-<p>当你看着惠惠中二地吟唱完咒语，然后一个巨大的火球把你面前的构式炸成碎片的时候，那种积压了很久的压力和烦躁，真的会在一瞬间烟消云散。</p>
-<p>这就是这个项目的全部意义：它不是为了赚钱，不是为了找工作，只是为了给像我一样被生活压得喘不过气的人，提供一个最简单、最直接的情绪宣泄出口。</p>
-<hr>
-<h2 id="项目的未来"><a href="#项目的未来" class="headerlink" title="项目的未来"></a>项目的未来</h2><p>这个项目现在还只是一个非常粗糙的原型，还有很多很多的功能没有实现：</p>
-<ul>
-<li>惠惠的换装系统</li>
-<li>更多的魔法效果</li>
-<li>成就系统</li>
-<li>截图和录屏功能</li>
-<li>多人联机，和朋友一起炸东西</li>
-<li>各种神奇小彩蛋</li>
-</ul>
-<p>我会继续把它做下去，慢慢完善它。如果你对这个项目感兴趣，或者有什么好的想法，欢迎随时告诉我。</p>
-<p>其实应该是5.19就开始做了。。</p>
-<hr>
-<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>如果你也是一个和我一样的大学生，每天被各种作业和考试压得喘不过气，不知道自己未来要做什么。我想对你说：</p>
-<p><strong>去做一件你真正喜欢的事情吧。</strong></p>
-<p>不用怕做不好，不用怕别人笑话，不用怕没有意义。哪怕只是一个很小很小的项目，哪怕只是一个很傻很傻的想法。</p>
-<p>只要是你真正喜欢的，就去做。</p>
-<p>因为在这个过程中，你会找到真正的自己。</p>
-]]></content>
-      <categories>
-        <category>godot3d游戏开发</category>
-      </categories>
-      <tags>
-        <tag>godot</tag>
-        <tag>惠惠</tag>
       </tags>
   </entry>
   <entry>
@@ -308,47 +130,6 @@
       </tags>
   </entry>
   <entry>
-    <title>简单的rsa（攻防世界）</title>
-    <url>/2025/12/14/%E7%AE%80%E5%8D%95%E7%9A%84rsa%EF%BC%88%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%EF%BC%89/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="简单的rsa（攻防世界）"><a href="#简单的rsa（攻防世界）" class="headerlink" title="简单的rsa（攻防世界）"></a>简单的rsa（攻防世界）</h1><p><a href="attachment:9a753b99-785a-485f-a250-f550d436a9de:7634d7960e85494bb9ae648ea871f085.py">7634d7960e85494bb9ae648ea871f085.py</a></p>
-<h2 id="题目分析"><a href="#题目分析" class="headerlink" title="题目分析"></a>题目分析</h2><p>这是一个基于RSA加密系统的密码题目，主要特点如下：</p>
-<ol>
-<li>首先生成标准的RSA参数（p, q, n, e, d）</li>
-<li>然后对原始素数p和q进行”破坏”处理</li>
-<li>使用破坏后的新素数生成新的RSA模数进行加密</li>
-</ol>
-<h3 id="关键代码分析"><a href="#关键代码分析" class="headerlink" title="关键代码分析"></a>关键代码分析</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">def destory(x, num):</span><br><span class="line">    while True:</span><br><span class="line">        dt = getRandomNBitInteger(num)  # 生成num位的随机数</span><br><span class="line">        r = x ^ dt  # 与原素数异或</span><br><span class="line">        if isPrime(r):  # 确保结果是素数</span><br><span class="line">            return r</span><br></pre></td></tr></table></figure>
-
-<p>破坏函数将原始素数p和q分别与900位的随机数进行异或操作，确保结果是素数。</p>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><h3 id="第一步：分解原始n"><a href="#第一步：分解原始n" class="headerlink" title="第一步：分解原始n"></a>第一步：分解原始n</h3><p>题目给出了原始的n, e, d，我们可以利用这些信息分解n：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">def factorize_n_with_d(n, e, d):</span><br><span class="line">    k = e * d - 1</span><br><span class="line">    s = 0</span><br><span class="line">    t = k</span><br><span class="line">    while t % 2 == 0:</span><br><span class="line">        s += 1</span><br><span class="line">        t //= 2</span><br><span class="line"></span><br><span class="line">    for _ in range(100):</span><br><span class="line">        g = 2</span><br><span class="line">        y = pow(g, t, n)</span><br><span class="line">        if y == 1 or y == n-1:</span><br><span class="line">            continue</span><br><span class="line">        for _ in range(s-1):</span><br><span class="line">            x = pow(y, 2, n)</span><br><span class="line">            if x == 1:</span><br><span class="line">                p = sympy.gcd(y-1, n)</span><br><span class="line">                if p != 1 and p != n and n % p == 0:</span><br><span class="line">                    q = n // p</span><br><span class="line">                    return p, q</span><br><span class="line">            elif x == n-1:</span><br><span class="line">                break</span><br><span class="line">            y = x</span><br><span class="line">        g = nextprime(g)</span><br></pre></td></tr></table></figure>
-
-<h3 id="第二步：利用Coppersmith攻击"><a href="#第二步：利用Coppersmith攻击" class="headerlink" title="第二步：利用Coppersmith攻击"></a>第二步：利用Coppersmith攻击</h3><p>由于破坏操作只改变了p和q的低900位，高位保持不变，我们可以使用Coppersmith方法进行攻击：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">p_high = int(bin(p)[2:2050-900],2)  # 提取p的高位(2048-900=1148位)</span><br><span class="line">p = p_high &lt;&lt; 900  # 左移900位，低位补0</span><br><span class="line"></span><br><span class="line">PR.&lt;x&gt; = PolynomialRing(Zmod(new_n))</span><br><span class="line">f = x + p  # 构造多项式f(x) = x + p_high*2^900</span><br><span class="line">roots = f.small_roots(X=2**900, beta=0.4)  # 寻找小根</span><br></pre></td></tr></table></figure>
-
-<h3 id="第三步：恢复新素数并解密"><a href="#第三步：恢复新素数并解密" class="headerlink" title="第三步：恢复新素数并解密"></a>第三步：恢复新素数并解密</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">if roots:</span><br><span class="line">    p += int(roots[0])  # 恢复完整的new_p</span><br><span class="line">    assert new_n % p == 0</span><br><span class="line">    q = new_n // p  # 计算new_q</span><br><span class="line"></span><br><span class="line">    phi = (p - 1) * (q - 1)</span><br><span class="line">    d = pow(e, -1, phi)  # 计算私钥</span><br><span class="line">    m = pow(enc_flag, d, new_n)  # 解密</span><br><span class="line">    print(long_to_bytes(m).decode())</span><br></pre></td></tr></table></figure>
-
-<h2 id="数学原理"><a href="#数学原理" class="headerlink" title="数学原理"></a>数学原理</h2><p>Coppersmith方法的核心思想是：如果知道一个数的高位，可以在多项式时间内恢复其低位。在这个题目中：</p>
-<ul>
-<li>我们知道原始素数p</li>
-<li>新素数new_p = p ⊕ dt，其中dt是900位的随机数</li>
-<li>因此new_p和p只有低900位不同，高位完全相同</li>
-<li>我们可以构造多项式f(x) = p_high × 2^900 + x，在模new_n下寻找小根x</li>
-</ul>
-<h2 id="解题代码"><a href="#解题代码" class="headerlink" title="解题代码"></a>解题代码</h2><p>完整的解题代码如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import sympy</span><br><span class="line">from Crypto.Util.number import long_to_bytes</span><br><span class="line">from sympy import nextprime</span><br><span class="line"></span><br><span class="line"># 第一步：分解原始n</span><br><span class="line">def factorize_n_with_d(n, e, d):</span><br><span class="line">    k = e * d - 1</span><br><span class="line">    s = 0</span><br><span class="line">    t = k</span><br><span class="line">    while t % 2 == 0:</span><br><span class="line">        s += 1</span><br><span class="line">        t //= 2</span><br><span class="line"></span><br><span class="line">    g = 2</span><br><span class="line">    for _ in range(100):</span><br><span class="line">        y = pow(g, t, n)</span><br><span class="line">        if y == 1 or y == n-1:</span><br><span class="line">            continue</span><br><span class="line">        for _ in range(s-1):</span><br><span class="line">            x = pow(y, 2, n)</span><br><span class="line">            if x == 1:</span><br><span class="line">                p = sympy.gcd(y-1, n)</span><br><span class="line">                if p != 1 and p != n and n % p == 0:</span><br><span class="line">                    q = n // p</span><br><span class="line">                    return p, q</span><br><span class="line">            elif x == n-1:</span><br><span class="line">                break</span><br><span class="line">            y = x</span><br><span class="line">        g = nextprime(g)</span><br><span class="line"></span><br><span class="line"># 给定参数</span><br><span class="line">n = 0x73cec712124b33c0294e01eb52e8c3cd2fe9ddbcbf457b3b950360063dfae42cbbe9855bd986bcfea0948fadfb252f5e2ff3c982ff47afb6596a496636f1fc5ecfe9f5db7620b23fe9e30d230aa9299ab9a78bfb5e0630fd1149259b2b2104ea65d2e27b89785e4bf01d0594d9f94575cbcc3383f63c5aabe4d5b48eb761cce3ab21689b3f3155b5f15efee240d5ac149318ff80bd72a75fccdc57402aa197b472d98758019df8e9edb31bda82967dc66bcad845df824775eeb66ee304664d7929e8405122f9b0a5406887729dbe9760eb62dd7018087723c07c07082d1d51035fb211a9fc6d8fb5b3ee5bb91af5e3d0b89addce289041a5683a1fe7dc06a3bae283062ba3febdd987b5ac9b9a8ae4b8b02b804accc0a413bb144680fd8d0d8d8bebe176e5a9121f7653c31ede984d234ccce50e688f7048a0bfdfc84004c006ae912c4d4e514c200883e8dabaeb4bf57a5f628eb4bd2e6688d9b7688bc3eed4ce03831be5044dedbd5fddc43a3274b26c990a0e444fcf4a607de59c4906dfd1ea111920c38b4a365c5838e9cf1a22b146aa7afbc6e2e29ebe35aee4bf4d2fbe186c0f359c71f80b8f6298ad38619168d5986a857f558017c546d6df896c690896601aabd48398e957b77ef0e15d6cda339050b74cda3328c34c889306d089efc95ff467a4a775d3e104642cd9819f002b5db8c5f39b4e8d1a83007276b8a0b7</span><br><span class="line">e = 0x10001</span><br><span class="line">d = 0x37f2646fd190ad1e9f95c50d97cf4590a21e1c766bfd382cafafa2bb41442ce9839aac47944e288de6abfec1b17be4675f492a47f3e600f85a3823df9299d32f46c8a372f39d961f9471914e257f55cf1ef3d7878783fc34b61e1d61da332879c8d9597b0f0dac988916ac349e1d73b615cfbfef778ceeccee4f63dc32b1b7d7213c9199b6acb1d8a5141c94d777a29b89f8e0aea457788eaa9ca43626a24c74ebab355c89e3747626d4899745d148500c91416c782f2b30c9332f5cd32a4d3144d2a407ce9acc00f99dc619d425586285350cff734cdba9d4fad636d7fcbabfa382965005d8343e36ffe72604e557bae5044435ad990b6dca6d922e64387cee4abc0574d2eeeb42dda977be1e1064f6a6b00e78db75a7bf8e6e0c2ac3c6a52b2e6670cad3c907d990e53a7a311ef7b097c7644ff6f2bf96573e47d33031eeabf22620bdbc254a8fff8b0fa6f90d320c45e8d9094c26401f78560e16f77d6e09bc219c9849f1b68dc84ed36eb0cec7df16c4672c16a6b704ef2185ce04539f08688b72d48f9491e55be0095ee74f9622e8ae6835381e2efcd520cd02d1eeeb09bc11ab75bc903053102bc92718f2bf8691561a40026e53e950674f712aaef8cc69360df54c1af8b1f4aef997371b8a108e9b193a51002fe8d61f3991153e7ebd9593d68cd03b2f252c3d9d7a5bf802dcd150bd86028bd3b07cb415b767d716c1</span><br><span class="line"></span><br><span class="line">new_n = 0x73cec712124b33c0294e01eb52e8c3cd2fe9ddbcbf457b3b950360063dfae42cbbe9855bd986bcfea0948fadfb252f5e2ff3c982ff47afb6596a496636f1fc5ecfe9f5db7620b23fe9e30d230aa9299ab9a78bfb5e0630fd1149259b2b2104ea65d2e27b89785e4bf01d0594d9f94575cbcc3383f63c5aabe4d5b48eb761cce3ab21689b3f3155b5f15efee240d5ac11cee2acbd019de7c06f607ea618b5cd735b5a6972d2b446a12ff58cf8314822fa5ea09d0963acd00441b2a1b37aca01d7f39052927db98a0bd5ca1c49a7ad67923e3aac30ecd33cc8b4b30a40cdb3acc721ee5da53a02977cee959affe672a668525eb78df96af0a14f4ac04fab68efa8eabe9535e1064a5fc2ff7cac9520210311db0c3bf91101bc55a67a81e4f69364c724ee6ad6bdc301df642c9392e9befa4ff0d65481adb6feac251cd207044587da9710809700246cb3c63e659a97249f5e7418568e37db2fb2c1115e719d6682bb2e89b4e23d40ba4c532f289e10e0b89a5647c486a09b9e376844171b229d74f871004d4945a702a391a04ac704f43809e972891e6ab33b3c0f03f0b6f9ae005b26be6e647a1865c727277423f59a595187ffbfea13501e23b6b57ef115eaa6febcb207a3112628652a39578847241c33989e84607b0f683b30ddf773348b07360b063d9120a397809591ca18a04cd32ad9cbfe0494ed3ae8d2c5b43fdb51cb</span><br><span class="line">enc_flag = 0x3b0487110b2d61683fc9e65717d6431281c25ceda38915c9c2ff16013066e8cbe9d5f6c1f05988333d96e861f1b216f85d537aa70f603b3d20487a18c5e0d3a03556be88f984f508803f4bb25300149e805204c91f7aea038e545cf588a29bcb20113f81b16d9aacdbd820aa48615a5227ab2f329423da0a254c8f318dff4a7b75cf48e5ac18abc2975fee111ee56297fd7778b49320f6427227f21c08391d7429c49b399c366db38467a339229048e50735dff071bf89dbbab22997071a6b5a16935f5b65032f2cefb9c670cddd1470f6bf16d7c46d0fff22b82b2c1d867f4faa60e5daaad35a15ac0413a17beb5371a06f22c646336ae5e5738cfc5e997860056fb8bf1e02f27031ecd2b7983df510c4cdebbc644ea49e99e2376b89a90be8c89e4995c6689cc39d01fcc8ffef416e49684c0a01fdffab4613cb8eddbfa9e14d9b2daca6ad57c4e440a049d04b915ecfd64095c549bb9d22fb502a740a7373c1961c8cb7a58604bcbca3e5a97e28d5f498061db7cfbf07085ec84f47856e88992ab08870cbdb050431260861d0bcc9bbdf9a4164b8581f1f67e86ab854db1769418e300d73cf902509c76969473d0ee1b70c3b24085942fa9782507b359ffe049b18832610b4555b9bfe8eeae14cec53ab21881475f81069a6a33d6e38e3825eeb13874da8f0c91160712090a092286ea3838d88020e459f795783ad099367</span><br><span class="line"></span><br><span class="line"># 分解原始n得到p和q</span><br><span class="line">p, q = factorize_n_with_d(n, e, d)</span><br><span class="line"></span><br><span class="line"># 第二步：使用Coppersmith攻击</span><br><span class="line">p_high = int(bin(p)[2:2050-900],2)  # 提取p的高1148位</span><br><span class="line">p_val = p_high &lt;&lt; 900  # 左移900位</span><br><span class="line"></span><br><span class="line"># 在SageMath环境中使用Coppersmith方法</span><br><span class="line"># PR.&lt;x&gt; = PolynomialRing(Zmod(new_n))</span><br><span class="line"># f = x + p_val</span><br><span class="line"># roots = f.small_roots(X=2**900, beta=0.4)</span><br><span class="line"></span><br><span class="line"># 第三步：恢复新素数并解密</span><br><span class="line"># if roots:</span><br><span class="line">#     new_p = p_val + int(roots[0])</span><br><span class="line">#     new_q = new_n // new_p</span><br><span class="line">#     phi = (new_p - 1) * (new_q - 1)</span><br><span class="line">#     d_new = pow(e, -1, phi)</span><br><span class="line">#     m = pow(enc_flag, d_new, new_n)</span><br><span class="line">#     flag = long_to_bytes(m).decode()</span><br><span class="line">#     print(flag)</span><br></pre></td></tr></table></figure>
-
-<h2 id="最终结果"><a href="#最终结果" class="headerlink" title="最终结果"></a>最终结果</h2><p>成功解密后得到flag：<code>flag{6b1ff461dc15e5476cafe887189178e3924dad84}</code></p>
-<p>事后发现new_n可直接分解hhhhhh</p>
-]]></content>
-      <categories>
-        <category>CRYPTO</category>
-      </categories>
-      <tags>
-        <tag>crypto</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Crossed Wires</title>
     <url>/2025/12/14/Crossed-Wires/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="Crossed-Wires"><a href="#Crossed-Wires" class="headerlink" title="Crossed Wires"></a>Crossed Wires</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p><strong>Challenge files:</strong></p>
@@ -374,35 +155,6 @@
       </categories>
       <tags>
         <tag>crypto</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>我的第一篇blog</title>
-    <url>/2025/12/11/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87blog/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>你好，世界 👋  </p>
-<hr>
-<h2 id="🧠-关于我"><a href="#🧠-关于我" class="headerlink" title="🧠 关于我"></a>🧠 关于我</h2><p>我是吉林大学 <strong>网络空间安全专业</strong> 的二年级学生，目前主要专注于 <strong>CTF</strong> 中 <strong>Crypto</strong> 方向的学习与分享。</p>
-<h2 id="📝-近期动态"><a href="#📝-近期动态" class="headerlink" title="📝 近期动态"></a>📝 近期动态</h2><ul>
-<li>在我的博客持续更新 <strong>CTF Crypto 题目的 Writeups</strong>，记录解题思路与知识点总结。</li>
-<li>正在尝试入门 <strong>AI 安全</strong>，计划逐步开展一些小项目，探索机器学习与安全的交叉领域。</li>
-</ul>
-<h2 id="🚧-未来计划"><a href="#🚧-未来计划" class="headerlink" title="🚧 未来计划"></a>🚧 未来计划</h2><p>我会继续更新CTF相关的内容，并逐渐加入 AI 安全的学习笔记与实践记录。<br><strong>欢迎关注，一起交流，敬请期待！</strong></p>
-<hr>
-<p><em>📬 联系邮箱：[<a href="mailto:&#x33;&#x35;&#x31;&#51;&#55;&#50;&#x38;&#50;&#48;&#51;&#64;&#113;&#113;&#x2e;&#x63;&#x6f;&#x6d;">&#x33;&#x35;&#x31;&#51;&#55;&#50;&#x38;&#50;&#48;&#51;&#64;&#113;&#113;&#x2e;&#x63;&#x6f;&#x6d;</a>]</em></p>
-]]></content>
-      <tags>
-        <tag>第一篇blog</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>评论功能测试</title>
-    <url>/2025/12/14/%E8%AF%84%E8%AE%BA%E5%8A%9F%E8%83%BD%E6%B5%8B%E8%AF%95/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script>]]></content>
-      <categories>
-        <category>评论功能测试</category>
-      </categories>
-      <tags>
-        <tag>评论功能测试</tag>
       </tags>
   </entry>
   <entry>
@@ -497,6 +249,277 @@
 
 
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本挑战展示了如何利用格约化攻击基于格的加密系统。通过将加密问题转化为格中的短向量问题，并使用高斯约化算法，可以有效地恢复私钥并解密消息。这种方法在密码分析中常见，强调了设计加密系统时避免线性结构的重要性。</p>
+]]></content>
+      <categories>
+        <category>CRYPTO</category>
+      </categories>
+      <tags>
+        <tag>crypto</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>bad_python</title>
+    <url>/2026/02/08/bad-python/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="bad-python-题解-🐱"><a href="#bad-python-题解-🐱" class="headerlink" title="bad_python 题解 🐱"></a>bad_python 题解 🐱</h1><blockquote>
+<p>题目描述：the .pyc is broken ,can you help me recover?</p>
+</blockquote>
+<h2 id="第一步：初见文件-🎀"><a href="#第一步：初见文件-🎀" class="headerlink" title="第一步：初见文件 🎀"></a>第一步：初见文件 🎀</h2><p>下载附件，是一个名为 <code>bdbc0757-1971-4134-8f3c-aa4b0a7add42.zip</code> 的压缩包，解压后得到一个 <code>pyre.cpython-36.pyc</code> 文件。这是一个 Python 3.6 版本的字节码文件，但题目提示它被“破坏”了，需要我们帮忙恢复~</p>
+<p>通常，<code>.pyc</code> 文件是 Python 源码编译后的字节码，可以通过反编译工具将其还原为 Python 代码。但直接反编译可能会失败，因为文件头部可能被破坏了喵~</p>
+<h2 id="第二步：尝试反编译-🛠"><a href="#第二步：尝试反编译-🛠" class="headerlink" title="第二步：尝试反编译 🛠"></a>第二步：尝试反编译 🛠</h2><p>首先，尝试用常用的反编译工具 <code>uncompyle6</code> 来反编译：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pip install uncompyle6</span><br><span class="line">uncompyle6 -o . pyre.cpython-36.pyc</span><br></pre></td></tr></table></figure>
+
+<p>但出现了错误提示：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">KeyError: '3.9.3'</span><br></pre></td></tr></table></figure>
+
+<p>咦？文件名是 <code>cpython-36</code>，说明应该是 Python 3.6 编译的，但工具似乎检测到了不匹配的版本。可能是文件头部的魔数（magic number）不对，导致工具识别错误。</p>
+<h2 id="第三步：修复文件头-🔧"><a href="#第三步：修复文件头-🔧" class="headerlink" title="第三步：修复文件头 🔧"></a>第三步：修复文件头 🔧</h2><p>Python 的 <code>.pyc</code> 文件头部有一个魔数，用来标识 Python 版本。我们需要将其修正为正确的 Python 3.6 的魔数。</p>
+<p>用十六进制编辑器（如 WinHex）打开 <code>pyre.cpython-36.pyc</code>，查看头部。直接修改文件头，仍反编译失败。<br>我们可以在本地用 Python 3.6 编译一个简单的脚本，生成一个正确的 <code>.pyc</code> 文件，比较头部。</p>
+<p>在 Python 3.6 中，<code>.pyc</code> 文件头结构为：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> {</span></span><br><span class="line">    <span class="type">uint32_t</span> magic;      <span class="comment">// 4字节：魔数，标识Python版本</span></span><br><span class="line">    <span class="type">uint32_t</span> bit_field;  <span class="comment">// 4字节：位字段</span></span><br><span class="line">    <span class="type">uint64_t</span> timestamp;  <span class="comment">// 8字节：时间戳</span></span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<p>先写一个1.py，再用以下命令生成它的pyc文件：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">python3.6 -m py_compile 1.py</span><br></pre></td></tr></table></figure>
+
+<p>然后比较两个文件的头部。发现原文件的魔数不正确，于是将原文件的前 16 个字节替换为正确的 Python 3.6 的头部（可以从1.py中复制）。</p>
+<p><img src="attachment:a9b179b9-8725-40d3-8f61-89ec4056f4a3:9a55115c-2f47-4896-9d1b-56c89b117d53.png" alt="9a55115c-2f47-4896-9d1b-56c89b117d53.png"></p>
+<p>修复后，再次使用 <code>uncompyle6</code> 反编译：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">uncompyle6 -o . pyre.cpython-36.pyc</span><br></pre></td></tr></table></figure>
+
+<p><img src="attachment:ba280b01-4ff2-4b29-8a0d-76bbea5e599d:b0ce6f78-41f9-4059-9884-95c249a310eb.png" alt="b0ce6f78-41f9-4059-9884-95c249a310eb.png"></p>
+<p>成功啦！得到了 <code>pyre.py</code> 文件，里面就是被反编译的 Python 源码。</p>
+<h2 id="第四步：分析源码-🧐"><a href="#第四步：分析源码-🧐" class="headerlink" title="第四步：分析源码 🧐"></a>第四步：分析源码 🧐</h2><p>打开 <code>pyre.py</code>，内容如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">encrypt</span>(<span class="params">v, k</span>):</span><br><span class="line">    v0 = c_uint32(v[<span class="number">0</span>])</span><br><span class="line">    v1 = c_uint32(v[<span class="number">1</span>])</span><br><span class="line">    sum1 = c_uint32(<span class="number">0</span>)</span><br><span class="line">    delta = <span class="number">195935983</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">32</span>):</span><br><span class="line">        v0.value += (v1.value &lt;&lt; <span class="number">4</span> ^ v1.value &gt;&gt; <span class="number">7</span>) + v1.value ^ sum1.value + k[sum1.value &amp; <span class="number">3</span>]</span><br><span class="line">        sum1.value += delta</span><br><span class="line">        v1.value += (v0.value &lt;&lt; <span class="number">4</span> ^ v0.value &gt;&gt; <span class="number">7</span>) + v0.value ^ sum1.value + k[sum1.value &gt;&gt; <span class="number">9</span> &amp; <span class="number">3</span>]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> (v0.value, v1.value)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    flag = <span class="built_in">input</span>(<span class="string">"please input your flag:"</span>)</span><br><span class="line">    k = [<span class="number">255</span>, <span class="number">187</span>, <span class="number">51</span>, <span class="number">68</span>]</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(flag) != <span class="number">32</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"wrong!"</span>)</span><br><span class="line">        exit(-<span class="number">1</span>)</span><br><span class="line">    a = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="number">32</span>, <span class="number">8</span>):</span><br><span class="line">        v1 = bytes_to_long(<span class="built_in">bytes</span>(flag[i:i + <span class="number">4</span>], <span class="string">"ascii"</span>))</span><br><span class="line">        v2 = bytes_to_long(<span class="built_in">bytes</span>(flag[i + <span class="number">4</span>:i + <span class="number">8</span>], <span class="string">"ascii"</span>))</span><br><span class="line">        a += encrypt([v1, v2], k)</span><br><span class="line"></span><br><span class="line">    enc = [<span class="number">4006073346</span>, <span class="number">2582197823</span>, <span class="number">2235293281</span>, <span class="number">558171287</span>, <span class="number">2425328816</span>, <span class="number">1715140098</span>, <span class="number">986348143</span>, <span class="number">1948615354</span>]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">8</span>):</span><br><span class="line">        <span class="keyword">if</span> enc[i] != a[i]:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">"wrong!"</span>)</span><br><span class="line">            exit(-<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"flag is flag{%s}"</span> % flag)</span><br></pre></td></tr></table></figure>
+
+<p>加密算法是一个类似 XTEA 的分组密码，但有一些变体。我们需要编写解密算法，从密文反推明文。</p>
+<p>注意到该算法的核心是两个<code>bytes_to_long</code>函数，对其逆向即可。</p>
+<h2 id="第五步：编写解密脚本-🐾"><a href="#第五步：编写解密脚本-🐾" class="headerlink" title="第五步：编写解密脚本 🐾"></a>第五步：编写解密脚本 🐾</h2><p>观察加密过程，每轮操作如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">v0.value += (v1.value &lt;&lt; <span class="number">4</span> ^ v1.value &gt;&gt; <span class="number">7</span>) + v1.value ^ sum1.value + k[sum1.value &amp; <span class="number">3</span>]</span><br><span class="line">sum1.value += delta</span><br><span class="line">v1.value += (v0.value &lt;&lt; <span class="number">4</span> ^ v0.value &gt;&gt; <span class="number">7</span>) + v0.value ^ sum1.value + k[sum1.value &gt;&gt; <span class="number">9</span> &amp; <span class="number">3</span>]</span><br></pre></td></tr></table></figure>
+
+<p>其中，<code>sum1</code> 初始为 0，每轮加上 <code>delta</code>，共 32 轮。解密时，我们需要从最后一轮开始逆运算，逐步恢复出原始的 <code>v0</code> 和 <code>v1</code>。</p>
+<p>解密脚本如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">decrypt_pair</span>(<span class="params">v0, v1, k</span>):</span><br><span class="line">    delta = <span class="number">195935983</span></span><br><span class="line">    mask = <span class="number">0xFFFFFFFF</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">31</span>, -<span class="number">1</span>, -<span class="number">1</span>):</span><br><span class="line">        s_i = (i * delta) &amp; mask</span><br><span class="line">        s_prime = ((i + <span class="number">1</span>) * delta) &amp; mask</span><br><span class="line">        <span class="comment"># 逆向 v1 的更新</span></span><br><span class="line">        g = ((v0 &lt;&lt; <span class="number">4</span>) ^ (v0 &gt;&gt; <span class="number">7</span>)) + v0</span><br><span class="line">        g ^= (s_prime + k[(s_prime &gt;&gt; <span class="number">9</span>) &amp; <span class="number">3</span>])</span><br><span class="line">        g &amp;= mask</span><br><span class="line">        v1 = (v1 - g) &amp; mask</span><br><span class="line">        <span class="comment"># 逆向 v0 的更新</span></span><br><span class="line">        f = ((v1 &lt;&lt; <span class="number">4</span>) ^ (v1 &gt;&gt; <span class="number">7</span>)) + v1</span><br><span class="line">        f ^= (s_i + k[s_i &amp; <span class="number">3</span>])</span><br><span class="line">        f &amp;= mask</span><br><span class="line">        v0 = (v0 - f) &amp; mask</span><br><span class="line">    <span class="keyword">return</span> v0, v1</span><br><span class="line"></span><br><span class="line">k = [<span class="number">255</span>, <span class="number">187</span>, <span class="number">51</span>, <span class="number">68</span>]</span><br><span class="line">enc = [<span class="number">4006073346</span>, <span class="number">2582197823</span>, <span class="number">2235293281</span>, <span class="number">558171287</span>, <span class="number">2425328816</span>, <span class="number">1715140098</span>, <span class="number">986348143</span>, <span class="number">1948615354</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将密文分成四对</span></span><br><span class="line">pairs = [(enc[i], enc[i + <span class="number">1</span>]) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="number">8</span>, <span class="number">2</span>)]</span><br><span class="line"></span><br><span class="line">flag_bytes = <span class="string">b''</span></span><br><span class="line"><span class="keyword">for</span> v0, v1 <span class="keyword">in</span> pairs:</span><br><span class="line">    p0, p1 = decrypt_pair(v0, v1, k)</span><br><span class="line">    flag_bytes += p0.to_bytes(<span class="number">4</span>, <span class="string">'big'</span>)</span><br><span class="line">    flag_bytes += p1.to_bytes(<span class="number">4</span>, <span class="string">'big'</span>)</span><br><span class="line"></span><br><span class="line">flag = flag_bytes.decode(<span class="string">'ascii'</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">"flag is: flag{%s}"</span> % flag) <span class="comment"># flag is: flag{Th1s_1s_A_Easy_Pyth0n__R3veRse_0}</span></span><br></pre></td></tr></table></figure>
+
+<p>好累的说QAQ</p>
+]]></content>
+      <categories>
+        <category>REVERSE</category>
+      </categories>
+      <tags>
+        <tag>reverse</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>5.19 开发Day1</title>
+    <url>/2026/05/21/%E5%BC%80%E5%8F%91%E6%97%A5%E5%BF%97/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="惠惠爆裂魔法模拟器-开发日志"><a href="#惠惠爆裂魔法模拟器-开发日志" class="headerlink" title="惠惠爆裂魔法模拟器 开发日志"></a>惠惠爆裂魔法模拟器 开发日志</h1><h2 id="Day-1-2026-05-19-启动启动全部启动"><a href="#Day-1-2026-05-19-启动启动全部启动" class="headerlink" title="Day 1 | 2026.05.19 | 启动启动全部启动"></a>Day 1 | 2026.05.19 | 启动启动全部启动</h2><p>官网光速下好压缩包，竟然是exe文件一件运行，神了。</p>
+<p>先是跟着豆包走，铺地板放环境光，然后就是快乐的找材质包和惠惠建模环节，好玩捏。</p>
+<hr>
+<h2 id="Day-2-2026-05-20-被第一人称控制器折磨的一天"><a href="#Day-2-2026-05-20-被第一人称控制器折磨的一天" class="headerlink" title="Day 2 | 2026.05.20 | 被第一人称控制器折磨的一天"></a>Day 2 | 2026.05.20 | 被第一人称控制器折磨的一天</h2><p>看了一整天教程，尝试搓第一人称控制器，被豆包气笑了，鼠标晃一晃人物能跟着镜头飞走了，hyw</p>
+<p>还有按a往右跑和按d往左跑hhhhhhhhh</p>
+<p>沙比豆包</p>
+<p>随后尝试手搓，然后100行代码时电脑突然黑屏，咋按都没反应，两次重启后终于正常开机了，然后没有自动保存。。。。</p>
+<hr>
+<h2 id="Day-3-2026-05-21-git-clone是对的有没有懂的"><a href="#Day-3-2026-05-21-git-clone是对的有没有懂的" class="headerlink" title="Day 3 | 2026.05.21 | git clone是对的有没有懂的"></a>Day 3 | 2026.05.21 | git clone是对的有没有懂的</h2><p>不要反复造轮子！<br>不要反复造轮子！<br>不要反复造轮子！</p>
+<p>直接git clone别人的项目，哎我操这怎么这么丝滑，爽爽爽。</p>
+<p>先休息两天。。</p>
+]]></content>
+      <categories>
+        <category>godot3d游戏开发</category>
+      </categories>
+      <tags>
+        <tag>惠惠</tag>
+        <tag>godot</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>我的第一篇blog</title>
+    <url>/2025/12/11/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87blog/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>你好，世界 👋  </p>
+<hr>
+<h2 id="🧠-关于我"><a href="#🧠-关于我" class="headerlink" title="🧠 关于我"></a>🧠 关于我</h2><p>我是吉林大学 <strong>网络空间安全专业</strong> 的二年级学生，目前主要专注于 <strong>CTF</strong> 中 <strong>Crypto</strong> 方向的学习与分享。</p>
+<h2 id="📝-近期动态"><a href="#📝-近期动态" class="headerlink" title="📝 近期动态"></a>📝 近期动态</h2><ul>
+<li>在我的博客持续更新 <strong>CTF Crypto 题目的 Writeups</strong>，记录解题思路与知识点总结。</li>
+<li>正在尝试入门 <strong>AI 安全</strong>，计划逐步开展一些小项目，探索机器学习与安全的交叉领域。</li>
+</ul>
+<h2 id="🚧-未来计划"><a href="#🚧-未来计划" class="headerlink" title="🚧 未来计划"></a>🚧 未来计划</h2><p>我会继续更新CTF相关的内容，并逐渐加入 AI 安全的学习笔记与实践记录。<br><strong>欢迎关注，一起交流，敬请期待！</strong></p>
+<hr>
+<p><em>📬 联系邮箱：[<a href="mailto:&#51;&#x35;&#49;&#51;&#x37;&#50;&#x38;&#x32;&#x30;&#x33;&#x40;&#113;&#113;&#x2e;&#99;&#111;&#x6d;">&#51;&#x35;&#49;&#51;&#x37;&#50;&#x38;&#x32;&#x30;&#x33;&#x40;&#113;&#113;&#x2e;&#99;&#111;&#x6d;</a>]</em></p>
+]]></content>
+      <tags>
+        <tag>第一篇blog</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>新的尝试。。</title>
+    <url>/2026/05/21/%E6%96%B0%E7%9A%84%E5%B0%9D%E8%AF%95%E3%80%82%E3%80%82/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="大二菜鸡的第一次3D游戏尝试：我想做一个能炸掉一切的惠惠模拟器"><a href="#大二菜鸡的第一次3D游戏尝试：我想做一个能炸掉一切的惠惠模拟器" class="headerlink" title="大二菜鸡的第一次3D游戏尝试：我想做一个能炸掉一切的惠惠模拟器"></a>大二菜鸡的第一次3D游戏尝试：我想做一个能炸掉一切的惠惠模拟器</h1><h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>作为一个每天被实验报告、课程设计和各种截止日期追着跑的大二计算机学生，我最近突然陷入了一种很奇怪的状态：每天坐在电脑前，对着屏幕发呆，明明有一堆事情要做，却什么都不想干。</p>
+<p>我问自己：我学计算机到底是为了什么？是为了写永远写不完的CRUD吗？是为了应付一场又一场的考试吗？还是为了做一些真正能让自己开心的东西？</p>
+<p>就在我对着一个写了三天还没写完的数据结构大作业发呆的时候，我突然想到了惠惠。那个每天什么都不干，只想着放爆裂魔法的红魔族少女。</p>
+<p>“如果能把这些讨厌的东西全部炸掉就好了。”</p>
+<p>这个念头一旦产生，就再也挥之不去了。于是，我做了一个决定：暂停所有工作，用两周时间，做一个属于我自己的游戏。</p>
+<hr>
+<h2 id="项目介绍：惠惠爆裂魔法模拟器"><a href="#项目介绍：惠惠爆裂魔法模拟器" class="headerlink" title="项目介绍：惠惠爆裂魔法模拟器"></a>项目介绍：惠惠爆裂魔法模拟器</h2><p>这不是什么高大上的商业游戏，也不是什么复杂的学术项目。它只是一个非常简单、非常纯粹的小玩具：</p>
+<ul>
+<li>你扮演佐藤和真</li>
+<li>你站在山顶上</li>
+<li>惠惠在你身边</li>
+<li>跟惠惠聊聊天</li>
+<li>然后看着惠惠释放爆裂魔法</li>
+</ul>
+<h3 id="核心体验"><a href="#核心体验" class="headerlink" title="核心体验"></a>核心体验</h3><ol>
+<li><strong>第一人称沉浸式视角</strong>：你就是和真，你可以在山顶自由走动，走到惠惠身边和她说话</li>
+<li><strong>AI驱动的魔法</strong>：输入你想说的，AI会生成对应的咒语和魔法效果</li>
+<li><strong>炸掉你的烦恼</strong>：支持拖入任何图片作为地面，PPT、报表、账单、考试卷，想炸什么炸什么</li>
+<li><strong>情绪匹配BGM</strong>：AI会根据你的心情自动选择最合适的背景音乐</li>
+<li><strong>真实的爆炸反馈</strong>：爆炸时你会感受到相机震动、屏幕模糊、耳鸣，就像真的被冲击波掀飞一样</li>
+</ol>
+<h3 id="为什么要做这个项目"><a href="#为什么要做这个项目" class="headerlink" title="为什么要做这个项目"></a>为什么要做这个项目</h3><p>其实很简单，就是为了爽。</p>
+<p>当你看着惠惠中二地吟唱完咒语，然后一个巨大的火球把你面前的构式炸成碎片的时候，那种积压了很久的压力和烦躁，真的会在一瞬间烟消云散。</p>
+<p>这就是这个项目的全部意义：它不是为了赚钱，不是为了找工作，只是为了给像我一样被生活压得喘不过气的人，提供一个最简单、最直接的情绪宣泄出口。</p>
+<hr>
+<h2 id="项目的未来"><a href="#项目的未来" class="headerlink" title="项目的未来"></a>项目的未来</h2><p>这个项目现在还只是一个非常粗糙的原型，还有很多很多的功能没有实现：</p>
+<ul>
+<li>惠惠的换装系统</li>
+<li>更多的魔法效果</li>
+<li>成就系统</li>
+<li>截图和录屏功能</li>
+<li>多人联机，和朋友一起炸东西</li>
+<li>各种神奇小彩蛋</li>
+</ul>
+<p>我会继续把它做下去，慢慢完善它。如果你对这个项目感兴趣，或者有什么好的想法，欢迎随时告诉我。</p>
+<p>其实应该是5.19就开始做了。。</p>
+<hr>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>如果你也是一个和我一样的大学生，每天被各种作业和考试压得喘不过气，不知道自己未来要做什么。我想对你说：</p>
+<p><strong>去做一件你真正喜欢的事情吧。</strong></p>
+<p>不用怕做不好，不用怕别人笑话，不用怕没有意义。哪怕只是一个很小很小的项目，哪怕只是一个很傻很傻的想法。</p>
+<p>只要是你真正喜欢的，就去做。</p>
+<p>因为在这个过程中，你会找到真正的自己。</p>
+]]></content>
+      <categories>
+        <category>godot3d游戏开发</category>
+      </categories>
+      <tags>
+        <tag>惠惠</tag>
+        <tag>godot</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>评论功能测试</title>
+    <url>/2025/12/14/%E8%AF%84%E8%AE%BA%E5%8A%9F%E8%83%BD%E6%B5%8B%E8%AF%95/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script>]]></content>
+      <categories>
+        <category>评论功能测试</category>
+      </categories>
+      <tags>
+        <tag>评论功能测试</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SuanP01y</title>
+    <url>/2025/12/14/SuanP01y/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="RCTF-2025-SuanP01y"><a href="#RCTF-2025-SuanP01y" class="headerlink" title="RCTF 2025 SuanP01y"></a>RCTF 2025 SuanP01y</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>这是一个基于多项式环和有理重构的密码分析问题。题目涉及在有限域GF(2)上的多项式环中解决有理重构问题，并利用重构结果进行AES解密。</p>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><ol>
+<li>分析题目中的多项式环结构和有理重构问题</li>
+<li>实现多项式有理重构算法</li>
+<li>利用重构结果生成AES密钥</li>
+<li>通过穷举循环平移找到正确的解密密钥</li>
+</ol>
+<h2 id="解题过程"><a href="#解题过程" class="headerlink" title="解题过程"></a>解题过程</h2><h3 id="步骤1：理解多项式环结构"><a href="#步骤1：理解多项式环结构" class="headerlink" title="步骤1：理解多项式环结构"></a>步骤1：理解多项式环结构</h3><p>题目工作在有限域GF(2)上的多项式环，模数为m(x)=xr−1，其中r=16381。</p>
+<p>数学表示：</p>
+<ul>
+<li>基础环：R=GF(2)[x]</li>
+<li>商环：S=R/⟨xr−1⟩</li>
+</ul>
+<h3 id="步骤2：多项式有理重构原理"><a href="#步骤2：多项式有理重构原理" class="headerlink" title="步骤2：多项式有理重构原理"></a>步骤2：多项式有理重构原理</h3><p>有理重构问题：给定模多项式M(x)和多项式H(x)，寻找A(x)和B(x)满足：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">H(x)≡B(x)A(x)(modM(x))</span><br></pre></td></tr></table></figure>
+
+<p>其中：</p>
+<ol>
+<li>gcd(B(x),M(x))=1</li>
+<li>A(x)和B(x)的次数限制较小（本题中汉明重量d=41）</li>
+</ol>
+<h3 id="步骤3：扩展欧几里得算法实现"><a href="#步骤3：扩展欧几里得算法实现" class="headerlink" title="步骤3：扩展欧几里得算法实现"></a>步骤3：扩展欧几里得算法实现</h3><p>使用扩展欧几里得算法进行有理重构：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">def rational_reconstruction(hint_poly):</span><br><span class="line">    r0, r1 = m, R(hint_poly)</span><br><span class="line">    t0, t1 = R(0), R(1)</span><br><span class="line">    step = 0</span><br><span class="line"></span><br><span class="line">    while r1 != 0:</span><br><span class="line">        q = r0 // r1</span><br><span class="line">        r0, r1 = r1, r0 + q * r1  # 在GF(2)上，加法等同于异或</span><br><span class="line">        t0, t1 = t1, t0 + q * t1</span><br><span class="line">        step += 1</span><br><span class="line"></span><br><span class="line">        if hwt(r0) == d and hwt(t0) == d:</span><br><span class="line">            return r0, t0</span><br><span class="line"></span><br><span class="line">    print("Fail")</span><br><span class="line">    return None, None</span><br></pre></td></tr></table></figure>
+
+<p>算法步骤详解：</p>
+<ol>
+<li><strong>初始化</strong>：r0=M(x), r1=H(x), t0=0, t1=1</li>
+<li><strong>迭代计算</strong>：<ul>
+<li>计算商式：q=r0÷r1</li>
+<li>更新余数：r0,r1=r1,r0−q⋅r1</li>
+<li>更新系数：t0,t1=t1,t0−q⋅t1</li>
+</ul>
+</li>
+<li><strong>终止条件</strong>：当r0和t0的汉明重量都等于d=41时返回</li>
+</ol>
+<h3 id="步骤4：汉明重量计算"><a href="#步骤4：汉明重量计算" class="headerlink" title="步骤4：汉明重量计算"></a>步骤4：汉明重量计算</h3><p>汉明重量定义为多项式中非零系数的个数：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">def hwt(poly):</span><br><span class="line">    return len(poly.exponents())</span><br></pre></td></tr></table></figure>
+
+<p>在GF(2)上，非零系数即为1，因此汉明重量就是多项式中项的数量。</p>
+<h3 id="步骤5：多项式解析"><a href="#步骤5：多项式解析" class="headerlink" title="步骤5：多项式解析"></a>步骤5：多项式解析</h3><p>从字符串形式解析多项式：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hint_str = lines[0].split('=')[1].strip()</span><br><span class="line">exps = []</span><br><span class="line">for term in hint_str.split('+'):</span><br><span class="line">    term = term.strip()</span><br><span class="line">    if not term:</span><br><span class="line">        continue</span><br><span class="line">    if term == '1':</span><br><span class="line">        exps.append(0)</span><br><span class="line">    elif term == 'X':</span><br><span class="line">        exps.append(1)</span><br><span class="line">    elif term.startswith('X^'):</span><br><span class="line">        exps.append(int(term[2:]))</span><br><span class="line"></span><br><span class="line">hint_poly = sum(x**e for e in exps)</span><br></pre></td></tr></table></figure>
+
+<p>将形如”1 + X + X^2 + … + X^r”的字符串转换为多项式对象。</p>
+<h3 id="步骤6：循环平移与解密"><a href="#步骤6：循环平移与解密" class="headerlink" title="步骤6：循环平移与解密"></a>步骤6：循环平移与解密</h3><p>对重构得到的B(x)进行所有可能的循环平移：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">B_S = S(B)</span><br><span class="line">nonce = b"suanp01y"</span><br><span class="line"></span><br><span class="line">for k in range(r):</span><br><span class="line">    h0_candidate = B_S * (X**k)  # 循环平移</span><br><span class="line">    key = md5(str(h0_candidate).encode()).digest()</span><br><span class="line"></span><br><span class="line">    try:</span><br><span class="line">        cipher = AES.new(key, AES.MODE_CTR, nonce=nonce)</span><br><span class="line">        flag = cipher.decrypt(ct)</span><br><span class="line">        if flag.startswith(b"RCTF{"):</span><br><span class="line">            print("Success!")</span><br><span class="line">            print(flag)</span><br><span class="line">            return</span><br><span class="line">    except:</span><br><span class="line">        continue</span><br></pre></td></tr></table></figure>
+
+<p>数学原理：在商环S=R/⟨xr−1⟩中，乘以xk相当于循环平移。</p>
+<h3 id="步骤7：完整解题代码"><a href="#步骤7：完整解题代码" class="headerlink" title="步骤7：完整解题代码"></a>步骤7：完整解题代码</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">from Crypto.Cipher import AES</span><br><span class="line">from hashlib import md5</span><br><span class="line"></span><br><span class="line">r = 16381</span><br><span class="line">d = 41</span><br><span class="line"></span><br><span class="line">R.&lt;x&gt; = PolynomialRing(GF(2))</span><br><span class="line">m = x^r - 1</span><br><span class="line">S.&lt;X&gt; = R.quo(m)</span><br><span class="line"></span><br><span class="line">def hwt(poly):</span><br><span class="line">    return len(poly.exponents())</span><br><span class="line"></span><br><span class="line">def rational_reconstruction(hint_poly):</span><br><span class="line">    r0, r1 = m, R(hint_poly)</span><br><span class="line">    t0, t1 = R(0), R(1)</span><br><span class="line">    step = 0</span><br><span class="line"></span><br><span class="line">    while r1 != 0:</span><br><span class="line">        q = r0 // r1</span><br><span class="line">        r0, r1 = r1, r0 + q * r1</span><br><span class="line">        t0, t1 = t1, t0 + q * t1</span><br><span class="line">        step += 1</span><br><span class="line"></span><br><span class="line">        if hwt(r0) == d and hwt(t0) == d:</span><br><span class="line">            return r0, t0</span><br><span class="line"></span><br><span class="line">    print("Fail")</span><br><span class="line">    return None, None</span><br><span class="line"></span><br><span class="line">def solve():</span><br><span class="line">    with open("output.txt", "r") as f:</span><br><span class="line">        lines = f.read().splitlines()</span><br><span class="line"></span><br><span class="line">    hint_str = lines[0].split('=')[1].strip()</span><br><span class="line">    exps = []</span><br><span class="line"></span><br><span class="line">    for term in hint_str.split('+'):</span><br><span class="line">        term = term.strip()</span><br><span class="line">        if not term:</span><br><span class="line">            continue</span><br><span class="line">        if term == '1':</span><br><span class="line">            exps.append(0)</span><br><span class="line">        elif term == 'X':</span><br><span class="line">            exps.append(1)</span><br><span class="line">        elif term.startswith('X^'):</span><br><span class="line">            exps.append(int(term[2:]))</span><br><span class="line"></span><br><span class="line">    hint_poly = sum(x**e for e in exps)</span><br><span class="line">    ct = bytes.fromhex(lines[1])</span><br><span class="line"></span><br><span class="line">    A, B = rational_reconstruction(hint_poly)</span><br><span class="line"></span><br><span class="line">    if B is None:</span><br><span class="line">        print("Fail")</span><br><span class="line">        return</span><br><span class="line"></span><br><span class="line">    B_S = S(B)</span><br><span class="line">    nonce = b"suanp01y"</span><br><span class="line"></span><br><span class="line">    for k in range(r):</span><br><span class="line">        h0_candidate = B_S * (X**k)</span><br><span class="line">        key = md5(str(h0_candidate).encode()).digest()</span><br><span class="line"></span><br><span class="line">        try:</span><br><span class="line">            cipher = AES.new(key, AES.MODE_CTR, nonce=nonce)</span><br><span class="line">            flag = cipher.decrypt(ct)</span><br><span class="line">            if flag.startswith(b"RCTF{"):</span><br><span class="line">                print("Success!")</span><br><span class="line">                print(flag)</span><br><span class="line">                return</span><br><span class="line">        except:</span><br><span class="line">            continue</span><br><span class="line"></span><br><span class="line">if __name__ == '__main__':</span><br><span class="line">    solve()</span><br></pre></td></tr></table></figure>
+
+<h2 id="数学原理详解"><a href="#数学原理详解" class="headerlink" title="数学原理详解"></a>数学原理详解</h2><h3 id="多项式环与商环"><a href="#多项式环与商环" class="headerlink" title="多项式环与商环"></a>多项式环与商环</h3><ul>
+<li><strong>多项式环</strong>：GF(2)[x]表示系数在GF(2)上的多项式环</li>
+<li><strong>商环构造</strong>：S=R/⟨m(x)⟩，其中m(x)=xr−1</li>
+<li><strong>循环性质</strong>：在商环S中，xr≡1，因此乘以xk实现循环平移</li>
+</ul>
+<h3 id="有理重构的数学基础"><a href="#有理重构的数学基础" class="headerlink" title="有理重构的数学基础"></a>有理重构的数学基础</h3><p>有理重构问题等价于寻找满足以下条件的多项式：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">H(x)⋅B(x)≡A(x)(modM(x))</span><br></pre></td></tr></table></figure>
+
+<p>其中A(x)和B(x)满足特定的大小约束（本题中为汉明重量约束）。</p>
+<h3 id="扩展欧几里得算法"><a href="#扩展欧几里得算法" class="headerlink" title="扩展欧几里得算法"></a>扩展欧几里得算法</h3><p>算法保证在有限步内找到满足条件的A(x)和B(x)，当满足：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">deg(A)+deg(B)≤deg(M)</span><br></pre></td></tr></table></figure>
+
+<p>时，解是唯一的。</p>
+]]></content>
+      <categories>
+        <category>CRYPTO</category>
+      </categories>
+      <tags>
+        <tag>crypto</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>简单的rsa（攻防世界）</title>
+    <url>/2025/12/14/%E7%AE%80%E5%8D%95%E7%9A%84rsa%EF%BC%88%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%EF%BC%89/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="简单的rsa（攻防世界）"><a href="#简单的rsa（攻防世界）" class="headerlink" title="简单的rsa（攻防世界）"></a>简单的rsa（攻防世界）</h1><p><a href="attachment:9a753b99-785a-485f-a250-f550d436a9de:7634d7960e85494bb9ae648ea871f085.py">7634d7960e85494bb9ae648ea871f085.py</a></p>
+<h2 id="题目分析"><a href="#题目分析" class="headerlink" title="题目分析"></a>题目分析</h2><p>这是一个基于RSA加密系统的密码题目，主要特点如下：</p>
+<ol>
+<li>首先生成标准的RSA参数（p, q, n, e, d）</li>
+<li>然后对原始素数p和q进行”破坏”处理</li>
+<li>使用破坏后的新素数生成新的RSA模数进行加密</li>
+</ol>
+<h3 id="关键代码分析"><a href="#关键代码分析" class="headerlink" title="关键代码分析"></a>关键代码分析</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">def destory(x, num):</span><br><span class="line">    while True:</span><br><span class="line">        dt = getRandomNBitInteger(num)  # 生成num位的随机数</span><br><span class="line">        r = x ^ dt  # 与原素数异或</span><br><span class="line">        if isPrime(r):  # 确保结果是素数</span><br><span class="line">            return r</span><br></pre></td></tr></table></figure>
+
+<p>破坏函数将原始素数p和q分别与900位的随机数进行异或操作，确保结果是素数。</p>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><h3 id="第一步：分解原始n"><a href="#第一步：分解原始n" class="headerlink" title="第一步：分解原始n"></a>第一步：分解原始n</h3><p>题目给出了原始的n, e, d，我们可以利用这些信息分解n：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">def factorize_n_with_d(n, e, d):</span><br><span class="line">    k = e * d - 1</span><br><span class="line">    s = 0</span><br><span class="line">    t = k</span><br><span class="line">    while t % 2 == 0:</span><br><span class="line">        s += 1</span><br><span class="line">        t //= 2</span><br><span class="line"></span><br><span class="line">    for _ in range(100):</span><br><span class="line">        g = 2</span><br><span class="line">        y = pow(g, t, n)</span><br><span class="line">        if y == 1 or y == n-1:</span><br><span class="line">            continue</span><br><span class="line">        for _ in range(s-1):</span><br><span class="line">            x = pow(y, 2, n)</span><br><span class="line">            if x == 1:</span><br><span class="line">                p = sympy.gcd(y-1, n)</span><br><span class="line">                if p != 1 and p != n and n % p == 0:</span><br><span class="line">                    q = n // p</span><br><span class="line">                    return p, q</span><br><span class="line">            elif x == n-1:</span><br><span class="line">                break</span><br><span class="line">            y = x</span><br><span class="line">        g = nextprime(g)</span><br></pre></td></tr></table></figure>
+
+<h3 id="第二步：利用Coppersmith攻击"><a href="#第二步：利用Coppersmith攻击" class="headerlink" title="第二步：利用Coppersmith攻击"></a>第二步：利用Coppersmith攻击</h3><p>由于破坏操作只改变了p和q的低900位，高位保持不变，我们可以使用Coppersmith方法进行攻击：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">p_high = int(bin(p)[2:2050-900],2)  # 提取p的高位(2048-900=1148位)</span><br><span class="line">p = p_high &lt;&lt; 900  # 左移900位，低位补0</span><br><span class="line"></span><br><span class="line">PR.&lt;x&gt; = PolynomialRing(Zmod(new_n))</span><br><span class="line">f = x + p  # 构造多项式f(x) = x + p_high*2^900</span><br><span class="line">roots = f.small_roots(X=2**900, beta=0.4)  # 寻找小根</span><br></pre></td></tr></table></figure>
+
+<h3 id="第三步：恢复新素数并解密"><a href="#第三步：恢复新素数并解密" class="headerlink" title="第三步：恢复新素数并解密"></a>第三步：恢复新素数并解密</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">if roots:</span><br><span class="line">    p += int(roots[0])  # 恢复完整的new_p</span><br><span class="line">    assert new_n % p == 0</span><br><span class="line">    q = new_n // p  # 计算new_q</span><br><span class="line"></span><br><span class="line">    phi = (p - 1) * (q - 1)</span><br><span class="line">    d = pow(e, -1, phi)  # 计算私钥</span><br><span class="line">    m = pow(enc_flag, d, new_n)  # 解密</span><br><span class="line">    print(long_to_bytes(m).decode())</span><br></pre></td></tr></table></figure>
+
+<h2 id="数学原理"><a href="#数学原理" class="headerlink" title="数学原理"></a>数学原理</h2><p>Coppersmith方法的核心思想是：如果知道一个数的高位，可以在多项式时间内恢复其低位。在这个题目中：</p>
+<ul>
+<li>我们知道原始素数p</li>
+<li>新素数new_p = p ⊕ dt，其中dt是900位的随机数</li>
+<li>因此new_p和p只有低900位不同，高位完全相同</li>
+<li>我们可以构造多项式f(x) = p_high × 2^900 + x，在模new_n下寻找小根x</li>
+</ul>
+<h2 id="解题代码"><a href="#解题代码" class="headerlink" title="解题代码"></a>解题代码</h2><p>完整的解题代码如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import sympy</span><br><span class="line">from Crypto.Util.number import long_to_bytes</span><br><span class="line">from sympy import nextprime</span><br><span class="line"></span><br><span class="line"># 第一步：分解原始n</span><br><span class="line">def factorize_n_with_d(n, e, d):</span><br><span class="line">    k = e * d - 1</span><br><span class="line">    s = 0</span><br><span class="line">    t = k</span><br><span class="line">    while t % 2 == 0:</span><br><span class="line">        s += 1</span><br><span class="line">        t //= 2</span><br><span class="line"></span><br><span class="line">    g = 2</span><br><span class="line">    for _ in range(100):</span><br><span class="line">        y = pow(g, t, n)</span><br><span class="line">        if y == 1 or y == n-1:</span><br><span class="line">            continue</span><br><span class="line">        for _ in range(s-1):</span><br><span class="line">            x = pow(y, 2, n)</span><br><span class="line">            if x == 1:</span><br><span class="line">                p = sympy.gcd(y-1, n)</span><br><span class="line">                if p != 1 and p != n and n % p == 0:</span><br><span class="line">                    q = n // p</span><br><span class="line">                    return p, q</span><br><span class="line">            elif x == n-1:</span><br><span class="line">                break</span><br><span class="line">            y = x</span><br><span class="line">        g = nextprime(g)</span><br><span class="line"></span><br><span class="line"># 给定参数</span><br><span class="line">n = 0x73cec712124b33c0294e01eb52e8c3cd2fe9ddbcbf457b3b950360063dfae42cbbe9855bd986bcfea0948fadfb252f5e2ff3c982ff47afb6596a496636f1fc5ecfe9f5db7620b23fe9e30d230aa9299ab9a78bfb5e0630fd1149259b2b2104ea65d2e27b89785e4bf01d0594d9f94575cbcc3383f63c5aabe4d5b48eb761cce3ab21689b3f3155b5f15efee240d5ac149318ff80bd72a75fccdc57402aa197b472d98758019df8e9edb31bda82967dc66bcad845df824775eeb66ee304664d7929e8405122f9b0a5406887729dbe9760eb62dd7018087723c07c07082d1d51035fb211a9fc6d8fb5b3ee5bb91af5e3d0b89addce289041a5683a1fe7dc06a3bae283062ba3febdd987b5ac9b9a8ae4b8b02b804accc0a413bb144680fd8d0d8d8bebe176e5a9121f7653c31ede984d234ccce50e688f7048a0bfdfc84004c006ae912c4d4e514c200883e8dabaeb4bf57a5f628eb4bd2e6688d9b7688bc3eed4ce03831be5044dedbd5fddc43a3274b26c990a0e444fcf4a607de59c4906dfd1ea111920c38b4a365c5838e9cf1a22b146aa7afbc6e2e29ebe35aee4bf4d2fbe186c0f359c71f80b8f6298ad38619168d5986a857f558017c546d6df896c690896601aabd48398e957b77ef0e15d6cda339050b74cda3328c34c889306d089efc95ff467a4a775d3e104642cd9819f002b5db8c5f39b4e8d1a83007276b8a0b7</span><br><span class="line">e = 0x10001</span><br><span class="line">d = 0x37f2646fd190ad1e9f95c50d97cf4590a21e1c766bfd382cafafa2bb41442ce9839aac47944e288de6abfec1b17be4675f492a47f3e600f85a3823df9299d32f46c8a372f39d961f9471914e257f55cf1ef3d7878783fc34b61e1d61da332879c8d9597b0f0dac988916ac349e1d73b615cfbfef778ceeccee4f63dc32b1b7d7213c9199b6acb1d8a5141c94d777a29b89f8e0aea457788eaa9ca43626a24c74ebab355c89e3747626d4899745d148500c91416c782f2b30c9332f5cd32a4d3144d2a407ce9acc00f99dc619d425586285350cff734cdba9d4fad636d7fcbabfa382965005d8343e36ffe72604e557bae5044435ad990b6dca6d922e64387cee4abc0574d2eeeb42dda977be1e1064f6a6b00e78db75a7bf8e6e0c2ac3c6a52b2e6670cad3c907d990e53a7a311ef7b097c7644ff6f2bf96573e47d33031eeabf22620bdbc254a8fff8b0fa6f90d320c45e8d9094c26401f78560e16f77d6e09bc219c9849f1b68dc84ed36eb0cec7df16c4672c16a6b704ef2185ce04539f08688b72d48f9491e55be0095ee74f9622e8ae6835381e2efcd520cd02d1eeeb09bc11ab75bc903053102bc92718f2bf8691561a40026e53e950674f712aaef8cc69360df54c1af8b1f4aef997371b8a108e9b193a51002fe8d61f3991153e7ebd9593d68cd03b2f252c3d9d7a5bf802dcd150bd86028bd3b07cb415b767d716c1</span><br><span class="line"></span><br><span class="line">new_n = 0x73cec712124b33c0294e01eb52e8c3cd2fe9ddbcbf457b3b950360063dfae42cbbe9855bd986bcfea0948fadfb252f5e2ff3c982ff47afb6596a496636f1fc5ecfe9f5db7620b23fe9e30d230aa9299ab9a78bfb5e0630fd1149259b2b2104ea65d2e27b89785e4bf01d0594d9f94575cbcc3383f63c5aabe4d5b48eb761cce3ab21689b3f3155b5f15efee240d5ac11cee2acbd019de7c06f607ea618b5cd735b5a6972d2b446a12ff58cf8314822fa5ea09d0963acd00441b2a1b37aca01d7f39052927db98a0bd5ca1c49a7ad67923e3aac30ecd33cc8b4b30a40cdb3acc721ee5da53a02977cee959affe672a668525eb78df96af0a14f4ac04fab68efa8eabe9535e1064a5fc2ff7cac9520210311db0c3bf91101bc55a67a81e4f69364c724ee6ad6bdc301df642c9392e9befa4ff0d65481adb6feac251cd207044587da9710809700246cb3c63e659a97249f5e7418568e37db2fb2c1115e719d6682bb2e89b4e23d40ba4c532f289e10e0b89a5647c486a09b9e376844171b229d74f871004d4945a702a391a04ac704f43809e972891e6ab33b3c0f03f0b6f9ae005b26be6e647a1865c727277423f59a595187ffbfea13501e23b6b57ef115eaa6febcb207a3112628652a39578847241c33989e84607b0f683b30ddf773348b07360b063d9120a397809591ca18a04cd32ad9cbfe0494ed3ae8d2c5b43fdb51cb</span><br><span class="line">enc_flag = 0x3b0487110b2d61683fc9e65717d6431281c25ceda38915c9c2ff16013066e8cbe9d5f6c1f05988333d96e861f1b216f85d537aa70f603b3d20487a18c5e0d3a03556be88f984f508803f4bb25300149e805204c91f7aea038e545cf588a29bcb20113f81b16d9aacdbd820aa48615a5227ab2f329423da0a254c8f318dff4a7b75cf48e5ac18abc2975fee111ee56297fd7778b49320f6427227f21c08391d7429c49b399c366db38467a339229048e50735dff071bf89dbbab22997071a6b5a16935f5b65032f2cefb9c670cddd1470f6bf16d7c46d0fff22b82b2c1d867f4faa60e5daaad35a15ac0413a17beb5371a06f22c646336ae5e5738cfc5e997860056fb8bf1e02f27031ecd2b7983df510c4cdebbc644ea49e99e2376b89a90be8c89e4995c6689cc39d01fcc8ffef416e49684c0a01fdffab4613cb8eddbfa9e14d9b2daca6ad57c4e440a049d04b915ecfd64095c549bb9d22fb502a740a7373c1961c8cb7a58604bcbca3e5a97e28d5f498061db7cfbf07085ec84f47856e88992ab08870cbdb050431260861d0bcc9bbdf9a4164b8581f1f67e86ab854db1769418e300d73cf902509c76969473d0ee1b70c3b24085942fa9782507b359ffe049b18832610b4555b9bfe8eeae14cec53ab21881475f81069a6a33d6e38e3825eeb13874da8f0c91160712090a092286ea3838d88020e459f795783ad099367</span><br><span class="line"></span><br><span class="line"># 分解原始n得到p和q</span><br><span class="line">p, q = factorize_n_with_d(n, e, d)</span><br><span class="line"></span><br><span class="line"># 第二步：使用Coppersmith攻击</span><br><span class="line">p_high = int(bin(p)[2:2050-900],2)  # 提取p的高1148位</span><br><span class="line">p_val = p_high &lt;&lt; 900  # 左移900位</span><br><span class="line"></span><br><span class="line"># 在SageMath环境中使用Coppersmith方法</span><br><span class="line"># PR.&lt;x&gt; = PolynomialRing(Zmod(new_n))</span><br><span class="line"># f = x + p_val</span><br><span class="line"># roots = f.small_roots(X=2**900, beta=0.4)</span><br><span class="line"></span><br><span class="line"># 第三步：恢复新素数并解密</span><br><span class="line"># if roots:</span><br><span class="line">#     new_p = p_val + int(roots[0])</span><br><span class="line">#     new_q = new_n // new_p</span><br><span class="line">#     phi = (new_p - 1) * (new_q - 1)</span><br><span class="line">#     d_new = pow(e, -1, phi)</span><br><span class="line">#     m = pow(enc_flag, d_new, new_n)</span><br><span class="line">#     flag = long_to_bytes(m).decode()</span><br><span class="line">#     print(flag)</span><br></pre></td></tr></table></figure>
+
+<h2 id="最终结果"><a href="#最终结果" class="headerlink" title="最终结果"></a>最终结果</h2><p>成功解密后得到flag：<code>flag{6b1ff461dc15e5476cafe887189178e3924dad84}</code></p>
+<p>事后发现new_n可直接分解hhhhhh</p>
 ]]></content>
       <categories>
         <category>CRYPTO</category>

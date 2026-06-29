@@ -4,12 +4,12 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css">
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+<meta name="theme-color" content="#FFF3C9"><meta name="generator" content="Hexo 7.3.0">
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
-  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="mask-icon" href="/images/logo.svg" color="#FFF3C9">
 
 <link rel="stylesheet" href="/css/main.css">
 
@@ -48,7 +48,8 @@
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
-<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/bookmark.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/bookmark.js" defer></script><script src="/js/pjax.js" defer></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
 <script src="/js/third-party/search/local-search.js" defer></script>
@@ -60,7 +61,7 @@
 
 
   
-  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
 
@@ -188,9 +189,6 @@ mjx-container[display="true"] + br {
   display: none;
 }
 </style></head>
-
-<script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script>
-<div id="aplayer"></div>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
   <div class="headband"></div>
@@ -329,501 +327,172 @@ mjx-container[display="true"] + br {
     <div class="main-inner index posts-expand">
 
 
-<!-- 优化后的黑白简约风格横幅 -->
-<section class="home-hero" style="
-  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 25%, #2d2d2d 50%, #1a1a1a 75%, #0a0a0a 100%);
-  color: white;
-  padding: 80px 0 60px; /* 降低高度：减少上下内边距 */
-  text-align: center;
-  margin-bottom: 30px;
-  position: relative;
-  overflow: hidden;
-  min-height: 200px; /* 设置最小高度避免过小 */
-">
-  
-  <!-- 几何线条装饰 - 左上角 -->
-  <div style="
-    position: absolute;
-    top: 15px;
-    left: 15px;
-    width: 80px;
-    height: 80px;
-    border-top: 2px solid rgba(255,255,255,0.1);
-    border-left: 2px solid rgba(255,255,255,0.1);
-  "></div>
-  
-  <!-- 几何线条装饰 - 右上角 -->
-  <div style="
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    width: 80px;
-    height: 80px;
-    border-top: 2px solid rgba(255,255,255,0.1);
-    border-right: 2px solid rgba(255,255,255,0.1);
-  "></div>
-  
-  <!-- 动态网格背景 -->
-  <div style="
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: 
-      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-    background-size: 40px 40px;
-    opacity: 0.3;
-  "></div>
-  
-  <div class="container" style="position: relative; z-index: 2;">
-    <!-- 网站标题 - 使用与导航栏相同的字体并加粗 -->
-    <h1 style="
-      font-size: 2.5em; /* 适当调整大小 */
-      font-weight: 700; /* 加粗，使用700代替bold */
-      margin-bottom: 12px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif; /* 使用系统字体，与导航栏一致 */
-      color: #fff;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.3);
-      line-height: 1.2;
-    ">
-      Pinkode神秘小作坊
-    </h1>
-    
-    <!-- 副标题 -->
-    <p style="
-      font-size: 1.1em;
-      opacity: 0.8;
-      margin-bottom: 25px;
-      letter-spacing: 1.5px;
-      font-weight: 300;
-      color: #ccc;
-      font-family: inherit; /* 继承相同字体 */
-    ">
-      学习记录
-    </p>
-    
-    <!-- 按钮区域 - 调整对称性 -->
-    <div style="
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      margin-top: 20px;
-      flex-wrap: wrap;
-    ">
-      
-      <!-- 关于我按钮 - 统一样式 -->
-      <a href="/about" style="
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        background: transparent;
-        color: white;
-        border: 1.5px solid rgba(255,255,255,0.4);
-        padding: 10px 28px;
-        text-decoration: none;
-        border-radius: 2px;
-        font-size: 0.95em;
-        font-weight: 400;
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
-        transition: all 0.3s ease;
-        min-width: 120px; /* 统一最小宽度 */
-        height: 44px; /* 统一高度 */
-        font-family: inherit;
-      " 
-      onmouseover="
-        this.style.background = 'rgba(255,255,255,0.1)';
-        this.style.borderColor = 'rgba(255,255,255,0.8)';
-        this.style.transform = 'translateY(-1px)';
-      " 
-      onmouseout="
-        this.style.background = 'transparent';
-        this.style.borderColor = 'rgba(255,255,255,0.4)';
-        this.style.transform = 'translateY(0)';
-      ">
-        关于我
-      </a>
-      
-      <!-- 文章归档按钮 - 统一样式 -->
-      <a href="/archives" style="
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        background: rgba(255,255,255,0.1);
-        color: white;
-        border: 1.5px solid rgba(255,255,255,0.2);
-        padding: 10px 28px;
-        text-decoration: none;
-        border-radius: 2px;
-        font-size: 0.95em;
-        font-weight: 400;
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
-        transition: all 0.3s ease;
-        min-width: 120px; /* 统一最小宽度 */
-        height: 44px; /* 统一高度 */
-        font-family: inherit;
-        backdrop-filter: blur(5px);
-      " 
-      onmouseover="
-        this.style.background = 'rgba(255,255,255,0.15)';
-        this.style.borderColor = 'rgba(255,255,255,0.4)';
-        this.style.transform = 'translateY(-1px)';
-      " 
-      onmouseout="
-        this.style.background = 'rgba(255,255,255,0.1)';
-        this.style.borderColor = 'rgba(255,255,255,0.2)';
-        this.style.transform = 'translateY(0)';
-      ">
-        文章归档
-      </a>
+<section class="home-hero">
+  <div class="home-hero__inner">
+    <div class="home-hero__copy">
+      <p class="home-hero__eyebrow">CRYPTO / AI SECURITY / DEV LOG</p>
+      <h1>Pinkode神秘小作坊</h1>
+      <p class="home-hero__subtitle">学习记录、技术拆解、CTF 和开发实验。</p>
     </div>
-    
-    <!-- 已删除向下箭头 -->
+    <div class="home-hero__mark" aria-hidden="true">
+      <span>PK</span>
+      <span>01</span>
+    </div>
+    <div class="home-hero__actions">
+      <a href="/archives/" class="home-action home-action--primary">文章归档</a>
+      <a href="/categories/" class="home-action">浏览分类</a>
+      <a href="/about/" class="home-action">关于我</a>
+    </div>
   </div>
 </section>
 
-<!-- 修改后的搜索长条 - 与主题色协调 -->
-<section class="full-width-search" style="
-  background: #f8f9fa;  /* 使用浅灰色背景，与大多数网站协调 */
-  padding: 50px 0;
-  margin: 40px 0;
-  border-top: 1px solid #e9ecef;
-  border-bottom: 1px solid #e9ecef;
-">
-  <div class="container" style="max-width: 800px; margin: 0 auto; padding: 0 20px;">
-    <div style="text-align: center; margin-bottom: 30px;">
-      <h2 style="color: #333; font-size: 2.2em; margin-bottom: 10px;">
-        🔍 搜索博客内容
-      </h2>
-      <p style="color: #666; font-size: 1.1em; margin: 0;">
-        快速查找技术文章、教程和资源
-      </p>
+<div class="home-shell">
+  <aside class="home-search">
+    <div class="section-heading">
+      <span>Search</span>
+      <h2>搜索博客内容</h2>
     </div>
-    
-    <!-- 搜索表单 -->
-    <form action="/search" method="get" class="full-search-form" style="
-      display: flex;
-      background: white;
-      border-radius: 8px;
-      padding: 0;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      transition: all 0.3s ease;
-      max-width: 700px;
-      margin: 0 auto;
-      border: 1px solid #e9ecef;
-    ">
-      
-      <input 
-        type="text" 
-        name="q" 
-        placeholder="输入关键词搜索文章、教程、代码示例..." 
-        style="
-          flex: 1;
-          border: none;
-          outline: none;
-          padding: 16px 20px;
-          font-size: 16px;
-          background: transparent;
-          border-radius: 8px 0 0 8px;
-          color: #333;
-        "
-      >
-      
-      <button 
-        type="submit" 
-        style="
-          background: #37c6c0;
-          color: white;
-          border: none;
-          padding: 0 25px;
-          border-radius: 0 8px 8px 0;
-          cursor: pointer;
-          font-size: 16px;
-          font-weight: 600;
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          transition: all 0.3s ease;
-          min-width: 100px;
-        "
-        onmouseover="this.style.background='#2aa79f';"
-        onmouseout="this.style.background='#37c6c0';"
-      >
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="11" cy="11" r="8"></circle>
-          <path d="m21 21-4.3-4.3"></path>
-        </svg>
+    <form action="/search" method="get" class="full-search-form">
+      <input type="text" name="q" placeholder="输入关键词搜索文章、题解、开发记录">
+      <button type="submit" aria-label="搜索">
+        <i class="fa fa-search"></i>
         <span>搜索</span>
       </button>
     </form>
-  </div>
-</section>        
-      
-<!-- 热门文章区域 -->
-<section class="hot-posts" style="padding: 60px 0;">
-  <div class="container">
-    <h2 style="text-align: center; font-size: 2em; margin-bottom: 40px;">🔥 推荐阅读</h2>
-    
-    <!-- 这里可以手动指定热门文章，或者显示最新文章 -->
-    <div style="
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-      gap: 30px;
-      max-width: 1200px;
-      margin: 0 auto;
-    ">
+  </aside>
+
+  <section class="home-featured">
+    <div class="section-heading">
+      <span>Featured</span>
+      <h2>推荐阅读</h2>
+    </div>
+    <div class="featured-grid">
       
       
-      <article class="featured-post" style="
-        background: white;
-        padding: 25px;
-        border-radius: 10px;
-        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-        transition: transform 0.3s;
-      " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-        <h3 style="margin-top: 0;">
-          <a href="/2025/12/14/%E8%AF%84%E8%AE%BA%E5%8A%9F%E8%83%BD%E6%B5%8B%E8%AF%95/" style="color: #333; text-decoration: none;">
-            评论功能测试
-          </a>
-        </h3>
-        
-        <div style="color: #666; font-size: 0.9em; margin: 10px 0;">
+      <article class="featured-post">
+        <a class="featured-post__title" href="/2025/12/14/%E8%AF%84%E8%AE%BA%E5%8A%9F%E8%83%BD%E6%B5%8B%E8%AF%95/">评论功能测试</a>
+        <div class="home-post-meta">
           <time>2025-12-14</time>
           
-          <span> • </span>
           <span>评论功能测试</span>
           
         </div>
-        
-        <div style="color: #555; line-height: 1.6; margin: 15px 0;">
+        <div class="home-post-excerpt">
           
         </div>
-        
-        <a href="/2025/12/14/%E8%AF%84%E8%AE%BA%E5%8A%9F%E8%83%BD%E6%B5%8B%E8%AF%95/" style="
-          color: #37c6c0;
-          text-decoration: none;
-          font-weight: bold;
-        ">阅读更多 →</a>
+        <a class="home-read-more" href="/2025/12/14/%E8%AF%84%E8%AE%BA%E5%8A%9F%E8%83%BD%E6%B5%8B%E8%AF%95/">阅读更多</a>
       </article>
       
-      <article class="featured-post" style="
-        background: white;
-        padding: 25px;
-        border-radius: 10px;
-        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-        transition: transform 0.3s;
-      " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-        <h3 style="margin-top: 0;">
-          <a href="/2025/12/12/Find-the-lattice/" style="color: #333; text-decoration: none;">
-            Find the lattice
-          </a>
-        </h3>
-        
-        <div style="color: #666; font-size: 0.9em; margin: 10px 0;">
+      <article class="featured-post">
+        <a class="featured-post__title" href="/2025/12/12/Find-the-lattice/">Find the lattice</a>
+        <div class="home-post-meta">
           <time>2025-12-12</time>
           
-          <span> • </span>
           <span>CRYPTO</span>
           
         </div>
-        
-        <div style="color: #555; line-height: 1.6; margin: 15px 0;">
-          Find the LatticeChallenge files: source.py output.txt 问题分析该挑战涉及一个基于格的加密系统。加密过程使用公钥 加密消息 ，生成密文...
+        <div class="home-post-excerpt">
+          Find the LatticeChallenge files: source.py output.txt 问题分析该挑战涉及一个基于格的加密系统。加密过程使用公钥 加密消息 ，生成密文 。解密需要私钥...
         </div>
-        
-        <a href="/2025/12/12/Find-the-lattice/" style="
-          color: #37c6c0;
-          text-decoration: none;
-          font-weight: bold;
-        ">阅读更多 →</a>
+        <a class="home-read-more" href="/2025/12/12/Find-the-lattice/">阅读更多</a>
       </article>
       
-      <article class="featured-post" style="
-        background: white;
-        padding: 25px;
-        border-radius: 10px;
-        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-        transition: transform 0.3s;
-      " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-        <h3 style="margin-top: 0;">
-          <a href="/2025/12/11/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87blog/" style="color: #333; text-decoration: none;">
-            我的第一篇blog
-          </a>
-        </h3>
-        
-        <div style="color: #666; font-size: 0.9em; margin: 10px 0;">
+      <article class="featured-post">
+        <a class="featured-post__title" href="/2025/12/11/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87blog/">我的第一篇blog</a>
+        <div class="home-post-meta">
           <time>2025-12-11</time>
           
         </div>
-        
-        <div style="color: #555; line-height: 1.6; margin: 15px 0;">
-          你好，世界 👋 🧠 关于我我是吉林大学 网络空间安全专业 的二年级学生，目前主要专注于 CTF 中 Crypto 方向的学习与分享。 📝 近期动态 在我的博客持续更新 CTF Crypto...
+        <div class="home-post-excerpt">
+          你好，世界 👋 🧠 关于我我是吉林大学 网络空间安全专业 的二年级学生，目前主要专注于 CTF 中 Crypto 方向的学习与分享。 📝 近期动态 在我的博客持续更新 CTF Crypto 题目的...
         </div>
-        
-        <a href="/2025/12/11/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87blog/" style="
-          color: #37c6c0;
-          text-decoration: none;
-          font-weight: bold;
-        ">阅读更多 →</a>
+        <a class="home-read-more" href="/2025/12/11/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87blog/">阅读更多</a>
       </article>
       
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- 最新文章区域 -->
-<section class="recent-posts" style="padding: 60px 0; background: #f8f9fa;">
-  <div class="container">
-    <h2 style="text-align: center; font-size: 2em; margin-bottom: 40px;">📖 最新文章</h2>
-    
+  <section class="home-recent">
+    <div class="section-heading">
+      <span>Latest</span>
+      <h2>最新文章</h2>
+    </div>
     <div class="post-list">
       
       
-      <article class="post-item" style="
-        background: white;
-        padding: 25px;
-        margin-bottom: 25px;
-        border-radius: 10px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      ">
-        <h3 style="margin-top: 0;">
-          <a href="/2025/12/14/%E8%AF%84%E8%AE%BA%E5%8A%9F%E8%83%BD%E6%B5%8B%E8%AF%95/" style="color: #333; text-decoration: none;">
-            评论功能测试
-          </a>
-        </h3>
-        
-        <div style="color: #666; font-size: 0.9em; margin: 10px 0;">
-          <time>2025-12-14</time>
-          
-          <span> • </span>
-          <a href="/categories/%E8%AF%84%E8%AE%BA%E5%8A%9F%E8%83%BD%E6%B5%8B%E8%AF%95/" style="color: #37c6c0;">
-            评论功能测试
-          </a>
+      <article class="post-item">
+        <div>
+          <h3><a href="/2025/12/14/%E8%AF%84%E8%AE%BA%E5%8A%9F%E8%83%BD%E6%B5%8B%E8%AF%95/">评论功能测试</a></h3>
+          <div class="home-post-meta">
+            <time>2025-12-14</time>
+            
+            <a href="/categories/%E8%AF%84%E8%AE%BA%E5%8A%9F%E8%83%BD%E6%B5%8B%E8%AF%95/">评论功能测试</a>
+            
+          </div>
+        </div>
+        <div class="home-post-excerpt">
           
         </div>
         
-        <div style="color: #555; line-height: 1.6; margin: 15px 0;">
+        <div class="home-tags">
+          
+          <a href="/tags/%E8%AF%84%E8%AE%BA%E5%8A%9F%E8%83%BD%E6%B5%8B%E8%AF%95/">评论功能测试</a>
           
         </div>
         
-        <div style="margin-top: 15px;">
-          
-          
-          <a href="/" style="
-            display: inline-block;
-            background: #f1f3f4;
-            color: #666;
-            padding: 3px 8px;
-            border-radius: 3px;
-            font-size: 0.8em;
-            margin-right: 5px;
-            text-decoration: none;
-          "></a>
-          
-          
-        </div>
       </article>
       
-      <article class="post-item" style="
-        background: white;
-        padding: 25px;
-        margin-bottom: 25px;
-        border-radius: 10px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      ">
-        <h3 style="margin-top: 0;">
-          <a href="/2025/12/12/Find-the-lattice/" style="color: #333; text-decoration: none;">
-            Find the lattice
-          </a>
-        </h3>
-        
-        <div style="color: #666; font-size: 0.9em; margin: 10px 0;">
-          <time>2025-12-12</time>
-          
-          <span> • </span>
-          <a href="/categories/CRYPTO/" style="color: #37c6c0;">
-            CRYPTO
-          </a>
-          
+      <article class="post-item">
+        <div>
+          <h3><a href="/2025/12/12/Find-the-lattice/">Find the lattice</a></h3>
+          <div class="home-post-meta">
+            <time>2025-12-12</time>
+            
+            <a href="/categories/CRYPTO/">CRYPTO</a>
+            
+          </div>
         </div>
-        
-        <div style="color: #555; line-height: 1.6; margin: 15px 0;">
+        <div class="home-post-excerpt">
           Find the LatticeChallenge files: source.py output.txt 问题分析该挑战涉及一个基于格的加密系统。加密过程使用公钥 加密消息 ，生成密文 。解密需要私钥 。从代码中可知，加密算法满足关系式 ，即存在整数 使得 。这可以表示为向量关系：因此，向量...
         </div>
         
-        <div style="margin-top: 15px;">
+        <div class="home-tags">
           
-          
-          <a href="/" style="
-            display: inline-block;
-            background: #f1f3f4;
-            color: #666;
-            padding: 3px 8px;
-            border-radius: 3px;
-            font-size: 0.8em;
-            margin-right: 5px;
-            text-decoration: none;
-          "></a>
-          
+          <a href="/tags/crypto/">crypto</a>
           
         </div>
+        
       </article>
       
-      <article class="post-item" style="
-        background: white;
-        padding: 25px;
-        margin-bottom: 25px;
-        border-radius: 10px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      ">
-        <h3 style="margin-top: 0;">
-          <a href="/2025/12/11/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87blog/" style="color: #333; text-decoration: none;">
-            我的第一篇blog
-          </a>
-        </h3>
-        
-        <div style="color: #666; font-size: 0.9em; margin: 10px 0;">
-          <time>2025-12-11</time>
-          
+      <article class="post-item">
+        <div>
+          <h3><a href="/2025/12/11/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87blog/">我的第一篇blog</a></h3>
+          <div class="home-post-meta">
+            <time>2025-12-11</time>
+            
+          </div>
         </div>
-        
-        <div style="color: #555; line-height: 1.6; margin: 15px 0;">
+        <div class="home-post-excerpt">
           你好，世界 👋 🧠 关于我我是吉林大学 网络空间安全专业 的二年级学生，目前主要专注于 CTF 中 Crypto 方向的学习与分享。 📝 近期动态 在我的博客持续更新 CTF Crypto 题目的 Writeups，记录解题思路与知识点总结。 正在尝试入门 AI...
         </div>
         
-        <div style="margin-top: 15px;">
+        <div class="home-tags">
           
-          
-          <a href="/" style="
-            display: inline-block;
-            background: #f1f3f4;
-            color: #666;
-            padding: 3px 8px;
-            border-radius: 3px;
-            font-size: 0.8em;
-            margin-right: 5px;
-            text-decoration: none;
-          "></a>
-          
+          <a href="/tags/%E7%AC%AC%E4%B8%80%E7%AF%87blog/">第一篇blog</a>
           
         </div>
+        
       </article>
       
     </div>
+
     
-    <!-- 分页导航 -->
-    
-    <nav class="pagination" style="text-align: center; margin-top: 40px;">
-      <a class="extend prev" rel="prev" href="/">← 上一页</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+    <nav class="pagination">
+      <a class="extend prev" rel="prev" href="/">上一页</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
     </nav>
     
-  </div>
-</section>
+  </section>
+</div>
 
 
 </div>
@@ -881,225 +550,379 @@ mjx-container[display="true"] + br {
 <noscript>
   <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
 </noscript>
-</style><!-- 全局音乐播放器 -->
+<div id="aplayer" aria-label="全局音乐播放器"></div>
+
 <script>
-// 等待页面和APlayer资源加载完成
-document.addEventListener('DOMContentLoaded', function() {
-  // 延迟初始化，确保所有资源已加载
-  setTimeout(initMusicPlayer, 500);
-});
-
-function initMusicPlayer() {
-  // 检查是否已存在播放器
-  if (window.aplayerInstance) {
-    console.log('APlayer实例已存在');
-    return;
-  }
-  
-  // 检查APlayer是否已加载
-  if (typeof APlayer === 'undefined') {
-    console.error('APlayer未加载，尝试动态加载');
-    loadAPlayerResources();
-    return;
-  }
-  
-  // 创建播放器实例
-  try {
-    window.aplayerInstance = new APlayer({
-      container: document.getElementById('aplayer'),
-      fixed: true,
-      autoplay: false,
-      theme: '#37c6c0',
-      loop: 'all',
-      order: 'list',
-      preload: 'auto',
-      volume: 0.7,
-      mutex: true,
-      lrcType: 0,
-      audio: [{
-        name: 'My Foolish Heart~',
-        artist: '椎名林檎',
-        url: '/music/bg-music.mp3',
-        cover: '/images/music-covers/R.jpg',
-        theme: '#37c6c0'
-      }]
-    });
-    
-    console.log('APlayer初始化成功');
-    
-    // 确保播放器在底部
-    const playerEl = document.querySelector('.aplayer');
-    if (playerEl) {
-      playerEl.style.position = 'fixed';
-      playerEl.style.bottom = '0';
-      playerEl.style.left = '0';
-      playerEl.style.right = '0';
-      playerEl.style.zIndex = '9999';
-    }
-    
-  } catch (error) {
-    console.error('APlayer初始化失败:', error);
-  }
-}
-
-// 动态加载APlayer资源（备用方案）
-function loadAPlayerResources() {
-  // 加载CSS
-  const link = document.createElement('link');
-  link.rel = 'stylesheet';
-  link.href = 'https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css';
-  document.head.appendChild(link);
-  
-  // 加载JS
-  const script = document.createElement('script');
-  script.src = 'https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js';
-  script.onload = initMusicPlayer;
-  script.onerror = function() {
-    console.error('APlayer资源加载失败');
+(function() {
+  const THEME = {
+    cream: '#FFF3C9',
+    pink: '#F3B3CC',
+    cyan: '#ABE5E8',
+    ink: '#236c73'
   };
-  document.head.appendChild(script);
-}
+  const APLAYER_JS = 'https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js';
+  const APLAYER_CSS = 'https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css';
+  const GSAP_JS = 'https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js';
+  const SCROLL_TRIGGER_JS = 'https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js';
 
-// 解决浏览器自动播放限制
-document.addEventListener('click', function() {
-  const audioElements = document.querySelectorAll('audio');
-  audioElements.forEach(audio => {
-    audio.volume = 0.5; // 设置默认音量
+  window.PinkodeEnhance = window.PinkodeEnhance || {};
+  const app = window.PinkodeEnhance;
+  app.pageTweens = app.pageTweens || [];
+  app.scrollTriggers = app.scrollTriggers || [];
+  app.bgTweens = app.bgTweens || [];
+
+  function loadStyle(href) {
+    if ([...document.styleSheets].some(sheet => sheet.href && sheet.href.includes(href))) {
+      return Promise.resolve();
+    }
+    if (document.querySelector(`link[href="${href}"]`)) return Promise.resolve();
+    return new Promise((resolve, reject) => {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = href;
+      link.onload = resolve;
+      link.onerror = reject;
+      document.head.appendChild(link);
+    });
+  }
+
+  function loadScript(src, globalName) {
+    if (globalName && window[globalName]) return Promise.resolve(window[globalName]);
+    const existing = document.querySelector(`script[src="${src}"]`);
+    if (existing) {
+      return new Promise(resolve => {
+        if (!globalName || window[globalName]) {
+          resolve(window[globalName]);
+          return;
+        }
+        existing.addEventListener('load', () => resolve(window[globalName]), { once: true });
+      });
+    }
+    return new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = src;
+      script.defer = true;
+      script.onload = () => resolve(globalName ? window[globalName] : true);
+      script.onerror = reject;
+      document.head.appendChild(script);
+    });
+  }
+
+  function ensureAPlayer() {
+    return loadStyle(APLAYER_CSS)
+      .then(() => loadScript(APLAYER_JS, 'APlayer'))
+      .then(() => {
+        if (app.aplayerInstance) return app.aplayerInstance;
+        const container = document.getElementById('aplayer');
+        if (!container || typeof APlayer === 'undefined') return null;
+        app.aplayerInstance = new APlayer({
+          container,
+          fixed: true,
+          mini: false,
+          autoplay: false,
+          theme: THEME.pink,
+          loop: 'all',
+          order: 'list',
+          preload: 'auto',
+          volume: 0.65,
+          mutex: true,
+          lrcType: 0,
+          audio: [{
+            name: 'My Foolish Heart~',
+            artist: '椎名林檎',
+            url: '/music/bg-music.mp3',
+            cover: '/images/music-covers/R.jpg',
+            theme: THEME.cyan
+          }]
+        });
+        return app.aplayerInstance;
+      })
+      .catch(error => console.warn('[PinkodeEnhance] APlayer load failed:', error));
+  }
+
+  function ensureGSAP() {
+    return loadScript(GSAP_JS, 'gsap')
+      .then(() => loadScript(SCROLL_TRIGGER_JS, 'ScrollTrigger'))
+      .then(() => {
+        if (window.gsap && window.ScrollTrigger) {
+          gsap.registerPlugin(ScrollTrigger);
+          gsap.defaults({ duration: 0.65, ease: 'power3.out' });
+        }
+        return window.gsap;
+      })
+      .catch(error => console.warn('[PinkodeEnhance] GSAP load failed:', error));
+  }
+
+  function clearPageMotion() {
+    app.pageTweens.forEach(tween => tween && tween.kill && tween.kill());
+    app.pageTweens = [];
+    if (window.ScrollTrigger) {
+      app.scrollTriggers.forEach(trigger => trigger && trigger.kill && trigger.kill());
+      app.scrollTriggers = [];
+    }
+  }
+
+  function ensureCuteBackground() {
+    let layer = document.querySelector('.pinkode-bg-layer');
+    if (!layer) {
+      layer = document.createElement('div');
+      layer.className = 'pinkode-bg-layer';
+      layer.setAttribute('aria-hidden', 'true');
+      document.body.prepend(layer);
+    }
+    if (layer.dataset.pinkodeReady) return;
+    layer.dataset.pinkodeReady = 'true';
+
+    const specs = [
+      ['star', 'pink', 5, 10, 30, 0.72], ['heart', 'cyan', 18, 16, 34, 0.64],
+      ['flower', 'pink', 33, 9, 42, 0.62], ['bubble', 'cyan', 52, 13, 54, 0.46],
+      ['petal', 'pink', 68, 8, 30, 0.68], ['bow', 'cyan', 84, 16, 48, 0.56],
+      ['star', 'cyan', 94, 6, 28, 0.66], ['heart', 'pink', 8, 34, 38, 0.64],
+      ['flower', 'cyan', 23, 46, 44, 0.56], ['bubble', 'pink', 40, 33, 64, 0.38],
+      ['petal', 'cyan', 58, 43, 28, 0.62], ['bow', 'pink', 76, 36, 46, 0.58],
+      ['star', 'pink', 91, 48, 26, 0.64], ['heart', 'cyan', 4, 65, 34, 0.58],
+      ['flower', 'pink', 17, 82, 40, 0.58], ['bubble', 'cyan', 32, 68, 58, 0.4],
+      ['petal', 'pink', 49, 78, 30, 0.62], ['bow', 'cyan', 64, 68, 44, 0.52],
+      ['star', 'cyan', 80, 86, 28, 0.62], ['heart', 'pink', 94, 76, 36, 0.58],
+      ['flower', 'cyan', 2, 92, 36, 0.5], ['bubble', 'pink', 88, 96, 62, 0.34],
+      ['petal', 'cyan', 44, 4, 22, 0.58], ['bow', 'pink', 56, 94, 38, 0.5],
+      ['star', 'pink', 72, 58, 22, 0.6], ['heart', 'cyan', 28, 92, 30, 0.52],
+      ['flower', 'pink', 98, 28, 34, 0.5], ['bubble', 'cyan', 12, 52, 48, 0.38]
+    ];
+
+    const fragment = document.createDocumentFragment();
+    specs.forEach(([shape, colorName, x, y, size, opacity], index) => {
+      const item = document.createElement('i');
+      item.className = `pinkode-floatie pinkode-floatie--${shape}`;
+      item.style.setProperty('--x', `${x}%`);
+      item.style.setProperty('--y', `${y}%`);
+      item.style.setProperty('--s', `${size}px`);
+      item.style.setProperty('--o', opacity);
+      item.style.setProperty('--c', colorName === 'pink' ? THEME.pink : THEME.cyan);
+      item.dataset.floatIndex = index;
+      if (shape === 'bow') item.appendChild(document.createElement('span'));
+      fragment.appendChild(item);
+    });
+    layer.appendChild(fragment);
+  }
+
+  function animateCuteBackground() {
+    if (!window.gsap || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    ensureCuteBackground();
+    if (app.bgTweens.length) return;
+    const items = document.querySelectorAll('.pinkode-floatie');
+    items.forEach((item, index) => {
+      const driftX = index % 2 ? 58 : -58;
+      const driftY = index % 3 ? -70 : 70;
+      const duration = 4.8 + (index % 6) * 0.72;
+      app.bgTweens.push(gsap.to(item, {
+        x: driftX,
+        y: driftY,
+        rotation: index % 2 ? 36 : -36,
+        scale: 1.08 + (index % 4) * 0.08,
+        duration,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+        delay: index * 0.16
+      }));
+    });
+  }
+
+  function animatePage() {
+    if (!window.gsap) return;
+    clearPageMotion();
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const main = document.querySelector('.main-inner');
+    const headerItems = document.querySelectorAll('.brand, .menu-item, .site-search');
+    const heroParts = document.querySelectorAll('.home-hero__copy, .home-hero__mark, .home-hero__actions');
+    const cards = document.querySelectorAll('.featured-post, .post-item, .post-block, .collection-title, .category-list-item, .tag-cloud a, .archive .post-header');
+    const buttons = document.querySelectorAll('.btn, .post-button .btn, .pagination a, .featured-post a, .post-item a, .menu-item a, .sidebar-button a');
+
+    gsap.set([main, ...cards], { willChange: 'transform, opacity' });
+    app.pageTweens.push(gsap.fromTo(main, {
+      autoAlpha: 0,
+      y: reduceMotion ? 0 : 18,
+      filter: reduceMotion ? 'none' : 'blur(8px)'
+    }, {
+      autoAlpha: 1,
+      y: 0,
+      filter: 'blur(0px)',
+      duration: reduceMotion ? 0.01 : 0.7,
+      clearProps: 'filter,willChange'
+    }));
+
+    if (headerItems.length) {
+      app.pageTweens.push(gsap.fromTo(headerItems, {
+        autoAlpha: 0,
+        y: reduceMotion ? 0 : -12
+      }, {
+        autoAlpha: 1,
+        y: 0,
+        stagger: 0.04,
+        duration: reduceMotion ? 0.01 : 0.55,
+        clearProps: 'willChange'
+      }));
+    }
+
+    if (heroParts.length) {
+      app.pageTweens.push(gsap.fromTo(heroParts, {
+        autoAlpha: 0,
+        y: reduceMotion ? 0 : 24,
+        scale: reduceMotion ? 1 : 0.98
+      }, {
+        autoAlpha: 1,
+        y: 0,
+        scale: 1,
+        stagger: 0.08,
+        duration: reduceMotion ? 0.01 : 0.78,
+        ease: 'expo.out'
+      }));
+    }
+
+    if (cards.length && window.ScrollTrigger && !reduceMotion) {
+      const batch = ScrollTrigger.batch(cards, {
+        start: 'top 86%',
+        once: true,
+        onEnter: elements => gsap.fromTo(elements, {
+          autoAlpha: 0,
+          y: 32,
+          scale: 0.985
+        }, {
+          autoAlpha: 1,
+          y: 0,
+          scale: 1,
+          stagger: 0.08,
+          duration: 0.8,
+          overwrite: true,
+          clearProps: 'willChange'
+        })
+      });
+      app.scrollTriggers.push(...batch);
+    }
+
+    buttons.forEach(button => {
+      if (button.dataset.pinkodeHover) return;
+      button.dataset.pinkodeHover = 'true';
+      button.addEventListener('mouseenter', () => gsap.to(button, { y: -2, scale: 1.018, duration: 0.22, overwrite: 'auto' }));
+      button.addEventListener('mouseleave', () => gsap.to(button, { y: 0, scale: 1, duration: 0.22, overwrite: 'auto' }));
+    });
+
+    if (window.ScrollTrigger) {
+      setTimeout(() => ScrollTrigger.refresh(), 120);
+    }
+  }
+
+  function enhanceBackToTop() {
+    const button = document.querySelector('.back-to-top');
+    if (!button || button.dataset.pinkodeBackTop) return;
+    button.dataset.pinkodeBackTop = 'true';
+    button.setAttribute('title', '回到顶部');
+    if (!window.gsap) return;
+
+    gsap.set(button, { autoAlpha: 0, y: 16, scale: 0.88, pointerEvents: 'none' });
+    const setVisible = visible => {
+      gsap.to(button, {
+        autoAlpha: visible ? 1 : 0,
+        y: visible ? 0 : 16,
+        scale: visible ? 1 : 0.88,
+        pointerEvents: visible ? 'auto' : 'none',
+        duration: 0.28,
+        overwrite: 'auto'
+      });
+    };
+    const onScroll = () => setVisible(window.scrollY > Math.min(360, window.innerHeight * 0.45));
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    button.addEventListener('click', event => {
+      event.preventDefault();
+      const scrollState = { y: window.scrollY };
+      gsap.to(scrollState, {
+        y: 0,
+        duration: 0.75,
+        ease: 'power3.inOut',
+        onUpdate: () => window.scrollTo(0, scrollState.y)
+      });
+    });
+  }
+
+  function enhanceMenus() {
+    const toggle = document.querySelector('.site-nav-toggle .toggle');
+    const siteNav = document.querySelector('.site-nav');
+    if (!toggle || !siteNav || toggle.dataset.pinkodeMenu) return;
+    toggle.dataset.pinkodeMenu = 'true';
+    toggle.addEventListener('click', () => {
+      if (!window.gsap || !document.body.classList.contains('site-nav-on')) return;
+      gsap.fromTo('.site-nav .menu-item', {
+        autoAlpha: 0,
+        y: -10
+      }, {
+        autoAlpha: 1,
+        y: 0,
+        stagger: 0.045,
+        duration: 0.35,
+        overwrite: true
+      });
+    });
+  }
+
+  function refreshComments() {
+    const container = document.querySelector('.comments-container');
+    if (!container) return;
+    const giscus = container.querySelector('script[src*="giscus.app/client.js"], iframe.giscus-frame');
+    if (giscus) return;
+    const script = document.createElement('script');
+    script.src = 'https://giscus.app/client.js';
+    script.setAttribute('data-repo', 'P1nk0d3/P1nk0d3.github.io');
+    script.setAttribute('data-repo-id', 'R_kgDOQm6oMw');
+    script.setAttribute('data-category', 'Announcements');
+    script.setAttribute('data-category-id', 'DIC_kwDOQm6oM84CzxkR');
+    script.setAttribute('data-mapping', 'pathname');
+    script.setAttribute('data-strict', '0');
+    script.setAttribute('data-reactions-enabled', '1');
+    script.setAttribute('data-emit-metadata', '0');
+    script.setAttribute('data-input-position', 'top');
+    script.setAttribute('data-theme', 'preferred_color_scheme');
+    script.setAttribute('data-lang', 'zh-CN');
+    script.setAttribute('data-loading', 'lazy');
+    script.crossOrigin = 'anonymous';
+    script.async = true;
+    container.appendChild(script);
+  }
+
+  function fixCompatibility() {
+    if (/firefox/i.test(navigator.userAgent)) {
+      document.querySelector('meta[name="theme-color"]')?.setAttribute('content', THEME.cream);
+    }
+    if (/safari/i.test(navigator.userAgent) && !/chrome/i.test(navigator.userAgent)) {
+      document.querySelectorAll('input[autocapitalize]').forEach(input => input.removeAttribute('autocapitalize'));
+    }
+  }
+
+  function initPageEnhancements() {
+    ensureCuteBackground();
+    ensureGSAP().then(() => {
+      animateCuteBackground();
+      animatePage();
+      enhanceBackToTop();
+      enhanceMenus();
+    });
+    refreshComments();
+    fixCompatibility();
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    ensureAPlayer();
+    initPageEnhancements();
   });
-}, { once: true });
+  document.addEventListener('page:loaded', initPageEnhancements);
+  document.addEventListener('pjax:send', clearPageMotion);
+  document.addEventListener('click', () => {
+    document.querySelectorAll('audio').forEach(audio => { audio.volume = Math.min(audio.volume || 0.65, 0.65); });
+  }, { once: true });
+})();
 </script>
 
-<!-- 播放器容器 -->
-<div id="aplayer"></div>
-<script>
-// 评论系统加载和初始化
-document.addEventListener('DOMContentLoaded', function() {
-  initializeComments();
-});
-
-function initializeComments() {
-  // 检查是否应该显示评论
-  const commentsSection = document.querySelector('.post-comments');
-  if (!commentsSection) return;
-  
-  // 检查 Giscus 是否启用
-  const giscusEnabled = true; // 这里简化，实际应该从主题配置获取
-  
-  if (giscusEnabled) {
-    loadGiscus();
-  } else {
-    showCommentPrompt();
-  }
-}
-
-function loadGiscus() {
-  // 动态加载 Giscus
-  const giscusScript = document.createElement('script');
-  giscusScript.src = 'https://giscus.app/client.js';
-  giscusScript.setAttribute('data-repo', 'P1nk0d3/P1nk0d3.github.io');
-  giscusScript.setAttribute('data-repo-id', 'R_kgDOQm6oMw'); // 替换为你的ID
-  giscusScript.setAttribute('data-category', 'Announcements');
-  giscusScript.setAttribute('data-category-id', 'DIC_kwDOQm6oM84CzxkR'); // 替换为你的ID
-  giscusScript.setAttribute('data-mapping', 'pathname');
-  giscusScript.setAttribute('data-reactions-enabled', '1');
-  giscusScript.setAttribute('data-emit-metadata', '0');
-  giscusScript.setAttribute('data-input-position', 'top');
-  giscusScript.setAttribute('data-theme', 'light');
-  giscusScript.setAttribute('data-lang', 'zh-CN');
-  giscusScript.setAttribute('crossorigin', 'anonymous');
-  giscusScript.async = true;
-  
-  // 设置加载完成后的回调
-  giscusScript.onload = function() {
-    console.log('Giscus 评论系统加载成功');
-    hideLoadingIndicator();
-  };
-  
-  giscusScript.onerror = function() {
-    console.error('Giscus 评论系统加载失败');
-    showError('评论系统加载失败，请刷新页面重试');
-  };
-  
-  const container = document.getElementById('giscus-container');
-  if (container) {
-    container.appendChild(giscusScript);
-  }
-}
-
-function hideLoadingIndicator() {
-  const loadingEl = document.querySelector('.comments-loading');
-  if (loadingEl) {
-    loadingEl.style.display = 'none';
-  }
-}
-
-function showError(message) {
-  const container = document.getElementById('giscus-container');
-  if (container) {
-    container.innerHTML = `
-      <div style="text-align: center; padding: 40px 20px; color: #e53e3e;">
-        <div style="font-size: 3em; margin-bottom: 20px;">❌</div>
-        <h3 style="margin-bottom: 10px;">评论加载失败</h3>
-        <p>${message}</p>
-        <button onclick="location.reload()" style="
-          background: #e53e3e;
-          color: white;
-          border: none;
-          padding: 10px 20px;
-          border-radius: 5px;
-          cursor: pointer;
-          margin-top: 15px;
-        ">重新加载</button>
-      </div>
-    `;
-  }
-}
-
-function showCommentPrompt() {
-  const container = document.getElementById('giscus-container');
-  if (container) {
-    container.innerHTML = `
-      <div style="text-align: center; padding: 40px 20px;">
-        <div style="font-size: 3em; margin-bottom: 20px;">⚙️</div>
-        <h3 style="color: #4a5568; margin-bottom: 10px;">评论系统未配置</h3>
-        <p style="color: #718096; margin-bottom: 20px;">
-          如需启用评论功能，请在主题配置中设置 Giscus
-        </p>
-        <a href="https://giscus.app" target="_blank" style="
-          display: inline-block;
-          background: #4299e1;
-          color: white;
-          padding: 10px 20px;
-          text-decoration: none;
-          border-radius: 5px;
-          font-weight: 500;
-        ">配置 Giscus</a>
-      </div>
-    `;
-  }
-}
-
-// 修复兼容性问题
-function fixCompatibility() {
-  // 修复 Firefox 的 theme-color 问题
-  if (/firefox/i.test(navigator.userAgent)) {
-    const metaTheme = document.querySelector('meta[name="theme-color"]');
-    if (metaTheme) {
-      metaTheme.setAttribute('content', '#ffffff');
-    }
-  }
-  
-  // 修复 Safari 的 autocapitalize 问题
-  if (/safari/i.test(navigator.userAgent) && !/chrome/i.test(navigator.userAgent)) {
-    const inputs = document.querySelectorAll('input[autocapitalize]');
-    inputs.forEach(input => {
-      input.removeAttribute('autocapitalize');
-    });
-  }
-}
-
-// 初始化兼容性修复
-fixCompatibility();
-</script>
 </body>
 </html>

@@ -1,6 +1,238 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Backpack Cryptography</title>
+    <url>/2025/12/14/Backpack-Cryptography/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="Backpack-Cryptography"><a href="#Backpack-Cryptography" class="headerlink" title="Backpack Cryptography"></a>Backpack Cryptography</h1><p><strong>Challenge files:</strong></p>
+<p>   -<a href="https://cryptohack.org/static/challenges/source_83f1e856dc3e1d8c6628abb227a797cb.py">source.py</a></p>
+<p>   -<a href="https://cryptohack.org/static/challenges/output_e2fe6134f7dd580dcedacdbe71846d0e.txt">output.txt</a></p>
+<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>这是一个背包密码系统（Backpack Cryptography）的破解问题。题目提供了加密算法的源代码和输出结果，需要从公钥和加密后的flag中恢复原始消息。</p>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>背包密码系统基于超递增序列，通过模数q和乘数r进行伪装。攻击的基本思想是使用格基约化（LLL算法）来寻找短向量，从而恢复明文，而不需要找出正确的模数q和乘数r。</p>
+<p>简单来说LLL硬上就结束了。</p>
+<h2 id="解题过程"><a href="#解题过程" class="headerlink" title="解题过程"></a>解题过程</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">from sage.all import *</span><br><span class="line"></span><br><span class="line"># 从output.txt读取数据</span><br><span class="line">with open('output.txt', 'r') as f:</span><br><span class="line">    data = f.read()</span><br><span class="line"></span><br><span class="line"># 解析公钥和加密的flag</span><br><span class="line">public_key = eval(data.split('Public key:')[1].split('Encrypted Flag:')[0].strip())</span><br><span class="line">encrypted_flag = int(data.split('Encrypted Flag:')[1].strip())</span><br><span class="line"></span><br><span class="line">n = len(public_key)</span><br><span class="line"></span><br><span class="line"># 构造格基</span><br><span class="line">M = matrix(ZZ, n+1, n+1)</span><br><span class="line">for i in range(n):</span><br><span class="line">    M[i, i] = 2</span><br><span class="line">    M[i, n] = public_key[i]</span><br><span class="line">M[n, :n] = 1</span><br><span class="line">M[n, n] = encrypted_flag</span><br><span class="line"></span><br><span class="line"># 应用LLL算法</span><br><span class="line">M_lll = M.LLL()</span><br><span class="line"></span><br><span class="line"># 寻找包含解的行</span><br><span class="line">for row in M_lll:</span><br><span class="line">    if row[-1] == 0:</span><br><span class="line">        # 提取比特位</span><br><span class="line">        bits = []</span><br><span class="line">        for i in range(n):</span><br><span class="line">            if abs(row[i]) == 1:</span><br><span class="line">                bits.append(1 if row[i] &gt; 0 else 0)</span><br><span class="line">            else:</span><br><span class="line">                bits.append(0)</span><br><span class="line"></span><br><span class="line">        # 转换为字节</span><br><span class="line">        flag = 0</span><br><span class="line">        for i in range(n):</span><br><span class="line">            flag |= bits[i] &lt;&lt; i</span><br><span class="line"></span><br><span class="line">        # 转换为字符串</span><br><span class="line">        try:</span><br><span class="line">            flag_bytes = int.to_bytes(flag, (n+7)//8, 'little')</span><br><span class="line">            flag_str = flag_bytes.decode('ascii')</span><br><span class="line">            if 'crypto{' in flag_str:</span><br><span class="line">                print(f"Found flag: {flag_str}")</span><br><span class="line">                break</span><br><span class="line">        except:</span><br><span class="line">            continue</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>CRYPTO</category>
+      </categories>
+      <tags>
+        <tag>crypto</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>babyrsa（攻防世界）</title>
+    <url>/2025/12/14/babyrsa%EF%BC%88%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%EF%BC%89/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="babyrsa（攻防世界）"><a href="#babyrsa（攻防世界）" class="headerlink" title="babyrsa（攻防世界）"></a>babyrsa（攻防世界）</h1><p><a href="attachment:22e56407-c86e-4573-8ba4-a26015f4a4db:a1d729b93242433e86305169bf4765a9_(2).txt">a1d729b93242433e86305169bf4765a9 (2).txt</a></p>
+<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>题目提供了以下信息：</p>
+<ul>
+<li>模数 n</li>
+<li>加密指数 e = 0x10001</li>
+<li>密文 c</li>
+</ul>
+<p>服务器提供了一个”奇偶性预言机”（Parity Oracle）服务，当用户发送密文（十六进制格式）时，服务器会返回解密后明文的奇偶性（even或odd），然后立即断开连接。</p>
+<p>目标是通过利用这个奇偶性预言机，恢复原始明文m，从而获取flag。</p>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><h3 id="RSA奇偶性攻击原理"><a href="#RSA奇偶性攻击原理" class="headerlink" title="RSA奇偶性攻击原理"></a>RSA奇偶性攻击原理</h3><p>RSA加密具有同态性质，即：</p>
+<ul>
+<li>如果密文c对应明文m，那么密文c’ = c × 2^e mod n对应的明文是m’ = 2m mod n</li>
+</ul>
+<p>利用这个性质，我们可以构造一系列查询，通过分析2m mod n的奇偶性来推断m相对于n/2的大小关系：</p>
+<ol>
+<li>如果2m mod n是偶数 → 2m &lt; n → m &lt; n/2</li>
+<li>如果2m mod n是奇数 → 2m ≥ n → m ≥ n/2</li>
+</ol>
+<p>通过多次这样的查询，我们可以使用二分搜索法逐步缩小m的可能范围，最终精确确定m的值。</p>
+<h3 id="攻击步骤"><a href="#攻击步骤" class="headerlink" title="攻击步骤"></a>攻击步骤</h3><ol>
+<li><strong>初始化参数</strong>：<ul>
+<li>已知n、e、c</li>
+<li>设置初始搜索区间[0, n]</li>
+</ul>
+</li>
+<li><strong>二分搜索攻击</strong>：<ul>
+<li>对于每个比特位（共需log₂n次查询）：<ul>
+<li>计算新密文c’ = c × (2^e)^k mod n（其中k是查询次数）</li>
+<li>发送c’给服务器，获取奇偶性</li>
+<li>根据奇偶性更新搜索区间：<ul>
+<li>偶数：m在左半区间 → high = mid</li>
+<li>奇数：m在右半区间 → low = mid</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>恢复明文</strong>：<ul>
+<li>搜索完成后，区间边界收敛到m</li>
+<li>将m转换为字节串，得到flag</li>
+</ul>
+</li>
+</ol>
+<h2 id="完整攻击代码"><a href="#完整攻击代码" class="headerlink" title="完整攻击代码"></a>完整攻击代码</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import socket</span><br><span class="line">from time import sleep</span><br><span class="line">from Crypto.Util.number import long_to_bytes</span><br><span class="line"></span><br><span class="line">def parse_parameters(data):</span><br><span class="line">    e = 0x10001</span><br><span class="line">    n = 0x0b765daa79117afe1a77da7ff8122872bbcbddb322bb078fe0786dc40c9033fadd639adc48c3f2627fb7cb59bb0658707fe516967464439bdec2d6479fa3745f57c0a5ca255812f0884978b2a8aaeb750e0228cbe28a1e5a63bf0309b32a577eecea66f7610a9a4e720649129e9dc2115db9d4f34dc17f8b0806213c035e22f2c5054ae584b440def00afbccd458d020cae5fd1138be6507bc0b1a10da7e75def484c5fc1fcb13d11be691670cf38b487de9c4bde6c2c689be5adab08b486599b619a0790c0b2d70c9c461346966bcbae53c5007d0146fc520fa6e3106fbfc89905220778870a7119831c17f98628563ca020652d18d72203529a784ca73716db</span><br><span class="line">    c = 0x4f377296a19b3a25078d614e1c92ff632d3e3ded772c4445b75e468a9405de05d15c77532964120ae11f8655b68a630607df0568a7439bc694486ae50b5c0c8507e5eecdea4654eeff3e75fb8396e505a36b0af40bd5011990663a7655b91c9e6ed2d770525e4698dec9455db17db38fa4b99b53438b9e09000187949327980ca903d0eef114afc42b771657ea5458a4cb399212e943d139b7ceb6d5721f546b75cd53d65e025f4df7eb8637152ecbb6725962c7f66b714556d754f41555c691a34a798515f1e2a69c129047cb29a9eef466c206a7f4dbc2cea1a46a39ad3349a7db56c1c997dc181b1afcb76fa1bbbf118a4ab5c515e274ab2250dba1872be0</span><br><span class="line">    return n, e, c</span><br><span class="line"></span><br><span class="line">def main():</span><br><span class="line">    host = "61.147.171.105"</span><br><span class="line">    port = 62308</span><br><span class="line">    num_queries = 0</span><br><span class="line"></span><br><span class="line">    # 第一步：获取初始参数</span><br><span class="line">    s = socket.socket()</span><br><span class="line">    s.connect((host, port))</span><br><span class="line">    data = s.recv(4096).decode()</span><br><span class="line">    n, e, c = parse_parameters(data)</span><br><span class="line">    s.close()</span><br><span class="line"></span><br><span class="line">    print(f"Got parameters: n={n}\ne={e}\nc={c}")</span><br><span class="line"></span><br><span class="line">    # 初始化攻击参数</span><br><span class="line">    low = 0</span><br><span class="line">    high = n</span><br><span class="line">    multiplier = 1</span><br><span class="line">    two_e = pow(2, e, n)</span><br><span class="line">    bit_length = n.bit_length()</span><br><span class="line"></span><br><span class="line">    print(f"Starting attack, requires {bit_length} queries...")</span><br><span class="line"></span><br><span class="line">    # 进行二分搜索攻击</span><br><span class="line">    for i in range(bit_length):</span><br><span class="line">        multiplier = (multiplier * two_e) % n</span><br><span class="line">        current_ct = (c * multiplier) % n</span><br><span class="line">        hex_ct = format(current_ct, 'x')</span><br><span class="line"></span><br><span class="line">        # 连接服务器并发送查询</span><br><span class="line">        while True:</span><br><span class="line">            try:</span><br><span class="line">                s = socket.socket()</span><br><span class="line">                s.connect((host, port))</span><br><span class="line">                s.recv(1024)</span><br><span class="line">                s.send(hex_ct.encode() + b'\n')</span><br><span class="line">                response = s.recv(1024).decode()</span><br><span class="line">                s.close()</span><br><span class="line"></span><br><span class="line">                if 'even' in response:</span><br><span class="line">                    parity = 0</span><br><span class="line">                elif 'odd' in response:</span><br><span class="line">                    parity = 1</span><br><span class="line">                else:</span><br><span class="line">                    print(f"Unexpected response: {response}")</span><br><span class="line">                    continue</span><br><span class="line"></span><br><span class="line">                num_queries += 1</span><br><span class="line">                if num_queries % 50 == 0:</span><br><span class="line">                    print(f"Query {num_queries}/{bit_length}, parity={parity}")</span><br><span class="line"></span><br><span class="line">                # 更新搜索区间</span><br><span class="line">                mid = (low + high) // 2</span><br><span class="line">                if parity == 0:</span><br><span class="line">                    high = mid</span><br><span class="line">                else:</span><br><span class="line">                    low = mid</span><br><span class="line">                break</span><br><span class="line"></span><br><span class="line">            except Exception as e:</span><br><span class="line">                print(f"Error: {e}, retrying...")</span><br><span class="line">                sleep(1)</span><br><span class="line"></span><br><span class="line">    m = high</span><br><span class="line">    print(f"\nAttack completed after {num_queries} queries")</span><br><span class="line">    print(f"Recovered m: {m}")</span><br><span class="line"></span><br><span class="line">    flag = long_to_bytes(m).decode()</span><br><span class="line">    print(flag)</span><br><span class="line"></span><br><span class="line">if __name__ == "__main__":</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+<h2 id="执行结果"><a href="#执行结果" class="headerlink" title="执行结果"></a>执行结果</h2><p>运行攻击脚本后，程序会进行约2048次查询（对于2048位的RSA模数n），最终恢复出明文m，转换为字符串后得到flag：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">QCTF{RSA_parity_oracle_is_funa</span><br></pre></td></tr></table></figure>
+
+<p>根据flag的语义和常见格式，可以推断完整flag应为：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">QCTF{RSA_parity_oracle_is_fun}</span><br></pre></td></tr></table></figure>
+
+<h2 id=""><a href="#" class="headerlink" title=""></a></h2>]]></content>
+      <categories>
+        <category>CRYPTO</category>
+      </categories>
+      <tags>
+        <tag>crypto</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>bad_python</title>
+    <url>/2026/02/08/bad-python/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="bad-python-题解-🐱"><a href="#bad-python-题解-🐱" class="headerlink" title="bad_python 题解 🐱"></a>bad_python 题解 🐱</h1><blockquote>
+<p>题目描述：the .pyc is broken ,can you help me recover?</p>
+</blockquote>
+<h2 id="第一步：初见文件-🎀"><a href="#第一步：初见文件-🎀" class="headerlink" title="第一步：初见文件 🎀"></a>第一步：初见文件 🎀</h2><p>下载附件，是一个名为 <code>bdbc0757-1971-4134-8f3c-aa4b0a7add42.zip</code> 的压缩包，解压后得到一个 <code>pyre.cpython-36.pyc</code> 文件。这是一个 Python 3.6 版本的字节码文件，但题目提示它被“破坏”了，需要我们帮忙恢复~</p>
+<p>通常，<code>.pyc</code> 文件是 Python 源码编译后的字节码，可以通过反编译工具将其还原为 Python 代码。但直接反编译可能会失败，因为文件头部可能被破坏了喵~</p>
+<h2 id="第二步：尝试反编译-🛠"><a href="#第二步：尝试反编译-🛠" class="headerlink" title="第二步：尝试反编译 🛠"></a>第二步：尝试反编译 🛠</h2><p>首先，尝试用常用的反编译工具 <code>uncompyle6</code> 来反编译：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pip install uncompyle6</span><br><span class="line">uncompyle6 -o . pyre.cpython-36.pyc</span><br></pre></td></tr></table></figure>
+
+<p>但出现了错误提示：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">KeyError: '3.9.3'</span><br></pre></td></tr></table></figure>
+
+<p>咦？文件名是 <code>cpython-36</code>，说明应该是 Python 3.6 编译的，但工具似乎检测到了不匹配的版本。可能是文件头部的魔数（magic number）不对，导致工具识别错误。</p>
+<h2 id="第三步：修复文件头-🔧"><a href="#第三步：修复文件头-🔧" class="headerlink" title="第三步：修复文件头 🔧"></a>第三步：修复文件头 🔧</h2><p>Python 的 <code>.pyc</code> 文件头部有一个魔数，用来标识 Python 版本。我们需要将其修正为正确的 Python 3.6 的魔数。</p>
+<p>用十六进制编辑器（如 WinHex）打开 <code>pyre.cpython-36.pyc</code>，查看头部。直接修改文件头，仍反编译失败。<br>我们可以在本地用 Python 3.6 编译一个简单的脚本，生成一个正确的 <code>.pyc</code> 文件，比较头部。</p>
+<p>在 Python 3.6 中，<code>.pyc</code> 文件头结构为：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> {</span></span><br><span class="line">    <span class="type">uint32_t</span> magic;      <span class="comment">// 4字节：魔数，标识Python版本</span></span><br><span class="line">    <span class="type">uint32_t</span> bit_field;  <span class="comment">// 4字节：位字段</span></span><br><span class="line">    <span class="type">uint64_t</span> timestamp;  <span class="comment">// 8字节：时间戳</span></span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<p>先写一个1.py，再用以下命令生成它的pyc文件：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">python3.6 -m py_compile 1.py</span><br></pre></td></tr></table></figure>
+
+<p>然后比较两个文件的头部。发现原文件的魔数不正确，于是将原文件的前 16 个字节替换为正确的 Python 3.6 的头部（可以从1.py中复制）。</p>
+<p><img src="attachment:a9b179b9-8725-40d3-8f61-89ec4056f4a3:9a55115c-2f47-4896-9d1b-56c89b117d53.png" alt="9a55115c-2f47-4896-9d1b-56c89b117d53.png"></p>
+<p>修复后，再次使用 <code>uncompyle6</code> 反编译：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">uncompyle6 -o . pyre.cpython-36.pyc</span><br></pre></td></tr></table></figure>
+
+<p><img src="attachment:ba280b01-4ff2-4b29-8a0d-76bbea5e599d:b0ce6f78-41f9-4059-9884-95c249a310eb.png" alt="b0ce6f78-41f9-4059-9884-95c249a310eb.png"></p>
+<p>成功啦！得到了 <code>pyre.py</code> 文件，里面就是被反编译的 Python 源码。</p>
+<h2 id="第四步：分析源码-🧐"><a href="#第四步：分析源码-🧐" class="headerlink" title="第四步：分析源码 🧐"></a>第四步：分析源码 🧐</h2><p>打开 <code>pyre.py</code>，内容如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">encrypt</span>(<span class="params">v, k</span>):</span><br><span class="line">    v0 = c_uint32(v[<span class="number">0</span>])</span><br><span class="line">    v1 = c_uint32(v[<span class="number">1</span>])</span><br><span class="line">    sum1 = c_uint32(<span class="number">0</span>)</span><br><span class="line">    delta = <span class="number">195935983</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">32</span>):</span><br><span class="line">        v0.value += (v1.value &lt;&lt; <span class="number">4</span> ^ v1.value &gt;&gt; <span class="number">7</span>) + v1.value ^ sum1.value + k[sum1.value &amp; <span class="number">3</span>]</span><br><span class="line">        sum1.value += delta</span><br><span class="line">        v1.value += (v0.value &lt;&lt; <span class="number">4</span> ^ v0.value &gt;&gt; <span class="number">7</span>) + v0.value ^ sum1.value + k[sum1.value &gt;&gt; <span class="number">9</span> &amp; <span class="number">3</span>]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> (v0.value, v1.value)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    flag = <span class="built_in">input</span>(<span class="string">"please input your flag:"</span>)</span><br><span class="line">    k = [<span class="number">255</span>, <span class="number">187</span>, <span class="number">51</span>, <span class="number">68</span>]</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(flag) != <span class="number">32</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"wrong!"</span>)</span><br><span class="line">        exit(-<span class="number">1</span>)</span><br><span class="line">    a = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="number">32</span>, <span class="number">8</span>):</span><br><span class="line">        v1 = bytes_to_long(<span class="built_in">bytes</span>(flag[i:i + <span class="number">4</span>], <span class="string">"ascii"</span>))</span><br><span class="line">        v2 = bytes_to_long(<span class="built_in">bytes</span>(flag[i + <span class="number">4</span>:i + <span class="number">8</span>], <span class="string">"ascii"</span>))</span><br><span class="line">        a += encrypt([v1, v2], k)</span><br><span class="line"></span><br><span class="line">    enc = [<span class="number">4006073346</span>, <span class="number">2582197823</span>, <span class="number">2235293281</span>, <span class="number">558171287</span>, <span class="number">2425328816</span>, <span class="number">1715140098</span>, <span class="number">986348143</span>, <span class="number">1948615354</span>]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">8</span>):</span><br><span class="line">        <span class="keyword">if</span> enc[i] != a[i]:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">"wrong!"</span>)</span><br><span class="line">            exit(-<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"flag is flag{%s}"</span> % flag)</span><br></pre></td></tr></table></figure>
+
+<p>加密算法是一个类似 XTEA 的分组密码，但有一些变体。我们需要编写解密算法，从密文反推明文。</p>
+<p>注意到该算法的核心是两个<code>bytes_to_long</code>函数，对其逆向即可。</p>
+<h2 id="第五步：编写解密脚本-🐾"><a href="#第五步：编写解密脚本-🐾" class="headerlink" title="第五步：编写解密脚本 🐾"></a>第五步：编写解密脚本 🐾</h2><p>观察加密过程，每轮操作如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">v0.value += (v1.value &lt;&lt; <span class="number">4</span> ^ v1.value &gt;&gt; <span class="number">7</span>) + v1.value ^ sum1.value + k[sum1.value &amp; <span class="number">3</span>]</span><br><span class="line">sum1.value += delta</span><br><span class="line">v1.value += (v0.value &lt;&lt; <span class="number">4</span> ^ v0.value &gt;&gt; <span class="number">7</span>) + v0.value ^ sum1.value + k[sum1.value &gt;&gt; <span class="number">9</span> &amp; <span class="number">3</span>]</span><br></pre></td></tr></table></figure>
+
+<p>其中，<code>sum1</code> 初始为 0，每轮加上 <code>delta</code>，共 32 轮。解密时，我们需要从最后一轮开始逆运算，逐步恢复出原始的 <code>v0</code> 和 <code>v1</code>。</p>
+<p>解密脚本如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">decrypt_pair</span>(<span class="params">v0, v1, k</span>):</span><br><span class="line">    delta = <span class="number">195935983</span></span><br><span class="line">    mask = <span class="number">0xFFFFFFFF</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">31</span>, -<span class="number">1</span>, -<span class="number">1</span>):</span><br><span class="line">        s_i = (i * delta) &amp; mask</span><br><span class="line">        s_prime = ((i + <span class="number">1</span>) * delta) &amp; mask</span><br><span class="line">        <span class="comment"># 逆向 v1 的更新</span></span><br><span class="line">        g = ((v0 &lt;&lt; <span class="number">4</span>) ^ (v0 &gt;&gt; <span class="number">7</span>)) + v0</span><br><span class="line">        g ^= (s_prime + k[(s_prime &gt;&gt; <span class="number">9</span>) &amp; <span class="number">3</span>])</span><br><span class="line">        g &amp;= mask</span><br><span class="line">        v1 = (v1 - g) &amp; mask</span><br><span class="line">        <span class="comment"># 逆向 v0 的更新</span></span><br><span class="line">        f = ((v1 &lt;&lt; <span class="number">4</span>) ^ (v1 &gt;&gt; <span class="number">7</span>)) + v1</span><br><span class="line">        f ^= (s_i + k[s_i &amp; <span class="number">3</span>])</span><br><span class="line">        f &amp;= mask</span><br><span class="line">        v0 = (v0 - f) &amp; mask</span><br><span class="line">    <span class="keyword">return</span> v0, v1</span><br><span class="line"></span><br><span class="line">k = [<span class="number">255</span>, <span class="number">187</span>, <span class="number">51</span>, <span class="number">68</span>]</span><br><span class="line">enc = [<span class="number">4006073346</span>, <span class="number">2582197823</span>, <span class="number">2235293281</span>, <span class="number">558171287</span>, <span class="number">2425328816</span>, <span class="number">1715140098</span>, <span class="number">986348143</span>, <span class="number">1948615354</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将密文分成四对</span></span><br><span class="line">pairs = [(enc[i], enc[i + <span class="number">1</span>]) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="number">8</span>, <span class="number">2</span>)]</span><br><span class="line"></span><br><span class="line">flag_bytes = <span class="string">b''</span></span><br><span class="line"><span class="keyword">for</span> v0, v1 <span class="keyword">in</span> pairs:</span><br><span class="line">    p0, p1 = decrypt_pair(v0, v1, k)</span><br><span class="line">    flag_bytes += p0.to_bytes(<span class="number">4</span>, <span class="string">'big'</span>)</span><br><span class="line">    flag_bytes += p1.to_bytes(<span class="number">4</span>, <span class="string">'big'</span>)</span><br><span class="line"></span><br><span class="line">flag = flag_bytes.decode(<span class="string">'ascii'</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">"flag is: flag{%s}"</span> % flag) <span class="comment"># flag is: flag{Th1s_1s_A_Easy_Pyth0n__R3veRse_0}</span></span><br></pre></td></tr></table></figure>
+
+<p>好累的说QAQ</p>
+]]></content>
+      <categories>
+        <category>REVERSE</category>
+      </categories>
+      <tags>
+        <tag>reverse</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Crossed Wires</title>
+    <url>/2025/12/14/Crossed-Wires/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="Crossed-Wires"><a href="#Crossed-Wires" class="headerlink" title="Crossed Wires"></a>Crossed Wires</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p><strong>Challenge files:</strong></p>
+<p>-<a href="https://cryptohack.org/static/challenges/source_b3c3c786c649d363d27995545cf95dab.py">source.py</a></p>
+<p>-<a href="https://cryptohack.org/static/challenges/output_434cbf2b937bac1177bed299b2049a92.txt">output.txt</a></p>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><ol>
+<li>利用已知的私钥(N, d)分解N，得到p和q</li>
+<li>计算欧拉函数φ(N) = (p-1)*(q-1)</li>
+<li>对朋友公钥列表进行反向操作，依次解密</li>
+<li>最终得到原始flag</li>
+</ol>
+<h2 id="解题过程"><a href="#解题过程" class="headerlink" title="解题过程"></a>解题过程</h2><h3 id="步骤1：分析加密过程"><a href="#步骤1：分析加密过程" class="headerlink" title="步骤1：分析加密过程"></a>步骤1：分析加密过程</h3><p>从源代码分析加密流程：</p>
+<ul>
+<li>原始flag先被转换为大整数</li>
+<li>然后依次使用5个朋友的公钥进行RSA加密</li>
+<li>每个朋友使用相同的N但不同的e（17位素数）</li>
+</ul>
+<h3 id="步骤2：已知d分解N的算法"><a href="#步骤2：已知d分解N的算法" class="headerlink" title="步骤2：已知d分解N的算法"></a>步骤2：已知d分解N的算法</h3><p>使用标准的已知d分解N算法：<a href="https://di-mgt.com.au/rsa_factorize_n.html">RSA: how to factorize N given d</a></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1. 设 k=e⋅d−1</span><br><span class="line">2. 随机选择 g∈{2,…,N−1}</span><br><span class="line">3. 将 k 表示为 k=2s⋅t，其中 t 为奇数</span><br><span class="line">4. 计算 x=gtmodN</span><br><span class="line">5. 如果 x!=1 且 gcd(x−1,N)&gt;1，则找到因子</span><br><span class="line">6. 否则继续尝试不同的 g</span><br></pre></td></tr></table></figure>
+<h3 id="步骤3：实现解密代码"><a href="#步骤3：实现解密代码" class="headerlink" title="步骤3：实现解密代码"></a>步骤3：实现解密代码</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">from Crypto.Util.number import long_to_bytes</span><br><span class="line">import math</span><br><span class="line">from sympy import nextprime, gcd</span><br><span class="line"></span><br><span class="line"># 从output.txt读取数据</span><br><span class="line">with open('output.txt', 'r') as f:</span><br><span class="line">    data = f.read()</span><br><span class="line"></span><br><span class="line"># 解析数据</span><br><span class="line">my_key = eval(data.split("My private key:")[1].split("My Friend's public keys:")[0].strip())</span><br><span class="line">friend_keys = eval(data.split("My Friend's public keys:")[1].split("Encrypted flag:")[0].strip())</span><br><span class="line">encrypted_flag = int(data.split("Encrypted flag:")[1].strip())</span><br><span class="line"></span><br><span class="line">N, d = my_key</span><br><span class="line">e = 0x10001  # 65537</span><br><span class="line"></span><br><span class="line"># 已知d分解N的算法</span><br><span class="line">def factorize_N(N, e, d):</span><br><span class="line">    k = e * d - 1</span><br><span class="line">    g = 2</span><br><span class="line">    while True:</span><br><span class="line">        # 将k表示为k = 2^s * t，其中t为奇数</span><br><span class="line">        t = k</span><br><span class="line">        while t % 2 == 0:</span><br><span class="line">            t //= 2</span><br><span class="line">            x = pow(g, t, N)</span><br><span class="line">            y = gcd(x - 1, N)</span><br><span class="line">            if y &gt; 1 and y &lt; N:</span><br><span class="line">                p = y</span><br><span class="line">                q = N // y</span><br><span class="line">                return p, q</span><br><span class="line">        g = nextprime(g)</span><br><span class="line"></span><br><span class="line"># 分解N得到p和q</span><br><span class="line">p, q = factorize_N(N, e, d)</span><br><span class="line">print(f"Found factors: p={p}, q={q}")</span><br><span class="line"></span><br><span class="line"># 计算欧拉函数</span><br><span class="line">phi = (p - 1) * (q - 1)</span><br><span class="line"></span><br><span class="line"># 反向解密（从最后一个朋友开始）</span><br><span class="line">friend_keys.reverse()</span><br><span class="line">current = encrypted_flag</span><br><span class="line">for _, friend_e in friend_keys:</span><br><span class="line">    # 计算朋友的私钥指数</span><br><span class="line">    friend_d = pow(friend_e, -1, phi)</span><br><span class="line">    # 解密</span><br><span class="line">    current = pow(current, friend_d, N)</span><br><span class="line"></span><br><span class="line"># 转换为字节</span><br><span class="line">flag = long_to_bytes(current)</span><br><span class="line">print(f"Flag: {flag.decode()}")</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>CRYPTO</category>
+      </categories>
+      <tags>
+        <tag>crypto</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SuanP01y</title>
+    <url>/2025/12/14/SuanP01y/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="RCTF-2025-SuanP01y"><a href="#RCTF-2025-SuanP01y" class="headerlink" title="RCTF 2025 SuanP01y"></a>RCTF 2025 SuanP01y</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>这是一个基于多项式环和有理重构的密码分析问题。题目涉及在有限域GF(2)上的多项式环中解决有理重构问题，并利用重构结果进行AES解密。</p>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><ol>
+<li>分析题目中的多项式环结构和有理重构问题</li>
+<li>实现多项式有理重构算法</li>
+<li>利用重构结果生成AES密钥</li>
+<li>通过穷举循环平移找到正确的解密密钥</li>
+</ol>
+<h2 id="解题过程"><a href="#解题过程" class="headerlink" title="解题过程"></a>解题过程</h2><h3 id="步骤1：理解多项式环结构"><a href="#步骤1：理解多项式环结构" class="headerlink" title="步骤1：理解多项式环结构"></a>步骤1：理解多项式环结构</h3><p>题目工作在有限域GF(2)上的多项式环，模数为m(x)=xr−1，其中r=16381。</p>
+<p>数学表示：</p>
+<ul>
+<li>基础环：R=GF(2)[x]</li>
+<li>商环：S=R/⟨xr−1⟩</li>
+</ul>
+<h3 id="步骤2：多项式有理重构原理"><a href="#步骤2：多项式有理重构原理" class="headerlink" title="步骤2：多项式有理重构原理"></a>步骤2：多项式有理重构原理</h3><p>有理重构问题：给定模多项式M(x)和多项式H(x)，寻找A(x)和B(x)满足：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">H(x)≡B(x)A(x)(modM(x))</span><br></pre></td></tr></table></figure>
+
+<p>其中：</p>
+<ol>
+<li>gcd(B(x),M(x))=1</li>
+<li>A(x)和B(x)的次数限制较小（本题中汉明重量d=41）</li>
+</ol>
+<h3 id="步骤3：扩展欧几里得算法实现"><a href="#步骤3：扩展欧几里得算法实现" class="headerlink" title="步骤3：扩展欧几里得算法实现"></a>步骤3：扩展欧几里得算法实现</h3><p>使用扩展欧几里得算法进行有理重构：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">def rational_reconstruction(hint_poly):</span><br><span class="line">    r0, r1 = m, R(hint_poly)</span><br><span class="line">    t0, t1 = R(0), R(1)</span><br><span class="line">    step = 0</span><br><span class="line"></span><br><span class="line">    while r1 != 0:</span><br><span class="line">        q = r0 // r1</span><br><span class="line">        r0, r1 = r1, r0 + q * r1  # 在GF(2)上，加法等同于异或</span><br><span class="line">        t0, t1 = t1, t0 + q * t1</span><br><span class="line">        step += 1</span><br><span class="line"></span><br><span class="line">        if hwt(r0) == d and hwt(t0) == d:</span><br><span class="line">            return r0, t0</span><br><span class="line"></span><br><span class="line">    print("Fail")</span><br><span class="line">    return None, None</span><br></pre></td></tr></table></figure>
+
+<p>算法步骤详解：</p>
+<ol>
+<li><strong>初始化</strong>：r0=M(x), r1=H(x), t0=0, t1=1</li>
+<li><strong>迭代计算</strong>：<ul>
+<li>计算商式：q=r0÷r1</li>
+<li>更新余数：r0,r1=r1,r0−q⋅r1</li>
+<li>更新系数：t0,t1=t1,t0−q⋅t1</li>
+</ul>
+</li>
+<li><strong>终止条件</strong>：当r0和t0的汉明重量都等于d=41时返回</li>
+</ol>
+<h3 id="步骤4：汉明重量计算"><a href="#步骤4：汉明重量计算" class="headerlink" title="步骤4：汉明重量计算"></a>步骤4：汉明重量计算</h3><p>汉明重量定义为多项式中非零系数的个数：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">def hwt(poly):</span><br><span class="line">    return len(poly.exponents())</span><br></pre></td></tr></table></figure>
+
+<p>在GF(2)上，非零系数即为1，因此汉明重量就是多项式中项的数量。</p>
+<h3 id="步骤5：多项式解析"><a href="#步骤5：多项式解析" class="headerlink" title="步骤5：多项式解析"></a>步骤5：多项式解析</h3><p>从字符串形式解析多项式：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hint_str = lines[0].split('=')[1].strip()</span><br><span class="line">exps = []</span><br><span class="line">for term in hint_str.split('+'):</span><br><span class="line">    term = term.strip()</span><br><span class="line">    if not term:</span><br><span class="line">        continue</span><br><span class="line">    if term == '1':</span><br><span class="line">        exps.append(0)</span><br><span class="line">    elif term == 'X':</span><br><span class="line">        exps.append(1)</span><br><span class="line">    elif term.startswith('X^'):</span><br><span class="line">        exps.append(int(term[2:]))</span><br><span class="line"></span><br><span class="line">hint_poly = sum(x**e for e in exps)</span><br></pre></td></tr></table></figure>
+
+<p>将形如”1 + X + X^2 + … + X^r”的字符串转换为多项式对象。</p>
+<h3 id="步骤6：循环平移与解密"><a href="#步骤6：循环平移与解密" class="headerlink" title="步骤6：循环平移与解密"></a>步骤6：循环平移与解密</h3><p>对重构得到的B(x)进行所有可能的循环平移：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">B_S = S(B)</span><br><span class="line">nonce = b"suanp01y"</span><br><span class="line"></span><br><span class="line">for k in range(r):</span><br><span class="line">    h0_candidate = B_S * (X**k)  # 循环平移</span><br><span class="line">    key = md5(str(h0_candidate).encode()).digest()</span><br><span class="line"></span><br><span class="line">    try:</span><br><span class="line">        cipher = AES.new(key, AES.MODE_CTR, nonce=nonce)</span><br><span class="line">        flag = cipher.decrypt(ct)</span><br><span class="line">        if flag.startswith(b"RCTF{"):</span><br><span class="line">            print("Success!")</span><br><span class="line">            print(flag)</span><br><span class="line">            return</span><br><span class="line">    except:</span><br><span class="line">        continue</span><br></pre></td></tr></table></figure>
+
+<p>数学原理：在商环S=R/⟨xr−1⟩中，乘以xk相当于循环平移。</p>
+<h3 id="步骤7：完整解题代码"><a href="#步骤7：完整解题代码" class="headerlink" title="步骤7：完整解题代码"></a>步骤7：完整解题代码</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">from Crypto.Cipher import AES</span><br><span class="line">from hashlib import md5</span><br><span class="line"></span><br><span class="line">r = 16381</span><br><span class="line">d = 41</span><br><span class="line"></span><br><span class="line">R.&lt;x&gt; = PolynomialRing(GF(2))</span><br><span class="line">m = x^r - 1</span><br><span class="line">S.&lt;X&gt; = R.quo(m)</span><br><span class="line"></span><br><span class="line">def hwt(poly):</span><br><span class="line">    return len(poly.exponents())</span><br><span class="line"></span><br><span class="line">def rational_reconstruction(hint_poly):</span><br><span class="line">    r0, r1 = m, R(hint_poly)</span><br><span class="line">    t0, t1 = R(0), R(1)</span><br><span class="line">    step = 0</span><br><span class="line"></span><br><span class="line">    while r1 != 0:</span><br><span class="line">        q = r0 // r1</span><br><span class="line">        r0, r1 = r1, r0 + q * r1</span><br><span class="line">        t0, t1 = t1, t0 + q * t1</span><br><span class="line">        step += 1</span><br><span class="line"></span><br><span class="line">        if hwt(r0) == d and hwt(t0) == d:</span><br><span class="line">            return r0, t0</span><br><span class="line"></span><br><span class="line">    print("Fail")</span><br><span class="line">    return None, None</span><br><span class="line"></span><br><span class="line">def solve():</span><br><span class="line">    with open("output.txt", "r") as f:</span><br><span class="line">        lines = f.read().splitlines()</span><br><span class="line"></span><br><span class="line">    hint_str = lines[0].split('=')[1].strip()</span><br><span class="line">    exps = []</span><br><span class="line"></span><br><span class="line">    for term in hint_str.split('+'):</span><br><span class="line">        term = term.strip()</span><br><span class="line">        if not term:</span><br><span class="line">            continue</span><br><span class="line">        if term == '1':</span><br><span class="line">            exps.append(0)</span><br><span class="line">        elif term == 'X':</span><br><span class="line">            exps.append(1)</span><br><span class="line">        elif term.startswith('X^'):</span><br><span class="line">            exps.append(int(term[2:]))</span><br><span class="line"></span><br><span class="line">    hint_poly = sum(x**e for e in exps)</span><br><span class="line">    ct = bytes.fromhex(lines[1])</span><br><span class="line"></span><br><span class="line">    A, B = rational_reconstruction(hint_poly)</span><br><span class="line"></span><br><span class="line">    if B is None:</span><br><span class="line">        print("Fail")</span><br><span class="line">        return</span><br><span class="line"></span><br><span class="line">    B_S = S(B)</span><br><span class="line">    nonce = b"suanp01y"</span><br><span class="line"></span><br><span class="line">    for k in range(r):</span><br><span class="line">        h0_candidate = B_S * (X**k)</span><br><span class="line">        key = md5(str(h0_candidate).encode()).digest()</span><br><span class="line"></span><br><span class="line">        try:</span><br><span class="line">            cipher = AES.new(key, AES.MODE_CTR, nonce=nonce)</span><br><span class="line">            flag = cipher.decrypt(ct)</span><br><span class="line">            if flag.startswith(b"RCTF{"):</span><br><span class="line">                print("Success!")</span><br><span class="line">                print(flag)</span><br><span class="line">                return</span><br><span class="line">        except:</span><br><span class="line">            continue</span><br><span class="line"></span><br><span class="line">if __name__ == '__main__':</span><br><span class="line">    solve()</span><br></pre></td></tr></table></figure>
+
+<h2 id="数学原理详解"><a href="#数学原理详解" class="headerlink" title="数学原理详解"></a>数学原理详解</h2><h3 id="多项式环与商环"><a href="#多项式环与商环" class="headerlink" title="多项式环与商环"></a>多项式环与商环</h3><ul>
+<li><strong>多项式环</strong>：GF(2)[x]表示系数在GF(2)上的多项式环</li>
+<li><strong>商环构造</strong>：S=R/⟨m(x)⟩，其中m(x)=xr−1</li>
+<li><strong>循环性质</strong>：在商环S中，xr≡1，因此乘以xk实现循环平移</li>
+</ul>
+<h3 id="有理重构的数学基础"><a href="#有理重构的数学基础" class="headerlink" title="有理重构的数学基础"></a>有理重构的数学基础</h3><p>有理重构问题等价于寻找满足以下条件的多项式：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">H(x)⋅B(x)≡A(x)(modM(x))</span><br></pre></td></tr></table></figure>
+
+<p>其中A(x)和B(x)满足特定的大小约束（本题中为汉明重量约束）。</p>
+<h3 id="扩展欧几里得算法"><a href="#扩展欧几里得算法" class="headerlink" title="扩展欧几里得算法"></a>扩展欧几里得算法</h3><p>算法保证在有限步内找到满足条件的A(x)和B(x)，当满足：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">deg(A)+deg(B)≤deg(M)</span><br></pre></td></tr></table></figure>
+
+<p>时，解是唯一的。</p>
+]]></content>
+      <categories>
+        <category>CRYPTO</category>
+      </categories>
+      <tags>
+        <tag>crypto</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>CTF 流量题杀器！开源 CTF 流量分析专家系统，一键定位 Flag</title>
     <url>/2026/03/16/CTF-%E6%B5%81%E9%87%8F%E9%A2%98%E6%9D%80%E5%99%A8%EF%BC%81%E5%BC%80%E6%BA%90-CTF-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E4%B8%93%E5%AE%B6%E7%B3%BB%E7%BB%9F%EF%BC%8C%E4%B8%80%E9%94%AE%E5%AE%9A%E4%BD%8D-Flag/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="CTF流量题杀器！在线即用的CTF流量分析专家系统，一键定位Flag"><a href="#CTF流量题杀器！在线即用的CTF流量分析专家系统，一键定位Flag" class="headerlink" title="CTF流量题杀器！在线即用的CTF流量分析专家系统，一键定位Flag"></a>CTF流量题杀器！在线即用的CTF流量分析专家系统，一键定位Flag</h1><p>做CTF流量分析题的你，是不是也踩过这些坑：</p>
@@ -85,142 +317,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Backpack Cryptography</title>
-    <url>/2025/12/14/Backpack-Cryptography/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="Backpack-Cryptography"><a href="#Backpack-Cryptography" class="headerlink" title="Backpack Cryptography"></a>Backpack Cryptography</h1><p><strong>Challenge files:</strong></p>
-<p>   -<a href="https://cryptohack.org/static/challenges/source_83f1e856dc3e1d8c6628abb227a797cb.py">source.py</a></p>
-<p>   -<a href="https://cryptohack.org/static/challenges/output_e2fe6134f7dd580dcedacdbe71846d0e.txt">output.txt</a></p>
-<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>这是一个背包密码系统（Backpack Cryptography）的破解问题。题目提供了加密算法的源代码和输出结果，需要从公钥和加密后的flag中恢复原始消息。</p>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>背包密码系统基于超递增序列，通过模数q和乘数r进行伪装。攻击的基本思想是使用格基约化（LLL算法）来寻找短向量，从而恢复明文，而不需要找出正确的模数q和乘数r。</p>
-<p>简单来说LLL硬上就结束了。</p>
-<h2 id="解题过程"><a href="#解题过程" class="headerlink" title="解题过程"></a>解题过程</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">from sage.all import *</span><br><span class="line"></span><br><span class="line"># 从output.txt读取数据</span><br><span class="line">with open('output.txt', 'r') as f:</span><br><span class="line">    data = f.read()</span><br><span class="line"></span><br><span class="line"># 解析公钥和加密的flag</span><br><span class="line">public_key = eval(data.split('Public key:')[1].split('Encrypted Flag:')[0].strip())</span><br><span class="line">encrypted_flag = int(data.split('Encrypted Flag:')[1].strip())</span><br><span class="line"></span><br><span class="line">n = len(public_key)</span><br><span class="line"></span><br><span class="line"># 构造格基</span><br><span class="line">M = matrix(ZZ, n+1, n+1)</span><br><span class="line">for i in range(n):</span><br><span class="line">    M[i, i] = 2</span><br><span class="line">    M[i, n] = public_key[i]</span><br><span class="line">M[n, :n] = 1</span><br><span class="line">M[n, n] = encrypted_flag</span><br><span class="line"></span><br><span class="line"># 应用LLL算法</span><br><span class="line">M_lll = M.LLL()</span><br><span class="line"></span><br><span class="line"># 寻找包含解的行</span><br><span class="line">for row in M_lll:</span><br><span class="line">    if row[-1] == 0:</span><br><span class="line">        # 提取比特位</span><br><span class="line">        bits = []</span><br><span class="line">        for i in range(n):</span><br><span class="line">            if abs(row[i]) == 1:</span><br><span class="line">                bits.append(1 if row[i] &gt; 0 else 0)</span><br><span class="line">            else:</span><br><span class="line">                bits.append(0)</span><br><span class="line"></span><br><span class="line">        # 转换为字节</span><br><span class="line">        flag = 0</span><br><span class="line">        for i in range(n):</span><br><span class="line">            flag |= bits[i] &lt;&lt; i</span><br><span class="line"></span><br><span class="line">        # 转换为字符串</span><br><span class="line">        try:</span><br><span class="line">            flag_bytes = int.to_bytes(flag, (n+7)//8, 'little')</span><br><span class="line">            flag_str = flag_bytes.decode('ascii')</span><br><span class="line">            if 'crypto{' in flag_str:</span><br><span class="line">                print(f"Found flag: {flag_str}")</span><br><span class="line">                break</span><br><span class="line">        except:</span><br><span class="line">            continue</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>CRYPTO</category>
-      </categories>
-      <tags>
-        <tag>crypto</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Codeforces Round 1070 (Div. 2) C. Odd Process</title>
-    <url>/2025/12/15/Codeforces-Round-1070-Div-2-C-Odd-Process/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="解题报告：C-Odd-Process"><a href="#解题报告：C-Odd-Process" class="headerlink" title="解题报告：C. Odd Process"></a>解题报告：C. <a href="https://codeforces.com/contest/2176/problem/C">Odd Process</a></h1><h2 id="题目概述"><a href="#题目概述" class="headerlink" title="题目概述"></a>题目概述</h2><p>You have n coins with denominations a1,a2,…,an and a natural number k. You also have a bag, which is initially empty, where you can place coins. You need to perform exactly k actions. In each action, you take one coin from those you have left and put it in your bag. After that, you can no longer take that coin.</p>
-<p>At the same time, you have a cat that loves even numbers, so every time the sum of the denominations of the coins in your bag becomes even, your cat empties the bag, meaning it takes all the coins to a place known only to it, and the bag is empty again. Note that the bag is emptied every time the sum becomes even during the process of adding coins, not just at the very last moment.</p>
-<p>Let your score be the sum of the denominations of the coins in the bag. Your task is to perform k actions such that your final score is maximized. Find the answer for all 1≤k≤n.</p>
-<h2 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a>问题分析</h2><p>我们需要选择硬币的放入顺序，以最大化最终得分。关键在于理解奇偶性的变化规律：</p>
-<ul>
-<li>奇数 + 奇数 = 偶数</li>
-<li>偶数 + 偶数 = 偶数</li>
-<li>奇数 + 偶数 = 奇数</li>
-</ul>
-<p>放入硬币后，如果总和为偶数，袋子被清空（总和变为 0）。因此，为了在操作结束时袋子不为空，最后一次操作后的总和必须是奇数。</p>
-<h2 id="关键观察"><a href="#关键观察" class="headerlink" title="关键观察"></a>关键观察</h2><ol>
-<li><strong>最终得分非零的条件</strong>：必须至少使用一个奇数，且最后一段（最后一次清空之后的操作序列，或从开始就没有清空）只能包含一个奇数和若干个偶数（因为再放入一个奇数会触发清空）。</li>
-<li><strong>构造方式</strong>：先将最大的奇数和较大的偶数依次放入，若偶数放完，保证接下来放入的奇数个数为偶数，否则将最小的偶数换为奇数。</li>
-</ol>
-<h2 id="算法设计"><a href="#算法设计" class="headerlink" title="算法设计"></a>算法设计</h2><p>将数组按奇偶分开从大到小排序，放入顺序为最大奇数，最大偶数，第二大偶数……，注意考虑不存在奇偶数的边界情况。</p>
-<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;functional&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">sas</span><span class="params">(<span class="type">const</span> std::vector&lt;<span class="type">long</span> <span class="type">long</span>&gt;&amp; input, std::vector&lt;<span class="type">long</span> <span class="type">long</span>&gt;&amp; odd, std::vector&lt;<span class="type">long</span> <span class="type">long</span>&gt;&amp; even)</span> </span>{</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">long</span> <span class="type">long</span> num : input) {</span><br><span class="line">        <span class="keyword">if</span> (num % <span class="number">2</span> != <span class="number">0</span>) {</span><br><span class="line">            odd.<span class="built_in">push_back</span>(num);</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">else</span> {</span><br><span class="line">            even.<span class="built_in">push_back</span>(num);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    std::<span class="built_in">sort</span>(odd.<span class="built_in">begin</span>(), odd.<span class="built_in">end</span>(), std::<span class="built_in">greater</span>&lt;<span class="type">long</span> <span class="type">long</span>&gt;());</span><br><span class="line">    std::<span class="built_in">sort</span>(even.<span class="built_in">begin</span>(), even.<span class="built_in">end</span>(), std::<span class="built_in">greater</span>&lt;<span class="type">long</span> <span class="type">long</span>&gt;());</span><br><span class="line">    <span class="keyword">if</span> (even.<span class="built_in">size</span>() == <span class="number">0</span>) {</span><br><span class="line">        even.<span class="built_in">push_back</span>(<span class="number">0</span>);</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="type">long</span> <span class="type">long</span> t;</span><br><span class="line">    std::cin &gt;&gt; t;</span><br><span class="line">    <span class="keyword">while</span> (t--) {</span><br><span class="line">        <span class="type">long</span> <span class="type">long</span> n,i;</span><br><span class="line">        cin &gt;&gt; n;</span><br><span class="line">        <span class="function">std::vector&lt;<span class="type">long</span> <span class="type">long</span>&gt; <span class="title">a</span><span class="params">(n)</span>, odd, even</span>;</span><br><span class="line">        <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n; i++) {</span><br><span class="line">            std::cin &gt;&gt; a[i];</span><br><span class="line"></span><br><span class="line">        }</span><br><span class="line">        <span class="built_in">sas</span>(a, odd, even);</span><br><span class="line">        <span class="keyword">if</span> (odd.<span class="built_in">size</span>() == <span class="number">0</span>) {</span><br><span class="line">            <span class="keyword">for</span> (i = <span class="number">1</span>; i &lt;= n; i++) {</span><br><span class="line">                std::cout &lt;&lt; <span class="number">0</span> &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">            }</span><br><span class="line">            </span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(odd.<span class="built_in">size</span>()%<span class="number">2</span> == <span class="number">1</span>) {</span><br><span class="line">            cout &lt;&lt; odd[<span class="number">0</span>] &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">            <span class="type">long</span> <span class="type">long</span> sum1 = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">if</span> (even[<span class="number">0</span>] != <span class="number">0</span>) {</span><br><span class="line">                <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt;= even.<span class="built_in">size</span>() - <span class="number">1</span>; i++) {</span><br><span class="line">                    <span class="keyword">if</span> (even[i] == <span class="number">0</span>) {</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    }</span><br><span class="line"></span><br><span class="line">                    sum1 += even[i];</span><br><span class="line">                    cout &lt;&lt; sum1 + odd[<span class="number">0</span>] &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">                }</span><br><span class="line">                <span class="keyword">if</span> (odd.<span class="built_in">size</span>() &gt; <span class="number">2</span>) {</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt;= odd.<span class="built_in">size</span>() - <span class="number">2</span>; i++) {</span><br><span class="line">                        <span class="keyword">if</span> (i % <span class="number">2</span> == <span class="number">0</span>) {</span><br><span class="line">                            cout &lt;&lt; sum1 - even[even.<span class="built_in">size</span>() - <span class="number">1</span>] + odd[<span class="number">0</span>] &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">                        }</span><br><span class="line">                        <span class="keyword">else</span> {</span><br><span class="line">                            cout &lt;&lt; sum1 + odd[<span class="number">0</span>] &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">                        }</span><br><span class="line">                    }</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">            <span class="keyword">else</span> {</span><br><span class="line">                <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n - <span class="number">1</span>; i++) {</span><br><span class="line">                    <span class="keyword">if</span> (i % <span class="number">2</span> == <span class="number">0</span>) {</span><br><span class="line">                        cout &lt;&lt; <span class="number">0</span> &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">                    }</span><br><span class="line">                    <span class="keyword">else</span> {</span><br><span class="line">                        cout &lt;&lt; odd[<span class="number">0</span>] &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">                    }</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">            </span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">else</span> {</span><br><span class="line">            cout &lt;&lt; odd[<span class="number">0</span>] &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">            <span class="type">long</span> <span class="type">long</span> sum1 = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">if</span> (even[<span class="number">0</span>] != <span class="number">0</span>) {</span><br><span class="line">                <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt;= even.<span class="built_in">size</span>() - <span class="number">1</span>; i++) {</span><br><span class="line"></span><br><span class="line">                    sum1 += even[i];</span><br><span class="line">                    cout &lt;&lt; sum1 + odd[<span class="number">0</span>] &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">                }</span><br><span class="line">                <span class="keyword">if</span> (odd.<span class="built_in">size</span>() &gt; <span class="number">2</span>) {</span><br><span class="line">                    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt;= odd.<span class="built_in">size</span>() - <span class="number">3</span>; i++) {</span><br><span class="line">                        <span class="keyword">if</span> (i % <span class="number">2</span> == <span class="number">0</span>) {</span><br><span class="line">                            cout &lt;&lt; sum1 - even[even.<span class="built_in">size</span>() - <span class="number">1</span>] + odd[<span class="number">0</span>] &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">                        }</span><br><span class="line">                        <span class="keyword">else</span> {</span><br><span class="line">                            cout &lt;&lt; sum1 + odd[<span class="number">0</span>] &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">                        }</span><br><span class="line">                    }</span><br><span class="line">                    cout &lt;&lt; <span class="number">0</span>;</span><br><span class="line">                }</span><br><span class="line">                <span class="keyword">else</span> {</span><br><span class="line">                    cout &lt;&lt; <span class="number">0</span>;</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">            <span class="keyword">else</span> {</span><br><span class="line">                <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n - <span class="number">1</span>; i++) {</span><br><span class="line">                    <span class="keyword">if</span> (i % <span class="number">2</span> == <span class="number">0</span>) {</span><br><span class="line">                        cout &lt;&lt; <span class="number">0</span> &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">                    }</span><br><span class="line">                    <span class="keyword">else</span> {</span><br><span class="line">                        cout &lt;&lt; odd[<span class="number">0</span>] &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">                    }</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">        </span><br><span class="line">        std::cout &lt;&lt; endl;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<p>比赛时被这题恶心了很久才拉出来的代码，也是能让你们吃上了😀</p>
-]]></content>
-      <categories>
-        <category>算法</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Crossed Wires</title>
-    <url>/2025/12/14/Crossed-Wires/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="Crossed-Wires"><a href="#Crossed-Wires" class="headerlink" title="Crossed Wires"></a>Crossed Wires</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p><strong>Challenge files:</strong></p>
-<p>-<a href="https://cryptohack.org/static/challenges/source_b3c3c786c649d363d27995545cf95dab.py">source.py</a></p>
-<p>-<a href="https://cryptohack.org/static/challenges/output_434cbf2b937bac1177bed299b2049a92.txt">output.txt</a></p>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><ol>
-<li>利用已知的私钥(N, d)分解N，得到p和q</li>
-<li>计算欧拉函数φ(N) = (p-1)*(q-1)</li>
-<li>对朋友公钥列表进行反向操作，依次解密</li>
-<li>最终得到原始flag</li>
-</ol>
-<h2 id="解题过程"><a href="#解题过程" class="headerlink" title="解题过程"></a>解题过程</h2><h3 id="步骤1：分析加密过程"><a href="#步骤1：分析加密过程" class="headerlink" title="步骤1：分析加密过程"></a>步骤1：分析加密过程</h3><p>从源代码分析加密流程：</p>
-<ul>
-<li>原始flag先被转换为大整数</li>
-<li>然后依次使用5个朋友的公钥进行RSA加密</li>
-<li>每个朋友使用相同的N但不同的e（17位素数）</li>
-</ul>
-<h3 id="步骤2：已知d分解N的算法"><a href="#步骤2：已知d分解N的算法" class="headerlink" title="步骤2：已知d分解N的算法"></a>步骤2：已知d分解N的算法</h3><p>使用标准的已知d分解N算法：<a href="https://di-mgt.com.au/rsa_factorize_n.html">RSA: how to factorize N given d</a></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1. 设 k=e⋅d−1</span><br><span class="line">2. 随机选择 g∈{2,…,N−1}</span><br><span class="line">3. 将 k 表示为 k=2s⋅t，其中 t 为奇数</span><br><span class="line">4. 计算 x=gtmodN</span><br><span class="line">5. 如果 x!=1 且 gcd(x−1,N)&gt;1，则找到因子</span><br><span class="line">6. 否则继续尝试不同的 g</span><br></pre></td></tr></table></figure>
-<h3 id="步骤3：实现解密代码"><a href="#步骤3：实现解密代码" class="headerlink" title="步骤3：实现解密代码"></a>步骤3：实现解密代码</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">from Crypto.Util.number import long_to_bytes</span><br><span class="line">import math</span><br><span class="line">from sympy import nextprime, gcd</span><br><span class="line"></span><br><span class="line"># 从output.txt读取数据</span><br><span class="line">with open('output.txt', 'r') as f:</span><br><span class="line">    data = f.read()</span><br><span class="line"></span><br><span class="line"># 解析数据</span><br><span class="line">my_key = eval(data.split("My private key:")[1].split("My Friend's public keys:")[0].strip())</span><br><span class="line">friend_keys = eval(data.split("My Friend's public keys:")[1].split("Encrypted flag:")[0].strip())</span><br><span class="line">encrypted_flag = int(data.split("Encrypted flag:")[1].strip())</span><br><span class="line"></span><br><span class="line">N, d = my_key</span><br><span class="line">e = 0x10001  # 65537</span><br><span class="line"></span><br><span class="line"># 已知d分解N的算法</span><br><span class="line">def factorize_N(N, e, d):</span><br><span class="line">    k = e * d - 1</span><br><span class="line">    g = 2</span><br><span class="line">    while True:</span><br><span class="line">        # 将k表示为k = 2^s * t，其中t为奇数</span><br><span class="line">        t = k</span><br><span class="line">        while t % 2 == 0:</span><br><span class="line">            t //= 2</span><br><span class="line">            x = pow(g, t, N)</span><br><span class="line">            y = gcd(x - 1, N)</span><br><span class="line">            if y &gt; 1 and y &lt; N:</span><br><span class="line">                p = y</span><br><span class="line">                q = N // y</span><br><span class="line">                return p, q</span><br><span class="line">        g = nextprime(g)</span><br><span class="line"></span><br><span class="line"># 分解N得到p和q</span><br><span class="line">p, q = factorize_N(N, e, d)</span><br><span class="line">print(f"Found factors: p={p}, q={q}")</span><br><span class="line"></span><br><span class="line"># 计算欧拉函数</span><br><span class="line">phi = (p - 1) * (q - 1)</span><br><span class="line"></span><br><span class="line"># 反向解密（从最后一个朋友开始）</span><br><span class="line">friend_keys.reverse()</span><br><span class="line">current = encrypted_flag</span><br><span class="line">for _, friend_e in friend_keys:</span><br><span class="line">    # 计算朋友的私钥指数</span><br><span class="line">    friend_d = pow(friend_e, -1, phi)</span><br><span class="line">    # 解密</span><br><span class="line">    current = pow(current, friend_d, N)</span><br><span class="line"></span><br><span class="line"># 转换为字节</span><br><span class="line">flag = long_to_bytes(current)</span><br><span class="line">print(f"Flag: {flag.decode()}")</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>CRYPTO</category>
-      </categories>
-      <tags>
-        <tag>crypto</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>babyrsa（攻防世界）</title>
-    <url>/2025/12/14/babyrsa%EF%BC%88%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%EF%BC%89/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="babyrsa（攻防世界）"><a href="#babyrsa（攻防世界）" class="headerlink" title="babyrsa（攻防世界）"></a>babyrsa（攻防世界）</h1><p><a href="attachment:22e56407-c86e-4573-8ba4-a26015f4a4db:a1d729b93242433e86305169bf4765a9_(2).txt">a1d729b93242433e86305169bf4765a9 (2).txt</a></p>
-<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>题目提供了以下信息：</p>
-<ul>
-<li>模数 n</li>
-<li>加密指数 e = 0x10001</li>
-<li>密文 c</li>
-</ul>
-<p>服务器提供了一个”奇偶性预言机”（Parity Oracle）服务，当用户发送密文（十六进制格式）时，服务器会返回解密后明文的奇偶性（even或odd），然后立即断开连接。</p>
-<p>目标是通过利用这个奇偶性预言机，恢复原始明文m，从而获取flag。</p>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><h3 id="RSA奇偶性攻击原理"><a href="#RSA奇偶性攻击原理" class="headerlink" title="RSA奇偶性攻击原理"></a>RSA奇偶性攻击原理</h3><p>RSA加密具有同态性质，即：</p>
-<ul>
-<li>如果密文c对应明文m，那么密文c’ = c × 2^e mod n对应的明文是m’ = 2m mod n</li>
-</ul>
-<p>利用这个性质，我们可以构造一系列查询，通过分析2m mod n的奇偶性来推断m相对于n/2的大小关系：</p>
-<ol>
-<li>如果2m mod n是偶数 → 2m &lt; n → m &lt; n/2</li>
-<li>如果2m mod n是奇数 → 2m ≥ n → m ≥ n/2</li>
-</ol>
-<p>通过多次这样的查询，我们可以使用二分搜索法逐步缩小m的可能范围，最终精确确定m的值。</p>
-<h3 id="攻击步骤"><a href="#攻击步骤" class="headerlink" title="攻击步骤"></a>攻击步骤</h3><ol>
-<li><strong>初始化参数</strong>：<ul>
-<li>已知n、e、c</li>
-<li>设置初始搜索区间[0, n]</li>
-</ul>
-</li>
-<li><strong>二分搜索攻击</strong>：<ul>
-<li>对于每个比特位（共需log₂n次查询）：<ul>
-<li>计算新密文c’ = c × (2^e)^k mod n（其中k是查询次数）</li>
-<li>发送c’给服务器，获取奇偶性</li>
-<li>根据奇偶性更新搜索区间：<ul>
-<li>偶数：m在左半区间 → high = mid</li>
-<li>奇数：m在右半区间 → low = mid</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><strong>恢复明文</strong>：<ul>
-<li>搜索完成后，区间边界收敛到m</li>
-<li>将m转换为字节串，得到flag</li>
-</ul>
-</li>
-</ol>
-<h2 id="完整攻击代码"><a href="#完整攻击代码" class="headerlink" title="完整攻击代码"></a>完整攻击代码</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import socket</span><br><span class="line">from time import sleep</span><br><span class="line">from Crypto.Util.number import long_to_bytes</span><br><span class="line"></span><br><span class="line">def parse_parameters(data):</span><br><span class="line">    e = 0x10001</span><br><span class="line">    n = 0x0b765daa79117afe1a77da7ff8122872bbcbddb322bb078fe0786dc40c9033fadd639adc48c3f2627fb7cb59bb0658707fe516967464439bdec2d6479fa3745f57c0a5ca255812f0884978b2a8aaeb750e0228cbe28a1e5a63bf0309b32a577eecea66f7610a9a4e720649129e9dc2115db9d4f34dc17f8b0806213c035e22f2c5054ae584b440def00afbccd458d020cae5fd1138be6507bc0b1a10da7e75def484c5fc1fcb13d11be691670cf38b487de9c4bde6c2c689be5adab08b486599b619a0790c0b2d70c9c461346966bcbae53c5007d0146fc520fa6e3106fbfc89905220778870a7119831c17f98628563ca020652d18d72203529a784ca73716db</span><br><span class="line">    c = 0x4f377296a19b3a25078d614e1c92ff632d3e3ded772c4445b75e468a9405de05d15c77532964120ae11f8655b68a630607df0568a7439bc694486ae50b5c0c8507e5eecdea4654eeff3e75fb8396e505a36b0af40bd5011990663a7655b91c9e6ed2d770525e4698dec9455db17db38fa4b99b53438b9e09000187949327980ca903d0eef114afc42b771657ea5458a4cb399212e943d139b7ceb6d5721f546b75cd53d65e025f4df7eb8637152ecbb6725962c7f66b714556d754f41555c691a34a798515f1e2a69c129047cb29a9eef466c206a7f4dbc2cea1a46a39ad3349a7db56c1c997dc181b1afcb76fa1bbbf118a4ab5c515e274ab2250dba1872be0</span><br><span class="line">    return n, e, c</span><br><span class="line"></span><br><span class="line">def main():</span><br><span class="line">    host = "61.147.171.105"</span><br><span class="line">    port = 62308</span><br><span class="line">    num_queries = 0</span><br><span class="line"></span><br><span class="line">    # 第一步：获取初始参数</span><br><span class="line">    s = socket.socket()</span><br><span class="line">    s.connect((host, port))</span><br><span class="line">    data = s.recv(4096).decode()</span><br><span class="line">    n, e, c = parse_parameters(data)</span><br><span class="line">    s.close()</span><br><span class="line"></span><br><span class="line">    print(f"Got parameters: n={n}\ne={e}\nc={c}")</span><br><span class="line"></span><br><span class="line">    # 初始化攻击参数</span><br><span class="line">    low = 0</span><br><span class="line">    high = n</span><br><span class="line">    multiplier = 1</span><br><span class="line">    two_e = pow(2, e, n)</span><br><span class="line">    bit_length = n.bit_length()</span><br><span class="line"></span><br><span class="line">    print(f"Starting attack, requires {bit_length} queries...")</span><br><span class="line"></span><br><span class="line">    # 进行二分搜索攻击</span><br><span class="line">    for i in range(bit_length):</span><br><span class="line">        multiplier = (multiplier * two_e) % n</span><br><span class="line">        current_ct = (c * multiplier) % n</span><br><span class="line">        hex_ct = format(current_ct, 'x')</span><br><span class="line"></span><br><span class="line">        # 连接服务器并发送查询</span><br><span class="line">        while True:</span><br><span class="line">            try:</span><br><span class="line">                s = socket.socket()</span><br><span class="line">                s.connect((host, port))</span><br><span class="line">                s.recv(1024)</span><br><span class="line">                s.send(hex_ct.encode() + b'\n')</span><br><span class="line">                response = s.recv(1024).decode()</span><br><span class="line">                s.close()</span><br><span class="line"></span><br><span class="line">                if 'even' in response:</span><br><span class="line">                    parity = 0</span><br><span class="line">                elif 'odd' in response:</span><br><span class="line">                    parity = 1</span><br><span class="line">                else:</span><br><span class="line">                    print(f"Unexpected response: {response}")</span><br><span class="line">                    continue</span><br><span class="line"></span><br><span class="line">                num_queries += 1</span><br><span class="line">                if num_queries % 50 == 0:</span><br><span class="line">                    print(f"Query {num_queries}/{bit_length}, parity={parity}")</span><br><span class="line"></span><br><span class="line">                # 更新搜索区间</span><br><span class="line">                mid = (low + high) // 2</span><br><span class="line">                if parity == 0:</span><br><span class="line">                    high = mid</span><br><span class="line">                else:</span><br><span class="line">                    low = mid</span><br><span class="line">                break</span><br><span class="line"></span><br><span class="line">            except Exception as e:</span><br><span class="line">                print(f"Error: {e}, retrying...")</span><br><span class="line">                sleep(1)</span><br><span class="line"></span><br><span class="line">    m = high</span><br><span class="line">    print(f"\nAttack completed after {num_queries} queries")</span><br><span class="line">    print(f"Recovered m: {m}")</span><br><span class="line"></span><br><span class="line">    flag = long_to_bytes(m).decode()</span><br><span class="line">    print(flag)</span><br><span class="line"></span><br><span class="line">if __name__ == "__main__":</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
-
-<h2 id="执行结果"><a href="#执行结果" class="headerlink" title="执行结果"></a>执行结果</h2><p>运行攻击脚本后，程序会进行约2048次查询（对于2048位的RSA模数n），最终恢复出明文m，转换为字符串后得到flag：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">QCTF{RSA_parity_oracle_is_funa</span><br></pre></td></tr></table></figure>
-
-<p>根据flag的语义和常见格式，可以推断完整flag应为：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">QCTF{RSA_parity_oracle_is_fun}</span><br></pre></td></tr></table></figure>
-
-<h2 id=""><a href="#" class="headerlink" title=""></a></h2>]]></content>
-      <categories>
-        <category>CRYPTO</category>
-      </categories>
-      <tags>
-        <tag>crypto</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Find the lattice</title>
     <url>/2025/12/12/Find-the-lattice/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="Find-the-Lattice"><a href="#Find-the-Lattice" class="headerlink" title="Find the Lattice"></a>Find the Lattice</h1><p>Challenge files:</p>
@@ -258,80 +354,6 @@
       </tags>
   </entry>
   <entry>
-    <title>bad_python</title>
-    <url>/2026/02/08/bad-python/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="bad-python-题解-🐱"><a href="#bad-python-题解-🐱" class="headerlink" title="bad_python 题解 🐱"></a>bad_python 题解 🐱</h1><blockquote>
-<p>题目描述：the .pyc is broken ,can you help me recover?</p>
-</blockquote>
-<h2 id="第一步：初见文件-🎀"><a href="#第一步：初见文件-🎀" class="headerlink" title="第一步：初见文件 🎀"></a>第一步：初见文件 🎀</h2><p>下载附件，是一个名为 <code>bdbc0757-1971-4134-8f3c-aa4b0a7add42.zip</code> 的压缩包，解压后得到一个 <code>pyre.cpython-36.pyc</code> 文件。这是一个 Python 3.6 版本的字节码文件，但题目提示它被“破坏”了，需要我们帮忙恢复~</p>
-<p>通常，<code>.pyc</code> 文件是 Python 源码编译后的字节码，可以通过反编译工具将其还原为 Python 代码。但直接反编译可能会失败，因为文件头部可能被破坏了喵~</p>
-<h2 id="第二步：尝试反编译-🛠"><a href="#第二步：尝试反编译-🛠" class="headerlink" title="第二步：尝试反编译 🛠"></a>第二步：尝试反编译 🛠</h2><p>首先，尝试用常用的反编译工具 <code>uncompyle6</code> 来反编译：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pip install uncompyle6</span><br><span class="line">uncompyle6 -o . pyre.cpython-36.pyc</span><br></pre></td></tr></table></figure>
-
-<p>但出现了错误提示：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">KeyError: '3.9.3'</span><br></pre></td></tr></table></figure>
-
-<p>咦？文件名是 <code>cpython-36</code>，说明应该是 Python 3.6 编译的，但工具似乎检测到了不匹配的版本。可能是文件头部的魔数（magic number）不对，导致工具识别错误。</p>
-<h2 id="第三步：修复文件头-🔧"><a href="#第三步：修复文件头-🔧" class="headerlink" title="第三步：修复文件头 🔧"></a>第三步：修复文件头 🔧</h2><p>Python 的 <code>.pyc</code> 文件头部有一个魔数，用来标识 Python 版本。我们需要将其修正为正确的 Python 3.6 的魔数。</p>
-<p>用十六进制编辑器（如 WinHex）打开 <code>pyre.cpython-36.pyc</code>，查看头部。直接修改文件头，仍反编译失败。<br>我们可以在本地用 Python 3.6 编译一个简单的脚本，生成一个正确的 <code>.pyc</code> 文件，比较头部。</p>
-<p>在 Python 3.6 中，<code>.pyc</code> 文件头结构为：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> {</span></span><br><span class="line">    <span class="type">uint32_t</span> magic;      <span class="comment">// 4字节：魔数，标识Python版本</span></span><br><span class="line">    <span class="type">uint32_t</span> bit_field;  <span class="comment">// 4字节：位字段</span></span><br><span class="line">    <span class="type">uint64_t</span> timestamp;  <span class="comment">// 8字节：时间戳</span></span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-
-<p>先写一个1.py，再用以下命令生成它的pyc文件：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">python3.6 -m py_compile 1.py</span><br></pre></td></tr></table></figure>
-
-<p>然后比较两个文件的头部。发现原文件的魔数不正确，于是将原文件的前 16 个字节替换为正确的 Python 3.6 的头部（可以从1.py中复制）。</p>
-<p><img src="attachment:a9b179b9-8725-40d3-8f61-89ec4056f4a3:9a55115c-2f47-4896-9d1b-56c89b117d53.png" alt="9a55115c-2f47-4896-9d1b-56c89b117d53.png"></p>
-<p>修复后，再次使用 <code>uncompyle6</code> 反编译：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">uncompyle6 -o . pyre.cpython-36.pyc</span><br></pre></td></tr></table></figure>
-
-<p><img src="attachment:ba280b01-4ff2-4b29-8a0d-76bbea5e599d:b0ce6f78-41f9-4059-9884-95c249a310eb.png" alt="b0ce6f78-41f9-4059-9884-95c249a310eb.png"></p>
-<p>成功啦！得到了 <code>pyre.py</code> 文件，里面就是被反编译的 Python 源码。</p>
-<h2 id="第四步：分析源码-🧐"><a href="#第四步：分析源码-🧐" class="headerlink" title="第四步：分析源码 🧐"></a>第四步：分析源码 🧐</h2><p>打开 <code>pyre.py</code>，内容如下：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">encrypt</span>(<span class="params">v, k</span>):</span><br><span class="line">    v0 = c_uint32(v[<span class="number">0</span>])</span><br><span class="line">    v1 = c_uint32(v[<span class="number">1</span>])</span><br><span class="line">    sum1 = c_uint32(<span class="number">0</span>)</span><br><span class="line">    delta = <span class="number">195935983</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">32</span>):</span><br><span class="line">        v0.value += (v1.value &lt;&lt; <span class="number">4</span> ^ v1.value &gt;&gt; <span class="number">7</span>) + v1.value ^ sum1.value + k[sum1.value &amp; <span class="number">3</span>]</span><br><span class="line">        sum1.value += delta</span><br><span class="line">        v1.value += (v0.value &lt;&lt; <span class="number">4</span> ^ v0.value &gt;&gt; <span class="number">7</span>) + v0.value ^ sum1.value + k[sum1.value &gt;&gt; <span class="number">9</span> &amp; <span class="number">3</span>]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> (v0.value, v1.value)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    flag = <span class="built_in">input</span>(<span class="string">"please input your flag:"</span>)</span><br><span class="line">    k = [<span class="number">255</span>, <span class="number">187</span>, <span class="number">51</span>, <span class="number">68</span>]</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(flag) != <span class="number">32</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"wrong!"</span>)</span><br><span class="line">        exit(-<span class="number">1</span>)</span><br><span class="line">    a = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="number">32</span>, <span class="number">8</span>):</span><br><span class="line">        v1 = bytes_to_long(<span class="built_in">bytes</span>(flag[i:i + <span class="number">4</span>], <span class="string">"ascii"</span>))</span><br><span class="line">        v2 = bytes_to_long(<span class="built_in">bytes</span>(flag[i + <span class="number">4</span>:i + <span class="number">8</span>], <span class="string">"ascii"</span>))</span><br><span class="line">        a += encrypt([v1, v2], k)</span><br><span class="line"></span><br><span class="line">    enc = [<span class="number">4006073346</span>, <span class="number">2582197823</span>, <span class="number">2235293281</span>, <span class="number">558171287</span>, <span class="number">2425328816</span>, <span class="number">1715140098</span>, <span class="number">986348143</span>, <span class="number">1948615354</span>]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">8</span>):</span><br><span class="line">        <span class="keyword">if</span> enc[i] != a[i]:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">"wrong!"</span>)</span><br><span class="line">            exit(-<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"flag is flag{%s}"</span> % flag)</span><br></pre></td></tr></table></figure>
-
-<p>加密算法是一个类似 XTEA 的分组密码，但有一些变体。我们需要编写解密算法，从密文反推明文。</p>
-<p>注意到该算法的核心是两个<code>bytes_to_long</code>函数，对其逆向即可。</p>
-<h2 id="第五步：编写解密脚本-🐾"><a href="#第五步：编写解密脚本-🐾" class="headerlink" title="第五步：编写解密脚本 🐾"></a>第五步：编写解密脚本 🐾</h2><p>观察加密过程，每轮操作如下：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">v0.value += (v1.value &lt;&lt; <span class="number">4</span> ^ v1.value &gt;&gt; <span class="number">7</span>) + v1.value ^ sum1.value + k[sum1.value &amp; <span class="number">3</span>]</span><br><span class="line">sum1.value += delta</span><br><span class="line">v1.value += (v0.value &lt;&lt; <span class="number">4</span> ^ v0.value &gt;&gt; <span class="number">7</span>) + v0.value ^ sum1.value + k[sum1.value &gt;&gt; <span class="number">9</span> &amp; <span class="number">3</span>]</span><br></pre></td></tr></table></figure>
-
-<p>其中，<code>sum1</code> 初始为 0，每轮加上 <code>delta</code>，共 32 轮。解密时，我们需要从最后一轮开始逆运算，逐步恢复出原始的 <code>v0</code> 和 <code>v1</code>。</p>
-<p>解密脚本如下：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">decrypt_pair</span>(<span class="params">v0, v1, k</span>):</span><br><span class="line">    delta = <span class="number">195935983</span></span><br><span class="line">    mask = <span class="number">0xFFFFFFFF</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">31</span>, -<span class="number">1</span>, -<span class="number">1</span>):</span><br><span class="line">        s_i = (i * delta) &amp; mask</span><br><span class="line">        s_prime = ((i + <span class="number">1</span>) * delta) &amp; mask</span><br><span class="line">        <span class="comment"># 逆向 v1 的更新</span></span><br><span class="line">        g = ((v0 &lt;&lt; <span class="number">4</span>) ^ (v0 &gt;&gt; <span class="number">7</span>)) + v0</span><br><span class="line">        g ^= (s_prime + k[(s_prime &gt;&gt; <span class="number">9</span>) &amp; <span class="number">3</span>])</span><br><span class="line">        g &amp;= mask</span><br><span class="line">        v1 = (v1 - g) &amp; mask</span><br><span class="line">        <span class="comment"># 逆向 v0 的更新</span></span><br><span class="line">        f = ((v1 &lt;&lt; <span class="number">4</span>) ^ (v1 &gt;&gt; <span class="number">7</span>)) + v1</span><br><span class="line">        f ^= (s_i + k[s_i &amp; <span class="number">3</span>])</span><br><span class="line">        f &amp;= mask</span><br><span class="line">        v0 = (v0 - f) &amp; mask</span><br><span class="line">    <span class="keyword">return</span> v0, v1</span><br><span class="line"></span><br><span class="line">k = [<span class="number">255</span>, <span class="number">187</span>, <span class="number">51</span>, <span class="number">68</span>]</span><br><span class="line">enc = [<span class="number">4006073346</span>, <span class="number">2582197823</span>, <span class="number">2235293281</span>, <span class="number">558171287</span>, <span class="number">2425328816</span>, <span class="number">1715140098</span>, <span class="number">986348143</span>, <span class="number">1948615354</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将密文分成四对</span></span><br><span class="line">pairs = [(enc[i], enc[i + <span class="number">1</span>]) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="number">8</span>, <span class="number">2</span>)]</span><br><span class="line"></span><br><span class="line">flag_bytes = <span class="string">b''</span></span><br><span class="line"><span class="keyword">for</span> v0, v1 <span class="keyword">in</span> pairs:</span><br><span class="line">    p0, p1 = decrypt_pair(v0, v1, k)</span><br><span class="line">    flag_bytes += p0.to_bytes(<span class="number">4</span>, <span class="string">'big'</span>)</span><br><span class="line">    flag_bytes += p1.to_bytes(<span class="number">4</span>, <span class="string">'big'</span>)</span><br><span class="line"></span><br><span class="line">flag = flag_bytes.decode(<span class="string">'ascii'</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">"flag is: flag{%s}"</span> % flag) <span class="comment"># flag is: flag{Th1s_1s_A_Easy_Pyth0n__R3veRse_0}</span></span><br></pre></td></tr></table></figure>
-
-<p>好累的说QAQ</p>
-]]></content>
-      <categories>
-        <category>REVERSE</category>
-      </categories>
-      <tags>
-        <tag>reverse</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>5.19 开发Day1</title>
-    <url>/2026/05/21/%E5%BC%80%E5%8F%91%E6%97%A5%E5%BF%97/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="惠惠爆裂魔法模拟器-开发日志"><a href="#惠惠爆裂魔法模拟器-开发日志" class="headerlink" title="惠惠爆裂魔法模拟器 开发日志"></a>惠惠爆裂魔法模拟器 开发日志</h1><h2 id="Day-1-2026-05-19-启动启动全部启动"><a href="#Day-1-2026-05-19-启动启动全部启动" class="headerlink" title="Day 1 | 2026.05.19 | 启动启动全部启动"></a>Day 1 | 2026.05.19 | 启动启动全部启动</h2><p>官网光速下好压缩包，竟然是exe文件一件运行，神了。</p>
-<p>先是跟着豆包走，铺地板放环境光，然后就是快乐的找材质包和惠惠建模环节，好玩捏。</p>
-<hr>
-<h2 id="Day-2-2026-05-20-被第一人称控制器折磨的一天"><a href="#Day-2-2026-05-20-被第一人称控制器折磨的一天" class="headerlink" title="Day 2 | 2026.05.20 | 被第一人称控制器折磨的一天"></a>Day 2 | 2026.05.20 | 被第一人称控制器折磨的一天</h2><p>看了一整天教程，尝试搓第一人称控制器，被豆包气笑了，鼠标晃一晃人物能跟着镜头飞走了，hyw</p>
-<p>还有按a往右跑和按d往左跑hhhhhhhhh</p>
-<p>沙比豆包</p>
-<p>随后尝试手搓，然后100行代码时电脑突然黑屏，咋按都没反应，两次重启后终于正常开机了，然后没有自动保存。。。。</p>
-<hr>
-<h2 id="Day-3-2026-05-21-git-clone是对的有没有懂的"><a href="#Day-3-2026-05-21-git-clone是对的有没有懂的" class="headerlink" title="Day 3 | 2026.05.21 | git clone是对的有没有懂的"></a>Day 3 | 2026.05.21 | git clone是对的有没有懂的</h2><p>不要反复造轮子！<br>不要反复造轮子！<br>不要反复造轮子！</p>
-<p>直接git clone别人的项目，哎我操这怎么这么丝滑，爽爽爽。</p>
-<p>先休息两天。。</p>
-]]></content>
-      <categories>
-        <category>godot3d游戏开发</category>
-      </categories>
-      <tags>
-        <tag>惠惠</tag>
-        <tag>godot</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>我的第一篇blog</title>
     <url>/2025/12/11/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87blog/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>你好，世界 👋  </p>
@@ -343,7 +365,7 @@
 </ul>
 <h2 id="🚧-未来计划"><a href="#🚧-未来计划" class="headerlink" title="🚧 未来计划"></a>🚧 未来计划</h2><p>我会继续更新CTF相关的内容，并逐渐加入 AI 安全的学习笔记与实践记录。<br><strong>欢迎关注，一起交流，敬请期待！</strong></p>
 <hr>
-<p><em>📬 联系邮箱：[<a href="mailto:&#51;&#x35;&#49;&#51;&#x37;&#50;&#x38;&#x32;&#x30;&#x33;&#x40;&#113;&#113;&#x2e;&#99;&#111;&#x6d;">&#51;&#x35;&#49;&#51;&#x37;&#50;&#x38;&#x32;&#x30;&#x33;&#x40;&#113;&#113;&#x2e;&#99;&#111;&#x6d;</a>]</em></p>
+<p><em>📬 联系邮箱：[<a href="mailto:&#x33;&#x35;&#49;&#51;&#x37;&#50;&#x38;&#50;&#x30;&#51;&#x40;&#x71;&#x71;&#46;&#x63;&#x6f;&#109;">&#x33;&#x35;&#49;&#51;&#x37;&#50;&#x38;&#50;&#x30;&#51;&#x40;&#x71;&#x71;&#46;&#x63;&#x6f;&#109;</a>]</em></p>
 ]]></content>
       <tags>
         <tag>第一篇blog</tag>
@@ -399,8 +421,59 @@
         <category>godot3d游戏开发</category>
       </categories>
       <tags>
-        <tag>惠惠</tag>
         <tag>godot</tag>
+        <tag>惠惠</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Codeforces Round 1070 (Div. 2) C. Odd Process</title>
+    <url>/2025/12/15/Codeforces-Round-1070-Div-2-C-Odd-Process/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="解题报告：C-Odd-Process"><a href="#解题报告：C-Odd-Process" class="headerlink" title="解题报告：C. Odd Process"></a>解题报告：C. <a href="https://codeforces.com/contest/2176/problem/C">Odd Process</a></h1><h2 id="题目概述"><a href="#题目概述" class="headerlink" title="题目概述"></a>题目概述</h2><p>You have n coins with denominations a1,a2,…,an and a natural number k. You also have a bag, which is initially empty, where you can place coins. You need to perform exactly k actions. In each action, you take one coin from those you have left and put it in your bag. After that, you can no longer take that coin.</p>
+<p>At the same time, you have a cat that loves even numbers, so every time the sum of the denominations of the coins in your bag becomes even, your cat empties the bag, meaning it takes all the coins to a place known only to it, and the bag is empty again. Note that the bag is emptied every time the sum becomes even during the process of adding coins, not just at the very last moment.</p>
+<p>Let your score be the sum of the denominations of the coins in the bag. Your task is to perform k actions such that your final score is maximized. Find the answer for all 1≤k≤n.</p>
+<h2 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a>问题分析</h2><p>我们需要选择硬币的放入顺序，以最大化最终得分。关键在于理解奇偶性的变化规律：</p>
+<ul>
+<li>奇数 + 奇数 = 偶数</li>
+<li>偶数 + 偶数 = 偶数</li>
+<li>奇数 + 偶数 = 奇数</li>
+</ul>
+<p>放入硬币后，如果总和为偶数，袋子被清空（总和变为 0）。因此，为了在操作结束时袋子不为空，最后一次操作后的总和必须是奇数。</p>
+<h2 id="关键观察"><a href="#关键观察" class="headerlink" title="关键观察"></a>关键观察</h2><ol>
+<li><strong>最终得分非零的条件</strong>：必须至少使用一个奇数，且最后一段（最后一次清空之后的操作序列，或从开始就没有清空）只能包含一个奇数和若干个偶数（因为再放入一个奇数会触发清空）。</li>
+<li><strong>构造方式</strong>：先将最大的奇数和较大的偶数依次放入，若偶数放完，保证接下来放入的奇数个数为偶数，否则将最小的偶数换为奇数。</li>
+</ol>
+<h2 id="算法设计"><a href="#算法设计" class="headerlink" title="算法设计"></a>算法设计</h2><p>将数组按奇偶分开从大到小排序，放入顺序为最大奇数，最大偶数，第二大偶数……，注意考虑不存在奇偶数的边界情况。</p>
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;functional&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">sas</span><span class="params">(<span class="type">const</span> std::vector&lt;<span class="type">long</span> <span class="type">long</span>&gt;&amp; input, std::vector&lt;<span class="type">long</span> <span class="type">long</span>&gt;&amp; odd, std::vector&lt;<span class="type">long</span> <span class="type">long</span>&gt;&amp; even)</span> </span>{</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">long</span> <span class="type">long</span> num : input) {</span><br><span class="line">        <span class="keyword">if</span> (num % <span class="number">2</span> != <span class="number">0</span>) {</span><br><span class="line">            odd.<span class="built_in">push_back</span>(num);</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">else</span> {</span><br><span class="line">            even.<span class="built_in">push_back</span>(num);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    std::<span class="built_in">sort</span>(odd.<span class="built_in">begin</span>(), odd.<span class="built_in">end</span>(), std::<span class="built_in">greater</span>&lt;<span class="type">long</span> <span class="type">long</span>&gt;());</span><br><span class="line">    std::<span class="built_in">sort</span>(even.<span class="built_in">begin</span>(), even.<span class="built_in">end</span>(), std::<span class="built_in">greater</span>&lt;<span class="type">long</span> <span class="type">long</span>&gt;());</span><br><span class="line">    <span class="keyword">if</span> (even.<span class="built_in">size</span>() == <span class="number">0</span>) {</span><br><span class="line">        even.<span class="built_in">push_back</span>(<span class="number">0</span>);</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="type">long</span> <span class="type">long</span> t;</span><br><span class="line">    std::cin &gt;&gt; t;</span><br><span class="line">    <span class="keyword">while</span> (t--) {</span><br><span class="line">        <span class="type">long</span> <span class="type">long</span> n,i;</span><br><span class="line">        cin &gt;&gt; n;</span><br><span class="line">        <span class="function">std::vector&lt;<span class="type">long</span> <span class="type">long</span>&gt; <span class="title">a</span><span class="params">(n)</span>, odd, even</span>;</span><br><span class="line">        <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n; i++) {</span><br><span class="line">            std::cin &gt;&gt; a[i];</span><br><span class="line"></span><br><span class="line">        }</span><br><span class="line">        <span class="built_in">sas</span>(a, odd, even);</span><br><span class="line">        <span class="keyword">if</span> (odd.<span class="built_in">size</span>() == <span class="number">0</span>) {</span><br><span class="line">            <span class="keyword">for</span> (i = <span class="number">1</span>; i &lt;= n; i++) {</span><br><span class="line">                std::cout &lt;&lt; <span class="number">0</span> &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">            }</span><br><span class="line">            </span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(odd.<span class="built_in">size</span>()%<span class="number">2</span> == <span class="number">1</span>) {</span><br><span class="line">            cout &lt;&lt; odd[<span class="number">0</span>] &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">            <span class="type">long</span> <span class="type">long</span> sum1 = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">if</span> (even[<span class="number">0</span>] != <span class="number">0</span>) {</span><br><span class="line">                <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt;= even.<span class="built_in">size</span>() - <span class="number">1</span>; i++) {</span><br><span class="line">                    <span class="keyword">if</span> (even[i] == <span class="number">0</span>) {</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    }</span><br><span class="line"></span><br><span class="line">                    sum1 += even[i];</span><br><span class="line">                    cout &lt;&lt; sum1 + odd[<span class="number">0</span>] &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">                }</span><br><span class="line">                <span class="keyword">if</span> (odd.<span class="built_in">size</span>() &gt; <span class="number">2</span>) {</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt;= odd.<span class="built_in">size</span>() - <span class="number">2</span>; i++) {</span><br><span class="line">                        <span class="keyword">if</span> (i % <span class="number">2</span> == <span class="number">0</span>) {</span><br><span class="line">                            cout &lt;&lt; sum1 - even[even.<span class="built_in">size</span>() - <span class="number">1</span>] + odd[<span class="number">0</span>] &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">                        }</span><br><span class="line">                        <span class="keyword">else</span> {</span><br><span class="line">                            cout &lt;&lt; sum1 + odd[<span class="number">0</span>] &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">                        }</span><br><span class="line">                    }</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">            <span class="keyword">else</span> {</span><br><span class="line">                <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n - <span class="number">1</span>; i++) {</span><br><span class="line">                    <span class="keyword">if</span> (i % <span class="number">2</span> == <span class="number">0</span>) {</span><br><span class="line">                        cout &lt;&lt; <span class="number">0</span> &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">                    }</span><br><span class="line">                    <span class="keyword">else</span> {</span><br><span class="line">                        cout &lt;&lt; odd[<span class="number">0</span>] &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">                    }</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">            </span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">else</span> {</span><br><span class="line">            cout &lt;&lt; odd[<span class="number">0</span>] &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">            <span class="type">long</span> <span class="type">long</span> sum1 = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">if</span> (even[<span class="number">0</span>] != <span class="number">0</span>) {</span><br><span class="line">                <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt;= even.<span class="built_in">size</span>() - <span class="number">1</span>; i++) {</span><br><span class="line"></span><br><span class="line">                    sum1 += even[i];</span><br><span class="line">                    cout &lt;&lt; sum1 + odd[<span class="number">0</span>] &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">                }</span><br><span class="line">                <span class="keyword">if</span> (odd.<span class="built_in">size</span>() &gt; <span class="number">2</span>) {</span><br><span class="line">                    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt;= odd.<span class="built_in">size</span>() - <span class="number">3</span>; i++) {</span><br><span class="line">                        <span class="keyword">if</span> (i % <span class="number">2</span> == <span class="number">0</span>) {</span><br><span class="line">                            cout &lt;&lt; sum1 - even[even.<span class="built_in">size</span>() - <span class="number">1</span>] + odd[<span class="number">0</span>] &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">                        }</span><br><span class="line">                        <span class="keyword">else</span> {</span><br><span class="line">                            cout &lt;&lt; sum1 + odd[<span class="number">0</span>] &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">                        }</span><br><span class="line">                    }</span><br><span class="line">                    cout &lt;&lt; <span class="number">0</span>;</span><br><span class="line">                }</span><br><span class="line">                <span class="keyword">else</span> {</span><br><span class="line">                    cout &lt;&lt; <span class="number">0</span>;</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">            <span class="keyword">else</span> {</span><br><span class="line">                <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n - <span class="number">1</span>; i++) {</span><br><span class="line">                    <span class="keyword">if</span> (i % <span class="number">2</span> == <span class="number">0</span>) {</span><br><span class="line">                        cout &lt;&lt; <span class="number">0</span> &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">                    }</span><br><span class="line">                    <span class="keyword">else</span> {</span><br><span class="line">                        cout &lt;&lt; odd[<span class="number">0</span>] &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">                    }</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">        </span><br><span class="line">        std::cout &lt;&lt; endl;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>比赛时被这题恶心了很久才拉出来的代码，也是能让你们吃上了😀</p>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>5.19 开发Day1</title>
+    <url>/2026/05/21/%E5%BC%80%E5%8F%91%E6%97%A5%E5%BF%97/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="惠惠爆裂魔法模拟器-开发日志"><a href="#惠惠爆裂魔法模拟器-开发日志" class="headerlink" title="惠惠爆裂魔法模拟器 开发日志"></a>惠惠爆裂魔法模拟器 开发日志</h1><h2 id="Day-1-2026-05-19-启动启动全部启动"><a href="#Day-1-2026-05-19-启动启动全部启动" class="headerlink" title="Day 1 | 2026.05.19 | 启动启动全部启动"></a>Day 1 | 2026.05.19 | 启动启动全部启动</h2><p>官网光速下好压缩包，竟然是exe文件一件运行，神了。</p>
+<p>先是跟着豆包走，铺地板放环境光，然后就是快乐的找材质包和惠惠建模环节，好玩捏。</p>
+<hr>
+<h2 id="Day-2-2026-05-20-被第一人称控制器折磨的一天"><a href="#Day-2-2026-05-20-被第一人称控制器折磨的一天" class="headerlink" title="Day 2 | 2026.05.20 | 被第一人称控制器折磨的一天"></a>Day 2 | 2026.05.20 | 被第一人称控制器折磨的一天</h2><p>看了一整天教程，尝试搓第一人称控制器，被豆包气笑了，鼠标晃一晃人物能跟着镜头飞走了，hyw</p>
+<p>还有按a往右跑和按d往左跑hhhhhhhhh</p>
+<p>沙比豆包</p>
+<p>随后尝试手搓，然后100行代码时电脑突然黑屏，咋按都没反应，两次重启后终于正常开机了，然后没有自动保存。。。。</p>
+<hr>
+<h2 id="Day-3-2026-05-21-git-clone是对的有没有懂的"><a href="#Day-3-2026-05-21-git-clone是对的有没有懂的" class="headerlink" title="Day 3 | 2026.05.21 | git clone是对的有没有懂的"></a>Day 3 | 2026.05.21 | git clone是对的有没有懂的</h2><p>不要反复造轮子！<br>不要反复造轮子！<br>不要反复造轮子！</p>
+<p>直接git clone别人的项目，哎我操这怎么这么丝滑，爽爽爽。</p>
+<p>先休息两天。。</p>
+]]></content>
+      <categories>
+        <category>godot3d游戏开发</category>
+      </categories>
+      <tags>
+        <tag>godot</tag>
+        <tag>惠惠</tag>
       </tags>
   </entry>
   <entry>
@@ -412,79 +485,6 @@
       </categories>
       <tags>
         <tag>评论功能测试</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>SuanP01y</title>
-    <url>/2025/12/14/SuanP01y/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="RCTF-2025-SuanP01y"><a href="#RCTF-2025-SuanP01y" class="headerlink" title="RCTF 2025 SuanP01y"></a>RCTF 2025 SuanP01y</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>这是一个基于多项式环和有理重构的密码分析问题。题目涉及在有限域GF(2)上的多项式环中解决有理重构问题，并利用重构结果进行AES解密。</p>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><ol>
-<li>分析题目中的多项式环结构和有理重构问题</li>
-<li>实现多项式有理重构算法</li>
-<li>利用重构结果生成AES密钥</li>
-<li>通过穷举循环平移找到正确的解密密钥</li>
-</ol>
-<h2 id="解题过程"><a href="#解题过程" class="headerlink" title="解题过程"></a>解题过程</h2><h3 id="步骤1：理解多项式环结构"><a href="#步骤1：理解多项式环结构" class="headerlink" title="步骤1：理解多项式环结构"></a>步骤1：理解多项式环结构</h3><p>题目工作在有限域GF(2)上的多项式环，模数为m(x)=xr−1，其中r=16381。</p>
-<p>数学表示：</p>
-<ul>
-<li>基础环：R=GF(2)[x]</li>
-<li>商环：S=R/⟨xr−1⟩</li>
-</ul>
-<h3 id="步骤2：多项式有理重构原理"><a href="#步骤2：多项式有理重构原理" class="headerlink" title="步骤2：多项式有理重构原理"></a>步骤2：多项式有理重构原理</h3><p>有理重构问题：给定模多项式M(x)和多项式H(x)，寻找A(x)和B(x)满足：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">H(x)≡B(x)A(x)(modM(x))</span><br></pre></td></tr></table></figure>
-
-<p>其中：</p>
-<ol>
-<li>gcd(B(x),M(x))=1</li>
-<li>A(x)和B(x)的次数限制较小（本题中汉明重量d=41）</li>
-</ol>
-<h3 id="步骤3：扩展欧几里得算法实现"><a href="#步骤3：扩展欧几里得算法实现" class="headerlink" title="步骤3：扩展欧几里得算法实现"></a>步骤3：扩展欧几里得算法实现</h3><p>使用扩展欧几里得算法进行有理重构：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">def rational_reconstruction(hint_poly):</span><br><span class="line">    r0, r1 = m, R(hint_poly)</span><br><span class="line">    t0, t1 = R(0), R(1)</span><br><span class="line">    step = 0</span><br><span class="line"></span><br><span class="line">    while r1 != 0:</span><br><span class="line">        q = r0 // r1</span><br><span class="line">        r0, r1 = r1, r0 + q * r1  # 在GF(2)上，加法等同于异或</span><br><span class="line">        t0, t1 = t1, t0 + q * t1</span><br><span class="line">        step += 1</span><br><span class="line"></span><br><span class="line">        if hwt(r0) == d and hwt(t0) == d:</span><br><span class="line">            return r0, t0</span><br><span class="line"></span><br><span class="line">    print("Fail")</span><br><span class="line">    return None, None</span><br></pre></td></tr></table></figure>
-
-<p>算法步骤详解：</p>
-<ol>
-<li><strong>初始化</strong>：r0=M(x), r1=H(x), t0=0, t1=1</li>
-<li><strong>迭代计算</strong>：<ul>
-<li>计算商式：q=r0÷r1</li>
-<li>更新余数：r0,r1=r1,r0−q⋅r1</li>
-<li>更新系数：t0,t1=t1,t0−q⋅t1</li>
-</ul>
-</li>
-<li><strong>终止条件</strong>：当r0和t0的汉明重量都等于d=41时返回</li>
-</ol>
-<h3 id="步骤4：汉明重量计算"><a href="#步骤4：汉明重量计算" class="headerlink" title="步骤4：汉明重量计算"></a>步骤4：汉明重量计算</h3><p>汉明重量定义为多项式中非零系数的个数：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">def hwt(poly):</span><br><span class="line">    return len(poly.exponents())</span><br></pre></td></tr></table></figure>
-
-<p>在GF(2)上，非零系数即为1，因此汉明重量就是多项式中项的数量。</p>
-<h3 id="步骤5：多项式解析"><a href="#步骤5：多项式解析" class="headerlink" title="步骤5：多项式解析"></a>步骤5：多项式解析</h3><p>从字符串形式解析多项式：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hint_str = lines[0].split('=')[1].strip()</span><br><span class="line">exps = []</span><br><span class="line">for term in hint_str.split('+'):</span><br><span class="line">    term = term.strip()</span><br><span class="line">    if not term:</span><br><span class="line">        continue</span><br><span class="line">    if term == '1':</span><br><span class="line">        exps.append(0)</span><br><span class="line">    elif term == 'X':</span><br><span class="line">        exps.append(1)</span><br><span class="line">    elif term.startswith('X^'):</span><br><span class="line">        exps.append(int(term[2:]))</span><br><span class="line"></span><br><span class="line">hint_poly = sum(x**e for e in exps)</span><br></pre></td></tr></table></figure>
-
-<p>将形如”1 + X + X^2 + … + X^r”的字符串转换为多项式对象。</p>
-<h3 id="步骤6：循环平移与解密"><a href="#步骤6：循环平移与解密" class="headerlink" title="步骤6：循环平移与解密"></a>步骤6：循环平移与解密</h3><p>对重构得到的B(x)进行所有可能的循环平移：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">B_S = S(B)</span><br><span class="line">nonce = b"suanp01y"</span><br><span class="line"></span><br><span class="line">for k in range(r):</span><br><span class="line">    h0_candidate = B_S * (X**k)  # 循环平移</span><br><span class="line">    key = md5(str(h0_candidate).encode()).digest()</span><br><span class="line"></span><br><span class="line">    try:</span><br><span class="line">        cipher = AES.new(key, AES.MODE_CTR, nonce=nonce)</span><br><span class="line">        flag = cipher.decrypt(ct)</span><br><span class="line">        if flag.startswith(b"RCTF{"):</span><br><span class="line">            print("Success!")</span><br><span class="line">            print(flag)</span><br><span class="line">            return</span><br><span class="line">    except:</span><br><span class="line">        continue</span><br></pre></td></tr></table></figure>
-
-<p>数学原理：在商环S=R/⟨xr−1⟩中，乘以xk相当于循环平移。</p>
-<h3 id="步骤7：完整解题代码"><a href="#步骤7：完整解题代码" class="headerlink" title="步骤7：完整解题代码"></a>步骤7：完整解题代码</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">from Crypto.Cipher import AES</span><br><span class="line">from hashlib import md5</span><br><span class="line"></span><br><span class="line">r = 16381</span><br><span class="line">d = 41</span><br><span class="line"></span><br><span class="line">R.&lt;x&gt; = PolynomialRing(GF(2))</span><br><span class="line">m = x^r - 1</span><br><span class="line">S.&lt;X&gt; = R.quo(m)</span><br><span class="line"></span><br><span class="line">def hwt(poly):</span><br><span class="line">    return len(poly.exponents())</span><br><span class="line"></span><br><span class="line">def rational_reconstruction(hint_poly):</span><br><span class="line">    r0, r1 = m, R(hint_poly)</span><br><span class="line">    t0, t1 = R(0), R(1)</span><br><span class="line">    step = 0</span><br><span class="line"></span><br><span class="line">    while r1 != 0:</span><br><span class="line">        q = r0 // r1</span><br><span class="line">        r0, r1 = r1, r0 + q * r1</span><br><span class="line">        t0, t1 = t1, t0 + q * t1</span><br><span class="line">        step += 1</span><br><span class="line"></span><br><span class="line">        if hwt(r0) == d and hwt(t0) == d:</span><br><span class="line">            return r0, t0</span><br><span class="line"></span><br><span class="line">    print("Fail")</span><br><span class="line">    return None, None</span><br><span class="line"></span><br><span class="line">def solve():</span><br><span class="line">    with open("output.txt", "r") as f:</span><br><span class="line">        lines = f.read().splitlines()</span><br><span class="line"></span><br><span class="line">    hint_str = lines[0].split('=')[1].strip()</span><br><span class="line">    exps = []</span><br><span class="line"></span><br><span class="line">    for term in hint_str.split('+'):</span><br><span class="line">        term = term.strip()</span><br><span class="line">        if not term:</span><br><span class="line">            continue</span><br><span class="line">        if term == '1':</span><br><span class="line">            exps.append(0)</span><br><span class="line">        elif term == 'X':</span><br><span class="line">            exps.append(1)</span><br><span class="line">        elif term.startswith('X^'):</span><br><span class="line">            exps.append(int(term[2:]))</span><br><span class="line"></span><br><span class="line">    hint_poly = sum(x**e for e in exps)</span><br><span class="line">    ct = bytes.fromhex(lines[1])</span><br><span class="line"></span><br><span class="line">    A, B = rational_reconstruction(hint_poly)</span><br><span class="line"></span><br><span class="line">    if B is None:</span><br><span class="line">        print("Fail")</span><br><span class="line">        return</span><br><span class="line"></span><br><span class="line">    B_S = S(B)</span><br><span class="line">    nonce = b"suanp01y"</span><br><span class="line"></span><br><span class="line">    for k in range(r):</span><br><span class="line">        h0_candidate = B_S * (X**k)</span><br><span class="line">        key = md5(str(h0_candidate).encode()).digest()</span><br><span class="line"></span><br><span class="line">        try:</span><br><span class="line">            cipher = AES.new(key, AES.MODE_CTR, nonce=nonce)</span><br><span class="line">            flag = cipher.decrypt(ct)</span><br><span class="line">            if flag.startswith(b"RCTF{"):</span><br><span class="line">                print("Success!")</span><br><span class="line">                print(flag)</span><br><span class="line">                return</span><br><span class="line">        except:</span><br><span class="line">            continue</span><br><span class="line"></span><br><span class="line">if __name__ == '__main__':</span><br><span class="line">    solve()</span><br></pre></td></tr></table></figure>
-
-<h2 id="数学原理详解"><a href="#数学原理详解" class="headerlink" title="数学原理详解"></a>数学原理详解</h2><h3 id="多项式环与商环"><a href="#多项式环与商环" class="headerlink" title="多项式环与商环"></a>多项式环与商环</h3><ul>
-<li><strong>多项式环</strong>：GF(2)[x]表示系数在GF(2)上的多项式环</li>
-<li><strong>商环构造</strong>：S=R/⟨m(x)⟩，其中m(x)=xr−1</li>
-<li><strong>循环性质</strong>：在商环S中，xr≡1，因此乘以xk实现循环平移</li>
-</ul>
-<h3 id="有理重构的数学基础"><a href="#有理重构的数学基础" class="headerlink" title="有理重构的数学基础"></a>有理重构的数学基础</h3><p>有理重构问题等价于寻找满足以下条件的多项式：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">H(x)⋅B(x)≡A(x)(modM(x))</span><br></pre></td></tr></table></figure>
-
-<p>其中A(x)和B(x)满足特定的大小约束（本题中为汉明重量约束）。</p>
-<h3 id="扩展欧几里得算法"><a href="#扩展欧几里得算法" class="headerlink" title="扩展欧几里得算法"></a>扩展欧几里得算法</h3><p>算法保证在有限步内找到满足条件的A(x)和B(x)，当满足：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">deg(A)+deg(B)≤deg(M)</span><br></pre></td></tr></table></figure>
-
-<p>时，解是唯一的。</p>
-]]></content>
-      <categories>
-        <category>CRYPTO</category>
-      </categories>
-      <tags>
-        <tag>crypto</tag>
       </tags>
   </entry>
   <entry>

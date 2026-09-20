@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css">
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#FFF3C9"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#FFF3C9">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"giscus","storage":true,"lazyload":true,"nav":{"giscus":{"text":"GitHub 评论","order":1}}},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="CryptoHack Mathematics 与零散题解CryptoHack 题目统计如下：    分类 题数 分数    Symmetric Ciphers 12 465   Mathematics 8 455   RSA 20 1025   Diffie-Hellman 7 285   Hash Functions 6 350   Lattices 13 480   其他 8 200   本文">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CryptoHack Mathematics 题解">
+<meta property="og:url" content="http://example.com/2026/09/21/CryptoHack-Mathematics-Writeup/index.html">
+<meta property="og:site_name" content="Pinkode神秘小作坊">
+<meta property="og:description" content="CryptoHack Mathematics 与零散题解CryptoHack 题目统计如下：    分类 题数 分数    Symmetric Ciphers 12 465   Mathematics 8 455   RSA 20 1025   Diffie-Hellman 7 285   Hash Functions 6 350   Lattices 13 480   其他 8 200   本文">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-09-21T03:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-20T16:11:45.021Z">
+<meta property="article:author" content="Mofan">
+<meta property="article:tag" content="RSA">
+<meta property="article:tag" content="CryptoHack">
+<meta property="article:tag" content="mathematics">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2026/09/21/CryptoHack-Mathematics-Writeup/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2026/09/21/CryptoHack-Mathematics-Writeup/","path":"2026/09/21/CryptoHack-Mathematics-Writeup/","title":"CryptoHack Mathematics 题解"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>CryptoHack Mathematics 题解 | Pinkode神秘小作坊</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/bookmark.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","cdn":"//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Pinkode神秘小作坊</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">学习记录</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#CryptoHack-Mathematics-%E4%B8%8E%E9%9B%B6%E6%95%A3%E9%A2%98%E8%A7%A3"><span class="nav-number">1.</span> <span class="nav-text">CryptoHack Mathematics 与零散题解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E7%B4%A2%E5%BC%95"><span class="nav-number">1.1.</span> <span class="nav-text">题目索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#No-Way-Back-Home"><span class="nav-number">1.2.</span> <span class="nav-text">No Way Back Home</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E5%88%86%E6%9E%90"><span class="nav-number">1.2.1.</span> <span class="nav-text">题目分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E6%B3%95"><span class="nav-number">1.2.2.</span> <span class="nav-text">解法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Unencryptable"><span class="nav-number">1.3.</span> <span class="nav-text">Unencryptable</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E5%88%86%E6%9E%90-1"><span class="nav-number">1.3.1.</span> <span class="nav-text">题目分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E6%B3%95-1"><span class="nav-number">1.3.2.</span> <span class="nav-text">解法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Successive-Powers"><span class="nav-number">1.4.</span> <span class="nav-text">Successive Powers</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Broken-RSA"><span class="nav-number">1.5.</span> <span class="nav-text">Broken RSA</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E5%88%86%E6%9E%90-2"><span class="nav-number">1.5.1.</span> <span class="nav-text">题目分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E6%B3%95-2"><span class="nav-number">1.5.2.</span> <span class="nav-text">解法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Noise-Free"><span class="nav-number">1.6.</span> <span class="nav-text">Noise Free</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E5%88%86%E6%9E%90-3"><span class="nav-number">1.6.1.</span> <span class="nav-text">题目分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%94%BB%E5%87%BB%E8%84%9A%E6%9C%AC%E6%A0%B8%E5%BF%83"><span class="nav-number">1.6.2.</span> <span class="nav-text">攻击脚本核心</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Mofan"
+      src="/images/1.jpg">
+  <p class="site-author-name" itemprop="name">Mofan</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">30</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/P1nk0d3" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;P1nk0d3" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:3513728203@qq.com" title="E-Mail → mailto:3513728203@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2026/09/21/CryptoHack-Mathematics-Writeup/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/1.jpg">
+      <meta itemprop="name" content="Mofan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pinkode神秘小作坊">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="CryptoHack Mathematics 题解 | Pinkode神秘小作坊">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CryptoHack Mathematics 题解
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-09-21 11:00:00 / 修改时间：00:11:45" itemprop="dateCreated datePublished" datetime="2026-09-21T11:00:00+08:00">2026-09-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CRYPTO/" itemprop="url" rel="index"><span itemprop="name">CRYPTO</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="CryptoHack-Mathematics-与零散题解"><a href="#CryptoHack-Mathematics-与零散题解" class="headerlink" title="CryptoHack Mathematics 与零散题解"></a>CryptoHack Mathematics 与零散题解</h1><p>CryptoHack 题目统计如下：</p>
+<table>
+<thead>
+<tr>
+<th>分类</th>
+<th align="right">题数</th>
+<th align="right">分数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Symmetric Ciphers</td>
+<td align="right">12</td>
+<td align="right">465</td>
+</tr>
+<tr>
+<td>Mathematics</td>
+<td align="right">8</td>
+<td align="right">455</td>
+</tr>
+<tr>
+<td>RSA</td>
+<td align="right">20</td>
+<td align="right">1025</td>
+</tr>
+<tr>
+<td>Diffie-Hellman</td>
+<td align="right">7</td>
+<td align="right">285</td>
+</tr>
+<tr>
+<td>Hash Functions</td>
+<td align="right">6</td>
+<td align="right">350</td>
+</tr>
+<tr>
+<td>Lattices</td>
+<td align="right">13</td>
+<td align="right">480</td>
+</tr>
+<tr>
+<td>其他</td>
+<td align="right">8</td>
+<td align="right">200</td>
+</tr>
+</tbody></table>
+<p>本文先记录 Mathematics 分类中的两道题，再补充三道零散题。</p>
+<h2 id="题目索引"><a href="#题目索引" class="headerlink" title="题目索引"></a>题目索引</h2><ul>
+<li><a href="#No-Way-Back-Home">No Way Back Home</a></li>
+<li><a href="#Unencryptable">Unencryptable</a></li>
+<li><a href="#Successive-Powers">Successive Powers</a></li>
+<li><a href="#Broken-RSA">Broken RSA</a></li>
+<li><a href="#Noise-Free">Noise Free</a></li>
+</ul>
+<h2 id="No-Way-Back-Home"><a href="#No-Way-Back-Home" class="headerlink" title="No Way Back Home"></a>No Way Back Home</h2><h3 id="题目分析"><a href="#题目分析" class="headerlink" title="题目分析"></a>题目分析</h3><p>协议中令 <code>v = p * r mod n</code>，所以 <code>v</code> 含有因子 <code>p</code>。Alice 和 Bob 分别乘上自己的随机数，再通过逆元消除，最终公开了：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vka   = v * kA mod n</span><br><span class="line">vkakb = v * kA * kB mod n</span><br><span class="line">vkb   = v * kB mod n</span><br></pre></td></tr></table></figure>
+
+<p>这些值在模 <code>n</code> 下都不可直接求逆，因为包含因子 <code>p</code>。但在模 <code>q</code> 下它们可逆，可以先恢复 <code>v mod q</code>，再利用 <code>v = 0 mod p</code> 通过 CRT 还原 <code>v mod n</code>。</p>
+<h3 id="解法"><a href="#解法" class="headerlink" title="解法"></a>解法</h3><p>核心计算如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> hashlib <span class="keyword">import</span> sha256</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> Crypto.Cipher <span class="keyword">import</span> AES</span><br><span class="line"><span class="keyword">from</span> Crypto.Util.number <span class="keyword">import</span> inverse, long_to_bytes</span><br><span class="line"><span class="keyword">from</span> Crypto.Util.Padding <span class="keyword">import</span> unpad</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">n = p * q</span><br><span class="line"></span><br><span class="line">vkakb_q = vkakb % q</span><br><span class="line">vkb_q = vkb % q</span><br><span class="line">k_a_q = vkakb_q * inverse(vkb_q, q) % q</span><br><span class="line"></span><br><span class="line">vka_q = vka % q</span><br><span class="line">v_q = vka_q * inverse(k_a_q, q) % q</span><br><span class="line"></span><br><span class="line"><span class="comment"># v = 0 (mod p)，并且 v = v_q (mod q)。</span></span><br><span class="line">t = v_q * inverse(p, q) % q</span><br><span class="line">v = p * t % n</span><br><span class="line"></span><br><span class="line">key = sha256(long_to_bytes(v)).digest()</span><br><span class="line">plaintext = AES.new(key, AES.MODE_ECB).decrypt(<span class="built_in">bytes</span>.fromhex(ciphertext))</span><br><span class="line"><span class="built_in">print</span>(unpad(plaintext, <span class="number">16</span>).decode())</span><br></pre></td></tr></table></figure>
+
+<p>最终得到：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">crypto{1nv3rt1bl3_k3y_3xch4ng3_pr0t0c0l}</span><br></pre></td></tr></table></figure>
+
+<h2 id="Unencryptable"><a href="#Unencryptable" class="headerlink" title="Unencryptable"></a>Unencryptable</h2><h3 id="题目分析-1"><a href="#题目分析-1" class="headerlink" title="题目分析"></a>题目分析</h3><p>题目给出一份固定的 <code>DATA</code>，并使用 RSA 对它加密。由于明文满足：</p>
+<p><mjx-container class="MathJax" jax="SVG" display="true"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="20.548ex" height="2.565ex" role="img" focusable="false" viewBox="0 -883.9 9082.4 1133.9"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="mi"><path data-c="1D45A" d="M21 287Q22 293 24 303T36 341T56 388T88 425T132 442T175 435T205 417T221 395T229 376L231 369Q231 367 232 367L243 378Q303 442 384 442Q401 442 415 440T441 433T460 423T475 411T485 398T493 385T497 373T500 364T502 357L510 367Q573 442 659 442Q713 442 746 415T780 336Q780 285 742 178T704 50Q705 36 709 31T724 26Q752 26 776 56T815 138Q818 149 821 151T837 153Q857 153 857 145Q857 144 853 130Q845 101 831 73T785 17T716 -10Q669 -10 648 17T627 73Q627 92 663 193T700 345Q700 404 656 404H651Q565 404 506 303L499 291L466 157Q433 26 428 16Q415 -11 385 -11Q372 -11 364 -4T353 8T350 18Q350 29 384 161L420 307Q423 322 423 345Q423 404 379 404H374Q288 404 229 303L222 291L189 157Q156 26 151 16Q138 -11 108 -11Q95 -11 87 -5T76 7T74 17Q74 30 112 181Q151 335 151 342Q154 357 154 369Q154 405 129 405Q107 405 92 377T69 316T57 280Q55 278 41 278H27Q21 284 21 287Z"></path></g><g data-mml-node="TeXAtom" transform="translate(911,413) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mi"><path data-c="1D452" d="M39 168Q39 225 58 272T107 350T174 402T244 433T307 442H310Q355 442 388 420T421 355Q421 265 310 237Q261 224 176 223Q139 223 138 221Q138 219 132 186T125 128Q125 81 146 54T209 26T302 45T394 111Q403 121 406 121Q410 121 419 112T429 98T420 82T390 55T344 24T281 -1T205 -11Q126 -11 83 42T39 168ZM373 353Q367 405 305 405Q272 405 244 391T199 357T170 316T154 280T149 261Q149 260 169 260Q282 260 327 284T373 353Z"></path></g><g data-mml-node="mo" transform="translate(466,0)"><path data-c="2212" d="M84 237T84 250T98 270H679Q694 262 694 250T679 230H98Q84 237 84 250Z"></path></g><g data-mml-node="mn" transform="translate(1244,0)"><path data-c="31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></g></g></g><g data-mml-node="mo" transform="translate(2472,0)"><path data-c="2261" d="M56 444Q56 457 70 464H707Q722 456 722 444Q722 430 706 424H72Q56 429 56 444ZM56 237T56 250T70 270H707Q722 262 722 250T707 230H70Q56 237 56 250ZM56 56Q56 71 72 76H706Q722 70 722 56Q722 44 707 36H70Q56 43 56 56Z"></path></g><g data-mml-node="mn" transform="translate(3527.7,0)"><path data-c="31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></g><g data-mml-node="mspace" transform="translate(4027.7,0)"></g><g data-mml-node="mo" transform="translate(5027.7,0)"><path data-c="28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"></path></g><g data-mml-node="mi" transform="translate(5416.7,0)"><path data-c="6D" d="M41 46H55Q94 46 102 60V68Q102 77 102 91T102 122T103 161T103 203Q103 234 103 269T102 328V351Q99 370 88 376T43 385H25V408Q25 431 27 431L37 432Q47 433 65 434T102 436Q119 437 138 438T167 441T178 442H181V402Q181 364 182 364T187 369T199 384T218 402T247 421T285 437Q305 442 336 442Q351 442 364 440T387 434T406 426T421 417T432 406T441 395T448 384T452 374T455 366L457 361L460 365Q463 369 466 373T475 384T488 397T503 410T523 422T546 432T572 439T603 442Q729 442 740 329Q741 322 741 190V104Q741 66 743 59T754 49Q775 46 803 46H819V0H811L788 1Q764 2 737 2T699 3Q596 3 587 0H579V46H595Q656 46 656 62Q657 64 657 200Q656 335 655 343Q649 371 635 385T611 402T585 404Q540 404 506 370Q479 343 472 315T464 232V168V108Q464 78 465 68T468 55T477 49Q498 46 526 46H542V0H534L510 1Q487 2 460 2T422 3Q319 3 310 0H302V46H318Q379 46 379 62Q380 64 380 200Q379 335 378 343Q372 371 358 385T334 402T308 404Q263 404 229 370Q202 343 195 315T187 232V168V108Q187 78 188 68T191 55T200 49Q221 46 249 46H265V0H257L234 1Q210 2 183 2T145 3Q42 3 33 0H25V46H41Z"></path><path data-c="6F" d="M28 214Q28 309 93 378T250 448Q340 448 405 380T471 215Q471 120 407 55T250 -10Q153 -10 91 57T28 214ZM250 30Q372 30 372 193V225V250Q372 272 371 288T364 326T348 362T317 390T268 410Q263 411 252 411Q222 411 195 399Q152 377 139 338T126 246V226Q126 130 145 91Q177 30 250 30Z" transform="translate(833,0)"></path><path data-c="64" d="M376 495Q376 511 376 535T377 568Q377 613 367 624T316 637H298V660Q298 683 300 683L310 684Q320 685 339 686T376 688Q393 689 413 690T443 693T454 694H457V390Q457 84 458 81Q461 61 472 55T517 46H535V0Q533 0 459 -5T380 -11H373V44L365 37Q307 -11 235 -11Q158 -11 96 50T34 215Q34 315 97 378T244 442Q319 442 376 393V495ZM373 342Q328 405 260 405Q211 405 173 369Q146 341 139 305T131 211Q131 155 138 120T173 59Q203 26 251 26Q322 26 373 103V342Z" transform="translate(1333,0)"></path></g><g data-mml-node="mspace" transform="translate(7305.7,0)"></g><g data-mml-node="mi" transform="translate(7805.4,0)"><path data-c="1D441" d="M234 637Q231 637 226 637Q201 637 196 638T191 649Q191 676 202 682Q204 683 299 683Q376 683 387 683T401 677Q612 181 616 168L670 381Q723 592 723 606Q723 633 659 637Q635 637 635 648Q635 650 637 660Q641 676 643 679T653 683Q656 683 684 682T767 680Q817 680 843 681T873 682Q888 682 888 672Q888 650 880 642Q878 637 858 637Q787 633 769 597L620 7Q618 0 599 0Q585 0 582 2Q579 5 453 305L326 604L261 344Q196 88 196 79Q201 46 268 46H278Q284 41 284 38T282 19Q278 6 272 0H259Q228 2 151 2Q123 2 100 2T63 2T46 1Q31 1 31 10Q31 14 34 26T39 40Q41 46 62 46Q130 49 150 85Q154 91 221 362L289 634Q287 635 234 637Z"></path></g><g data-mml-node="mo" transform="translate(8693.4,0)"><path data-c="29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"></path></g></g></g></svg></mjx-container></p>
+<p>因此：</p>
+<p><mjx-container class="MathJax" jax="SVG" display="true"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="28.192ex" height="2.565ex" role="img" focusable="false" viewBox="0 -883.9 12460.9 1133.9"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D45A" d="M21 287Q22 293 24 303T36 341T56 388T88 425T132 442T175 435T205 417T221 395T229 376L231 369Q231 367 232 367L243 378Q303 442 384 442Q401 442 415 440T441 433T460 423T475 411T485 398T493 385T497 373T500 364T502 357L510 367Q573 442 659 442Q713 442 746 415T780 336Q780 285 742 178T704 50Q705 36 709 31T724 26Q752 26 776 56T815 138Q818 149 821 151T837 153Q857 153 857 145Q857 144 853 130Q845 101 831 73T785 17T716 -10Q669 -10 648 17T627 73Q627 92 663 193T700 345Q700 404 656 404H651Q565 404 506 303L499 291L466 157Q433 26 428 16Q415 -11 385 -11Q372 -11 364 -4T353 8T350 18Q350 29 384 161L420 307Q423 322 423 345Q423 404 379 404H374Q288 404 229 303L222 291L189 157Q156 26 151 16Q138 -11 108 -11Q95 -11 87 -5T76 7T74 17Q74 30 112 181Q151 335 151 342Q154 357 154 369Q154 405 129 405Q107 405 92 377T69 316T57 280Q55 278 41 278H27Q21 284 21 287Z"></path></g><g data-mml-node="mo" transform="translate(878,0)"><path data-c="28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"></path></g><g data-mml-node="msup" transform="translate(1267,0)"><g data-mml-node="mi"><path data-c="1D45A" d="M21 287Q22 293 24 303T36 341T56 388T88 425T132 442T175 435T205 417T221 395T229 376L231 369Q231 367 232 367L243 378Q303 442 384 442Q401 442 415 440T441 433T460 423T475 411T485 398T493 385T497 373T500 364T502 357L510 367Q573 442 659 442Q713 442 746 415T780 336Q780 285 742 178T704 50Q705 36 709 31T724 26Q752 26 776 56T815 138Q818 149 821 151T837 153Q857 153 857 145Q857 144 853 130Q845 101 831 73T785 17T716 -10Q669 -10 648 17T627 73Q627 92 663 193T700 345Q700 404 656 404H651Q565 404 506 303L499 291L466 157Q433 26 428 16Q415 -11 385 -11Q372 -11 364 -4T353 8T350 18Q350 29 384 161L420 307Q423 322 423 345Q423 404 379 404H374Q288 404 229 303L222 291L189 157Q156 26 151 16Q138 -11 108 -11Q95 -11 87 -5T76 7T74 17Q74 30 112 181Q151 335 151 342Q154 357 154 369Q154 405 129 405Q107 405 92 377T69 316T57 280Q55 278 41 278H27Q21 284 21 287Z"></path></g><g data-mml-node="TeXAtom" transform="translate(911,413) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mi"><path data-c="1D452" d="M39 168Q39 225 58 272T107 350T174 402T244 433T307 442H310Q355 442 388 420T421 355Q421 265 310 237Q261 224 176 223Q139 223 138 221Q138 219 132 186T125 128Q125 81 146 54T209 26T302 45T394 111Q403 121 406 121Q410 121 419 112T429 98T420 82T390 55T344 24T281 -1T205 -11Q126 -11 83 42T39 168ZM373 353Q367 405 305 405Q272 405 244 391T199 357T170 316T154 280T149 261Q149 260 169 260Q282 260 327 284T373 353Z"></path></g><g data-mml-node="mo" transform="translate(466,0)"><path data-c="2212" d="M84 237T84 250T98 270H679Q694 262 694 250T679 230H98Q84 237 84 250Z"></path></g><g data-mml-node="mn" transform="translate(1244,0)"><path data-c="31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></g></g></g><g data-mml-node="mo" transform="translate(3683.4,0)"><path data-c="2212" d="M84 237T84 250T98 270H679Q694 262 694 250T679 230H98Q84 237 84 250Z"></path></g><g data-mml-node="mn" transform="translate(4683.6,0)"><path data-c="31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></g><g data-mml-node="mo" transform="translate(5183.6,0)"><path data-c="29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"></path></g><g data-mml-node="mo" transform="translate(5850.4,0)"><path data-c="2261" d="M56 444Q56 457 70 464H707Q722 456 722 444Q722 430 706 424H72Q56 429 56 444ZM56 237T56 250T70 270H707Q722 262 722 250T707 230H70Q56 237 56 250ZM56 56Q56 71 72 76H706Q722 70 722 56Q722 44 707 36H70Q56 43 56 56Z"></path></g><g data-mml-node="mn" transform="translate(6906.2,0)"><path data-c="30" d="M96 585Q152 666 249 666Q297 666 345 640T423 548Q460 465 460 320Q460 165 417 83Q397 41 362 16T301 -15T250 -22Q224 -22 198 -16T137 16T82 83Q39 165 39 320Q39 494 96 585ZM321 597Q291 629 250 629Q208 629 178 597Q153 571 145 525T137 333Q137 175 145 125T181 46Q209 16 250 16Q290 16 318 46Q347 76 354 130T362 333Q362 478 354 524T321 597Z"></path></g><g data-mml-node="mspace" transform="translate(7406.2,0)"></g><g data-mml-node="mo" transform="translate(8406.2,0)"><path data-c="28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"></path></g><g data-mml-node="mi" transform="translate(8795.2,0)"><path data-c="6D" d="M41 46H55Q94 46 102 60V68Q102 77 102 91T102 122T103 161T103 203Q103 234 103 269T102 328V351Q99 370 88 376T43 385H25V408Q25 431 27 431L37 432Q47 433 65 434T102 436Q119 437 138 438T167 441T178 442H181V402Q181 364 182 364T187 369T199 384T218 402T247 421T285 437Q305 442 336 442Q351 442 364 440T387 434T406 426T421 417T432 406T441 395T448 384T452 374T455 366L457 361L460 365Q463 369 466 373T475 384T488 397T503 410T523 422T546 432T572 439T603 442Q729 442 740 329Q741 322 741 190V104Q741 66 743 59T754 49Q775 46 803 46H819V0H811L788 1Q764 2 737 2T699 3Q596 3 587 0H579V46H595Q656 46 656 62Q657 64 657 200Q656 335 655 343Q649 371 635 385T611 402T585 404Q540 404 506 370Q479 343 472 315T464 232V168V108Q464 78 465 68T468 55T477 49Q498 46 526 46H542V0H534L510 1Q487 2 460 2T422 3Q319 3 310 0H302V46H318Q379 46 379 62Q380 64 380 200Q379 335 378 343Q372 371 358 385T334 402T308 404Q263 404 229 370Q202 343 195 315T187 232V168V108Q187 78 188 68T191 55T200 49Q221 46 249 46H265V0H257L234 1Q210 2 183 2T145 3Q42 3 33 0H25V46H41Z"></path><path data-c="6F" d="M28 214Q28 309 93 378T250 448Q340 448 405 380T471 215Q471 120 407 55T250 -10Q153 -10 91 57T28 214ZM250 30Q372 30 372 193V225V250Q372 272 371 288T364 326T348 362T317 390T268 410Q263 411 252 411Q222 411 195 399Q152 377 139 338T126 246V226Q126 130 145 91Q177 30 250 30Z" transform="translate(833,0)"></path><path data-c="64" d="M376 495Q376 511 376 535T377 568Q377 613 367 624T316 637H298V660Q298 683 300 683L310 684Q320 685 339 686T376 688Q393 689 413 690T443 693T454 694H457V390Q457 84 458 81Q461 61 472 55T517 46H535V0Q533 0 459 -5T380 -11H373V44L365 37Q307 -11 235 -11Q158 -11 96 50T34 215Q34 315 97 378T244 442Q319 442 376 393V495ZM373 342Q328 405 260 405Q211 405 173 369Q146 341 139 305T131 211Q131 155 138 120T173 59Q203 26 251 26Q322 26 373 103V342Z" transform="translate(1333,0)"></path></g><g data-mml-node="mspace" transform="translate(10684.2,0)"></g><g data-mml-node="mi" transform="translate(11183.9,0)"><path data-c="1D441" d="M234 637Q231 637 226 637Q201 637 196 638T191 649Q191 676 202 682Q204 683 299 683Q376 683 387 683T401 677Q612 181 616 168L670 381Q723 592 723 606Q723 633 659 637Q635 637 635 648Q635 650 637 660Q641 676 643 679T653 683Q656 683 684 682T767 680Q817 680 843 681T873 682Q888 682 888 672Q888 650 880 642Q878 637 858 637Q787 633 769 597L620 7Q618 0 599 0Q585 0 582 2Q579 5 453 305L326 604L261 344Q196 88 196 79Q201 46 268 46H278Q284 41 284 38T282 19Q278 6 272 0H259Q228 2 151 2Q123 2 100 2T63 2T46 1Q31 1 31 10Q31 14 34 26T39 40Q41 46 62 46Q130 49 150 85Q154 91 221 362L289 634Q287 635 234 637Z"></path></g><g data-mml-node="mo" transform="translate(12071.9,0)"><path data-c="29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"></path></g></g></g></svg></mjx-container></p>
+<p>将 <code>m^(e-1)-1</code> 与 <code>N</code> 做最大公约数，就可以得到 <code>N</code> 的非平凡因子。由于 <code>e = 65537</code>，可以不断将指数 <code>e - 1</code> 除以 2，直到找到合适的分解。</p>
+<h3 id="解法-1"><a href="#解法-1" class="headerlink" title="解法"></a>解法</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> Crypto.Util.number <span class="keyword">import</span> GCD, bytes_to_long, long_to_bytes</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">e = <span class="number">65537</span></span><br><span class="line">m = bytes_to_long(DATA)</span><br><span class="line">exponent = e - <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> exponent &gt; <span class="number">1</span>:</span><br><span class="line">    candidate = GCD(<span class="built_in">pow</span>(m, exponent, N) - <span class="number">1</span>, N)</span><br><span class="line">    <span class="keyword">if</span> <span class="number">1</span> &lt; candidate &lt; N:</span><br><span class="line">        p = candidate</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    exponent //= <span class="number">2</span></span><br><span class="line"></span><br><span class="line">q = N // p</span><br><span class="line">phi = (p - <span class="number">1</span>) * (q - <span class="number">1</span>)</span><br><span class="line">d = <span class="built_in">pow</span>(e, -<span class="number">1</span>, phi)</span><br><span class="line">flag = long_to_bytes(<span class="built_in">pow</span>(ciphertext, d, N)).decode()</span><br><span class="line"><span class="built_in">print</span>(flag)</span><br></pre></td></tr></table></figure>
+
+<p>最终 flag 为：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">crypto{R3m3mb3r!_F1x3d_P0iNts_aR3_s3crE7s_t00}</span><br></pre></td></tr></table></figure>
+
+<h2 id="Successive-Powers"><a href="#Successive-Powers" class="headerlink" title="Successive Powers"></a>Successive Powers</h2><p>题目给出一组整数：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">588, 665, 216, 113, 642, 4, 836, 114, 851, 492, 819, 237</span><br></pre></td></tr></table></figure>
+
+<p>它们是整数 <code>x</code> 的连续高次幂模三位素数 <code>p</code> 的结果，需要求出 <code>p</code> 和 <code>x</code>。</p>
+<p>观察到：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">836 // 4 = 209</span><br></pre></td></tr></table></figure>
+
+<p>如果 <code>x != 209</code>，则存在 <code>k</code> 使：</p>
+<p><mjx-container class="MathJax" jax="SVG" display="true"><svg style="vertical-align: -0.439ex;" xmlns="http://www.w3.org/2000/svg" width="13.919ex" height="2.009ex" role="img" focusable="false" viewBox="0 -694 6152 888"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mn"><path data-c="34" d="M462 0Q444 3 333 3Q217 3 199 0H190V46H221Q241 46 248 46T265 48T279 53T286 61Q287 63 287 115V165H28V211L179 442Q332 674 334 675Q336 677 355 677H373L379 671V211H471V165H379V114Q379 73 379 66T385 54Q393 47 442 46H471V0H462ZM293 211V545L74 212L183 211H293Z"></path></g><g data-mml-node="mi" transform="translate(500,0)"><path data-c="1D465" d="M52 289Q59 331 106 386T222 442Q257 442 286 424T329 379Q371 442 430 442Q467 442 494 420T522 361Q522 332 508 314T481 292T458 288Q439 288 427 299T415 328Q415 374 465 391Q454 404 425 404Q412 404 406 402Q368 386 350 336Q290 115 290 78Q290 50 306 38T341 26Q378 26 414 59T463 140Q466 150 469 151T485 153H489Q504 153 504 145Q504 144 502 134Q486 77 440 33T333 -11Q263 -11 227 52Q186 -10 133 -10H127Q78 -10 57 16T35 71Q35 103 54 123T99 143Q142 143 142 101Q142 81 130 66T107 46T94 41L91 40Q91 39 97 36T113 29T132 26Q168 26 194 71Q203 87 217 139T245 247T261 313Q266 340 266 352Q266 380 251 392T217 404Q177 404 142 372T93 290Q91 281 88 280T72 278H58Q52 284 52 289Z"></path></g><g data-mml-node="mo" transform="translate(1349.8,0)"><path data-c="3D" d="M56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153Z"></path></g><g data-mml-node="mn" transform="translate(2405.6,0)"><path data-c="38" d="M70 417T70 494T124 618T248 666Q319 666 374 624T429 515Q429 485 418 459T392 417T361 389T335 371T324 363L338 354Q352 344 366 334T382 323Q457 264 457 174Q457 95 399 37T249 -22Q159 -22 101 29T43 155Q43 263 172 335L154 348Q133 361 127 368Q70 417 70 494ZM286 386L292 390Q298 394 301 396T311 403T323 413T334 425T345 438T355 454T364 471T369 491T371 513Q371 556 342 586T275 624Q268 625 242 625Q201 625 165 599T128 534Q128 511 141 492T167 463T217 431Q224 426 228 424L286 386ZM250 21Q308 21 350 55T392 137Q392 154 387 169T375 194T353 216T330 234T301 253T274 270Q260 279 244 289T218 306L210 311Q204 311 181 294T133 239T107 157Q107 98 150 60T250 21Z"></path><path data-c="33" d="M127 463Q100 463 85 480T69 524Q69 579 117 622T233 665Q268 665 277 664Q351 652 390 611T430 522Q430 470 396 421T302 350L299 348Q299 347 308 345T337 336T375 315Q457 262 457 175Q457 96 395 37T238 -22Q158 -22 100 21T42 130Q42 158 60 175T105 193Q133 193 151 175T169 130Q169 119 166 110T159 94T148 82T136 74T126 70T118 67L114 66Q165 21 238 21Q293 21 321 74Q338 107 338 175V195Q338 290 274 322Q259 328 213 329L171 330L168 332Q166 335 166 348Q166 366 174 366Q202 366 232 371Q266 376 294 413T322 525V533Q322 590 287 612Q265 626 240 626Q208 626 181 615T143 592T132 580H135Q138 579 143 578T153 573T165 566T175 555T183 540T186 520Q186 498 172 481T127 463Z" transform="translate(500,0)"></path><path data-c="36" d="M42 313Q42 476 123 571T303 666Q372 666 402 630T432 550Q432 525 418 510T379 495Q356 495 341 509T326 548Q326 592 373 601Q351 623 311 626Q240 626 194 566Q147 500 147 364L148 360Q153 366 156 373Q197 433 263 433H267Q313 433 348 414Q372 400 396 374T435 317Q456 268 456 210V192Q456 169 451 149Q440 90 387 34T253 -22Q225 -22 199 -14T143 16T92 75T56 172T42 313ZM257 397Q227 397 205 380T171 335T154 278T148 216Q148 133 160 97T198 39Q222 21 251 21Q302 21 329 59Q342 77 347 104T352 209Q352 289 347 316T329 361Q302 397 257 397Z" transform="translate(1000,0)"></path></g><g data-mml-node="mo" transform="translate(4127.8,0)"><path data-c="2B" d="M56 237T56 250T70 270H369V420L370 570Q380 583 389 583Q402 583 409 568V270H707Q722 262 722 250T707 230H409V-68Q401 -82 391 -82H389H387Q375 -82 369 -68V230H70Q56 237 56 250Z"></path></g><g data-mml-node="mi" transform="translate(5128,0)"><path data-c="1D458" d="M121 647Q121 657 125 670T137 683Q138 683 209 688T282 694Q294 694 294 686Q294 679 244 477Q194 279 194 272Q213 282 223 291Q247 309 292 354T362 415Q402 442 438 442Q468 442 485 423T503 369Q503 344 496 327T477 302T456 291T438 288Q418 288 406 299T394 328Q394 353 410 369T442 390L458 393Q446 405 434 405H430Q398 402 367 380T294 316T228 255Q230 254 243 252T267 246T293 238T320 224T342 206T359 180T365 147Q365 130 360 106T354 66Q354 26 381 26Q429 26 459 145Q461 153 479 153H483Q499 153 499 144Q499 139 496 130Q455 -11 378 -11Q333 -11 305 15T277 90Q277 108 280 121T283 145Q283 167 269 183T234 206T200 217T182 220H180Q168 178 159 139T145 81T136 44T129 20T122 7T111 -2Q98 -11 83 -11Q66 -11 57 -1T48 16Q48 26 85 176T158 471L195 616Q196 629 188 632T149 637H144Q134 637 131 637T124 640T121 647Z"></path></g><g data-mml-node="mi" transform="translate(5649,0)"><path data-c="1D45D" d="M23 287Q24 290 25 295T30 317T40 348T55 381T75 411T101 433T134 442Q209 442 230 378L240 387Q302 442 358 442Q423 442 460 395T497 281Q497 173 421 82T249 -10Q227 -10 210 -4Q199 1 187 11T168 28L161 36Q160 35 139 -51T118 -138Q118 -144 126 -145T163 -148H188Q194 -155 194 -157T191 -175Q188 -187 185 -190T172 -194Q170 -194 161 -194T127 -193T65 -192Q-5 -192 -24 -194H-32Q-39 -187 -39 -183Q-37 -156 -26 -148H-6Q28 -147 33 -136Q36 -130 94 103T155 350Q156 355 156 364Q156 405 131 405Q109 405 94 377T71 316T59 280Q57 278 43 278H29Q23 284 23 287ZM178 102Q200 26 252 26Q282 26 310 49T356 107Q374 141 392 215T411 325V331Q411 405 350 405Q339 405 328 402T306 393T286 380T269 365T254 350T243 336T235 326L232 322Q232 321 229 308T218 264T204 212Q178 106 178 102Z"></path></g></g></g></svg></mjx-container></p>
+<p>也就是 <code>x = 209 + kp</code>。当 <code>k != 0</code> 时，<code>x &gt;= 209 + p &gt; p</code>，与模运算中取代表元的范围矛盾。因此：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">x = 209</span><br><span class="line">p = 919</span><br></pre></td></tr></table></figure>
+
+<p>将 <code>p</code> 和 <code>x</code> 提交给题目即可得到 flag。</p>
+<h2 id="Broken-RSA"><a href="#Broken-RSA" class="headerlink" title="Broken RSA"></a>Broken RSA</h2><h3 id="题目分析-2"><a href="#题目分析-2" class="headerlink" title="题目分析"></a>题目分析</h3><p>题目给出的 RSA 参数中，<code>N</code> 是素数，<code>e = 16</code>，密文为 <code>c = m^16 mod N</code>，并且明文 <code>m &lt; N</code>。</p>
+<p>因为指数是 16，所以不能直接使用普通 RSA 逆元。需要连续执行 4 次模平方根，每一轮都有两个可能的根，总共最多 <code>2^4 = 16</code> 条候选路径。</p>
+<h3 id="解法-2"><a href="#解法-2" class="headerlink" title="解法"></a>解法</h3><p>使用 Tonelli-Shanks 求模素数平方根，然后枚举每次取正根或负根：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> Crypto.Util.number <span class="keyword">import</span> long_to_bytes</span><br><span class="line"><span class="keyword">from</span> sympy.ntheory.residue_ntheory <span class="keyword">import</span> sqrt_mod</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将题目中的 N 和 ct 填入。</span></span><br><span class="line">N = ...</span><br><span class="line">ct = ...</span><br><span class="line"></span><br><span class="line">candidates = [ct]</span><br><span class="line"><span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):</span><br><span class="line">    next_candidates = []</span><br><span class="line">    <span class="keyword">for</span> value <span class="keyword">in</span> candidates:</span><br><span class="line">        roots = sqrt_mod(value, N, all_roots=<span class="literal">True</span>)</span><br><span class="line">        next_candidates.extend(<span class="built_in">int</span>(root) <span class="keyword">for</span> root <span class="keyword">in</span> roots)</span><br><span class="line">    candidates = next_candidates</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> candidate <span class="keyword">in</span> candidates:</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        text = long_to_bytes(candidate).decode()</span><br><span class="line">    <span class="keyword">except</span> UnicodeDecodeError:</span><br><span class="line">        <span class="keyword">continue</span></span><br><span class="line">    <span class="keyword">if</span> text.startswith(<span class="string">"crypto{"</span>):</span><br><span class="line">        <span class="built_in">print</span>(text)</span><br></pre></td></tr></table></figure>
+
+<p>最终得到：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">crypto{m0dul4r_squ4r3_r00t}</span><br></pre></td></tr></table></figure>
+
+<h2 id="Noise-Free"><a href="#Noise-Free" class="headerlink" title="Noise Free"></a>Noise Free</h2><h3 id="题目分析-3"><a href="#题目分析-3" class="headerlink" title="题目分析"></a>题目分析</h3><p>服务端使用如下线性加密：</p>
+<p><mjx-container class="MathJax" jax="SVG" display="true"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="23.998ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 10607.1 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D44F" d="M73 647Q73 657 77 670T89 683Q90 683 161 688T234 694Q246 694 246 685T212 542Q204 508 195 472T180 418L176 399Q176 396 182 402Q231 442 283 442Q345 442 383 396T422 280Q422 169 343 79T173 -11Q123 -11 82 27T40 150V159Q40 180 48 217T97 414Q147 611 147 623T109 637Q104 637 101 637H96Q86 637 83 637T76 640T73 647ZM336 325V331Q336 405 275 405Q258 405 240 397T207 376T181 352T163 330L157 322L136 236Q114 150 114 114Q114 66 138 42Q154 26 178 26Q211 26 245 58Q270 81 285 114T318 219Q336 291 336 325Z"></path></g><g data-mml-node="mo" transform="translate(706.8,0)"><path data-c="3D" d="M56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153Z"></path></g><g data-mml-node="mi" transform="translate(1762.6,0)"><path data-c="1D434" d="M208 74Q208 50 254 46Q272 46 272 35Q272 34 270 22Q267 8 264 4T251 0Q249 0 239 0T205 1T141 2Q70 2 50 0H42Q35 7 35 11Q37 38 48 46H62Q132 49 164 96Q170 102 345 401T523 704Q530 716 547 716H555H572Q578 707 578 706L606 383Q634 60 636 57Q641 46 701 46Q726 46 726 36Q726 34 723 22Q720 7 718 4T704 0Q701 0 690 0T651 1T578 2Q484 2 455 0H443Q437 6 437 9T439 27Q443 40 445 43L449 46H469Q523 49 533 63L521 213H283L249 155Q208 86 208 74ZM516 260Q516 271 504 416T490 562L463 519Q447 492 400 412L310 260L413 259Q516 259 516 260Z"></path></g><g data-mml-node="mo" transform="translate(2734.8,0)"><path data-c="22C5" d="M78 250Q78 274 95 292T138 310Q162 310 180 294T199 251Q199 226 182 208T139 190T96 207T78 250Z"></path></g><g data-mml-node="mi" transform="translate(3235,0)"><path data-c="1D446" d="M308 24Q367 24 416 76T466 197Q466 260 414 284Q308 311 278 321T236 341Q176 383 176 462Q176 523 208 573T273 648Q302 673 343 688T407 704H418H425Q521 704 564 640Q565 640 577 653T603 682T623 704Q624 704 627 704T632 705Q645 705 645 698T617 577T585 459T569 456Q549 456 549 465Q549 471 550 475Q550 478 551 494T553 520Q553 554 544 579T526 616T501 641Q465 662 419 662Q362 662 313 616T263 510Q263 480 278 458T319 427Q323 425 389 408T456 390Q490 379 522 342T554 242Q554 216 546 186Q541 164 528 137T492 78T426 18T332 -20Q320 -22 298 -22Q199 -22 144 33L134 44L106 13Q83 -14 78 -18T65 -22Q52 -22 52 -14Q52 -11 110 221Q112 227 130 227H143Q149 221 149 216Q149 214 148 207T144 186T142 153Q144 114 160 87T203 47T255 29T308 24Z"></path></g><g data-mml-node="mo" transform="translate(4102.2,0)"><path data-c="2B" d="M56 237T56 250T70 270H369V420L370 570Q380 583 389 583Q402 583 409 568V270H707Q722 262 722 250T707 230H409V-68Q401 -82 391 -82H389H387Q375 -82 369 -68V230H70Q56 237 56 250Z"></path></g><g data-mml-node="mi" transform="translate(5102.4,0)"><path data-c="1D45A" d="M21 287Q22 293 24 303T36 341T56 388T88 425T132 442T175 435T205 417T221 395T229 376L231 369Q231 367 232 367L243 378Q303 442 384 442Q401 442 415 440T441 433T460 423T475 411T485 398T493 385T497 373T500 364T502 357L510 367Q573 442 659 442Q713 442 746 415T780 336Q780 285 742 178T704 50Q705 36 709 31T724 26Q752 26 776 56T815 138Q818 149 821 151T837 153Q857 153 857 145Q857 144 853 130Q845 101 831 73T785 17T716 -10Q669 -10 648 17T627 73Q627 92 663 193T700 345Q700 404 656 404H651Q565 404 506 303L499 291L466 157Q433 26 428 16Q415 -11 385 -11Q372 -11 364 -4T353 8T350 18Q350 29 384 161L420 307Q423 322 423 345Q423 404 379 404H374Q288 404 229 303L222 291L189 157Q156 26 151 16Q138 -11 108 -11Q95 -11 87 -5T76 7T74 17Q74 30 112 181Q151 335 151 342Q154 357 154 369Q154 405 129 405Q107 405 92 377T69 316T57 280Q55 278 41 278H27Q21 284 21 287Z"></path></g><g data-mml-node="mspace" transform="translate(5980.4,0)"></g><g data-mml-node="mo" transform="translate(6980.4,0)"><path data-c="28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"></path></g><g data-mml-node="mi" transform="translate(7369.4,0)"><path data-c="6D" d="M41 46H55Q94 46 102 60V68Q102 77 102 91T102 122T103 161T103 203Q103 234 103 269T102 328V351Q99 370 88 376T43 385H25V408Q25 431 27 431L37 432Q47 433 65 434T102 436Q119 437 138 438T167 441T178 442H181V402Q181 364 182 364T187 369T199 384T218 402T247 421T285 437Q305 442 336 442Q351 442 364 440T387 434T406 426T421 417T432 406T441 395T448 384T452 374T455 366L457 361L460 365Q463 369 466 373T475 384T488 397T503 410T523 422T546 432T572 439T603 442Q729 442 740 329Q741 322 741 190V104Q741 66 743 59T754 49Q775 46 803 46H819V0H811L788 1Q764 2 737 2T699 3Q596 3 587 0H579V46H595Q656 46 656 62Q657 64 657 200Q656 335 655 343Q649 371 635 385T611 402T585 404Q540 404 506 370Q479 343 472 315T464 232V168V108Q464 78 465 68T468 55T477 49Q498 46 526 46H542V0H534L510 1Q487 2 460 2T422 3Q319 3 310 0H302V46H318Q379 46 379 62Q380 64 380 200Q379 335 378 343Q372 371 358 385T334 402T308 404Q263 404 229 370Q202 343 195 315T187 232V168V108Q187 78 188 68T191 55T200 49Q221 46 249 46H265V0H257L234 1Q210 2 183 2T145 3Q42 3 33 0H25V46H41Z"></path><path data-c="6F" d="M28 214Q28 309 93 378T250 448Q340 448 405 380T471 215Q471 120 407 55T250 -10Q153 -10 91 57T28 214ZM250 30Q372 30 372 193V225V250Q372 272 371 288T364 326T348 362T317 390T268 410Q263 411 252 411Q222 411 195 399Q152 377 139 338T126 246V226Q126 130 145 91Q177 30 250 30Z" transform="translate(833,0)"></path><path data-c="64" d="M376 495Q376 511 376 535T377 568Q377 613 367 624T316 637H298V660Q298 683 300 683L310 684Q320 685 339 686T376 688Q393 689 413 690T443 693T454 694H457V390Q457 84 458 81Q461 61 472 55T517 46H535V0Q533 0 459 -5T380 -11H373V44L365 37Q307 -11 235 -11Q158 -11 96 50T34 215Q34 315 97 378T244 442Q319 442 376 393V495ZM373 342Q328 405 260 405Q211 405 173 369Q146 341 139 305T131 211Q131 155 138 120T173 59Q203 26 251 26Q322 26 373 103V342Z" transform="translate(1333,0)"></path></g><g data-mml-node="mspace" transform="translate(9258.4,0)"></g><g data-mml-node="mi" transform="translate(9758.1,0)"><path data-c="1D45E" d="M33 157Q33 258 109 349T280 441Q340 441 372 389Q373 390 377 395T388 406T404 418Q438 442 450 442Q454 442 457 439T460 434Q460 425 391 149Q320 -135 320 -139Q320 -147 365 -148H390Q396 -156 396 -157T393 -175Q389 -188 383 -194H370Q339 -192 262 -192Q234 -192 211 -192T174 -192T157 -193Q143 -193 143 -185Q143 -182 145 -170Q149 -154 152 -151T172 -148Q220 -148 230 -141Q238 -136 258 -53T279 32Q279 33 272 29Q224 -10 172 -10Q117 -10 75 30T33 157ZM352 326Q329 405 277 405Q242 405 210 374T160 293Q131 214 119 129Q119 126 119 118T118 106Q118 61 136 44T179 26Q233 26 290 98L298 109L352 326Z"></path></g><g data-mml-node="mo" transform="translate(10218.1,0)"><path data-c="29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"></path></g></g></g></svg></mjx-container></p>
+<p>其中 <code>q = 65537</code>，<code>A</code> 是 64 维随机向量，<code>S</code> 是固定的 64 维私钥，<code>m</code> 是明文字符。</p>
+<p>先反复请求 <code>m = 0</code> 的加密结果，就能得到足够多组：</p>
+<p><mjx-container class="MathJax" jax="SVG" display="true"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="20.725ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 9160.6 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msub"><g data-mml-node="mi"><path data-c="1D434" d="M208 74Q208 50 254 46Q272 46 272 35Q272 34 270 22Q267 8 264 4T251 0Q249 0 239 0T205 1T141 2Q70 2 50 0H42Q35 7 35 11Q37 38 48 46H62Q132 49 164 96Q170 102 345 401T523 704Q530 716 547 716H555H572Q578 707 578 706L606 383Q634 60 636 57Q641 46 701 46Q726 46 726 36Q726 34 723 22Q720 7 718 4T704 0Q701 0 690 0T651 1T578 2Q484 2 455 0H443Q437 6 437 9T439 27Q443 40 445 43L449 46H469Q523 49 533 63L521 213H283L249 155Q208 86 208 74ZM516 260Q516 271 504 416T490 562L463 519Q447 492 400 412L310 260L413 259Q516 259 516 260Z"></path></g><g data-mml-node="mi" transform="translate(783,-150) scale(0.707)"><path data-c="1D456" d="M184 600Q184 624 203 642T247 661Q265 661 277 649T290 619Q290 596 270 577T226 557Q211 557 198 567T184 600ZM21 287Q21 295 30 318T54 369T98 420T158 442Q197 442 223 419T250 357Q250 340 236 301T196 196T154 83Q149 61 149 51Q149 26 166 26Q175 26 185 29T208 43T235 78T260 137Q263 149 265 151T282 153Q302 153 302 143Q302 135 293 112T268 61T223 11T161 -11Q129 -11 102 10T74 74Q74 91 79 106T122 220Q160 321 166 341T173 380Q173 404 156 404H154Q124 404 99 371T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Z"></path></g></g><g data-mml-node="mo" transform="translate(1299.2,0)"><path data-c="22C5" d="M78 250Q78 274 95 292T138 310Q162 310 180 294T199 251Q199 226 182 208T139 190T96 207T78 250Z"></path></g><g data-mml-node="mi" transform="translate(1799.4,0)"><path data-c="1D446" d="M308 24Q367 24 416 76T466 197Q466 260 414 284Q308 311 278 321T236 341Q176 383 176 462Q176 523 208 573T273 648Q302 673 343 688T407 704H418H425Q521 704 564 640Q565 640 577 653T603 682T623 704Q624 704 627 704T632 705Q645 705 645 698T617 577T585 459T569 456Q549 456 549 465Q549 471 550 475Q550 478 551 494T553 520Q553 554 544 579T526 616T501 641Q465 662 419 662Q362 662 313 616T263 510Q263 480 278 458T319 427Q323 425 389 408T456 390Q490 379 522 342T554 242Q554 216 546 186Q541 164 528 137T492 78T426 18T332 -20Q320 -22 298 -22Q199 -22 144 33L134 44L106 13Q83 -14 78 -18T65 -22Q52 -22 52 -14Q52 -11 110 221Q112 227 130 227H143Q149 221 149 216Q149 214 148 207T144 186T142 153Q144 114 160 87T203 47T255 29T308 24Z"></path></g><g data-mml-node="mo" transform="translate(2722.2,0)"><path data-c="3D" d="M56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153Z"></path></g><g data-mml-node="msub" transform="translate(3778,0)"><g data-mml-node="mi"><path data-c="1D44F" d="M73 647Q73 657 77 670T89 683Q90 683 161 688T234 694Q246 694 246 685T212 542Q204 508 195 472T180 418L176 399Q176 396 182 402Q231 442 283 442Q345 442 383 396T422 280Q422 169 343 79T173 -11Q123 -11 82 27T40 150V159Q40 180 48 217T97 414Q147 611 147 623T109 637Q104 637 101 637H96Q86 637 83 637T76 640T73 647ZM336 325V331Q336 405 275 405Q258 405 240 397T207 376T181 352T163 330L157 322L136 236Q114 150 114 114Q114 66 138 42Q154 26 178 26Q211 26 245 58Q270 81 285 114T318 219Q336 291 336 325Z"></path></g><g data-mml-node="mi" transform="translate(462,-150) scale(0.707)"><path data-c="1D456" d="M184 600Q184 624 203 642T247 661Q265 661 277 649T290 619Q290 596 270 577T226 557Q211 557 198 567T184 600ZM21 287Q21 295 30 318T54 369T98 420T158 442Q197 442 223 419T250 357Q250 340 236 301T196 196T154 83Q149 61 149 51Q149 26 166 26Q175 26 185 29T208 43T235 78T260 137Q263 149 265 151T282 153Q302 153 302 143Q302 135 293 112T268 61T223 11T161 -11Q129 -11 102 10T74 74Q74 91 79 106T122 220Q160 321 166 341T173 380Q173 404 156 404H154Q124 404 99 371T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Z"></path></g></g><g data-mml-node="mspace" transform="translate(4533.9,0)"></g><g data-mml-node="mo" transform="translate(5533.9,0)"><path data-c="28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"></path></g><g data-mml-node="mi" transform="translate(5922.9,0)"><path data-c="6D" d="M41 46H55Q94 46 102 60V68Q102 77 102 91T102 122T103 161T103 203Q103 234 103 269T102 328V351Q99 370 88 376T43 385H25V408Q25 431 27 431L37 432Q47 433 65 434T102 436Q119 437 138 438T167 441T178 442H181V402Q181 364 182 364T187 369T199 384T218 402T247 421T285 437Q305 442 336 442Q351 442 364 440T387 434T406 426T421 417T432 406T441 395T448 384T452 374T455 366L457 361L460 365Q463 369 466 373T475 384T488 397T503 410T523 422T546 432T572 439T603 442Q729 442 740 329Q741 322 741 190V104Q741 66 743 59T754 49Q775 46 803 46H819V0H811L788 1Q764 2 737 2T699 3Q596 3 587 0H579V46H595Q656 46 656 62Q657 64 657 200Q656 335 655 343Q649 371 635 385T611 402T585 404Q540 404 506 370Q479 343 472 315T464 232V168V108Q464 78 465 68T468 55T477 49Q498 46 526 46H542V0H534L510 1Q487 2 460 2T422 3Q319 3 310 0H302V46H318Q379 46 379 62Q380 64 380 200Q379 335 378 343Q372 371 358 385T334 402T308 404Q263 404 229 370Q202 343 195 315T187 232V168V108Q187 78 188 68T191 55T200 49Q221 46 249 46H265V0H257L234 1Q210 2 183 2T145 3Q42 3 33 0H25V46H41Z"></path><path data-c="6F" d="M28 214Q28 309 93 378T250 448Q340 448 405 380T471 215Q471 120 407 55T250 -10Q153 -10 91 57T28 214ZM250 30Q372 30 372 193V225V250Q372 272 371 288T364 326T348 362T317 390T268 410Q263 411 252 411Q222 411 195 399Q152 377 139 338T126 246V226Q126 130 145 91Q177 30 250 30Z" transform="translate(833,0)"></path><path data-c="64" d="M376 495Q376 511 376 535T377 568Q377 613 367 624T316 637H298V660Q298 683 300 683L310 684Q320 685 339 686T376 688Q393 689 413 690T443 693T454 694H457V390Q457 84 458 81Q461 61 472 55T517 46H535V0Q533 0 459 -5T380 -11H373V44L365 37Q307 -11 235 -11Q158 -11 96 50T34 215Q34 315 97 378T244 442Q319 442 376 393V495ZM373 342Q328 405 260 405Q211 405 173 369Q146 341 139 305T131 211Q131 155 138 120T173 59Q203 26 251 26Q322 26 373 103V342Z" transform="translate(1333,0)"></path></g><g data-mml-node="mspace" transform="translate(7811.9,0)"></g><g data-mml-node="mi" transform="translate(8311.6,0)"><path data-c="1D45E" d="M33 157Q33 258 109 349T280 441Q340 441 372 389Q373 390 377 395T388 406T404 418Q438 442 450 442Q454 442 457 439T460 434Q460 425 391 149Q320 -135 320 -139Q320 -147 365 -148H390Q396 -156 396 -157T393 -175Q389 -188 383 -194H370Q339 -192 262 -192Q234 -192 211 -192T174 -192T157 -193Q143 -193 143 -185Q143 -182 145 -170Q149 -154 152 -151T172 -148Q220 -148 230 -141Q238 -136 258 -53T279 32Q279 33 272 29Q224 -10 172 -10Q117 -10 75 30T33 157ZM352 326Q329 405 277 405Q242 405 210 374T160 293Q131 214 119 129Q119 126 119 118T118 106Q118 61 136 44T179 26Q233 26 290 98L298 109L352 326Z"></path></g><g data-mml-node="mo" transform="translate(8771.6,0)"><path data-c="29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"></path></g></g></g></svg></mjx-container></p>
+<p>收集至少 64 组线性无关的样本后，用模 <code>q</code> 的高斯消元恢复 <code>S</code>。拿到 <code>S</code> 后，对每个 flag 字符计算：</p>
+<p><mjx-container class="MathJax" jax="SVG" display="true"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="23.998ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 10607.1 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D45A" d="M21 287Q22 293 24 303T36 341T56 388T88 425T132 442T175 435T205 417T221 395T229 376L231 369Q231 367 232 367L243 378Q303 442 384 442Q401 442 415 440T441 433T460 423T475 411T485 398T493 385T497 373T500 364T502 357L510 367Q573 442 659 442Q713 442 746 415T780 336Q780 285 742 178T704 50Q705 36 709 31T724 26Q752 26 776 56T815 138Q818 149 821 151T837 153Q857 153 857 145Q857 144 853 130Q845 101 831 73T785 17T716 -10Q669 -10 648 17T627 73Q627 92 663 193T700 345Q700 404 656 404H651Q565 404 506 303L499 291L466 157Q433 26 428 16Q415 -11 385 -11Q372 -11 364 -4T353 8T350 18Q350 29 384 161L420 307Q423 322 423 345Q423 404 379 404H374Q288 404 229 303L222 291L189 157Q156 26 151 16Q138 -11 108 -11Q95 -11 87 -5T76 7T74 17Q74 30 112 181Q151 335 151 342Q154 357 154 369Q154 405 129 405Q107 405 92 377T69 316T57 280Q55 278 41 278H27Q21 284 21 287Z"></path></g><g data-mml-node="mo" transform="translate(1155.8,0)"><path data-c="3D" d="M56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153Z"></path></g><g data-mml-node="mi" transform="translate(2211.6,0)"><path data-c="1D44F" d="M73 647Q73 657 77 670T89 683Q90 683 161 688T234 694Q246 694 246 685T212 542Q204 508 195 472T180 418L176 399Q176 396 182 402Q231 442 283 442Q345 442 383 396T422 280Q422 169 343 79T173 -11Q123 -11 82 27T40 150V159Q40 180 48 217T97 414Q147 611 147 623T109 637Q104 637 101 637H96Q86 637 83 637T76 640T73 647ZM336 325V331Q336 405 275 405Q258 405 240 397T207 376T181 352T163 330L157 322L136 236Q114 150 114 114Q114 66 138 42Q154 26 178 26Q211 26 245 58Q270 81 285 114T318 219Q336 291 336 325Z"></path></g><g data-mml-node="mo" transform="translate(2862.8,0)"><path data-c="2212" d="M84 237T84 250T98 270H679Q694 262 694 250T679 230H98Q84 237 84 250Z"></path></g><g data-mml-node="mi" transform="translate(3863,0)"><path data-c="1D434" d="M208 74Q208 50 254 46Q272 46 272 35Q272 34 270 22Q267 8 264 4T251 0Q249 0 239 0T205 1T141 2Q70 2 50 0H42Q35 7 35 11Q37 38 48 46H62Q132 49 164 96Q170 102 345 401T523 704Q530 716 547 716H555H572Q578 707 578 706L606 383Q634 60 636 57Q641 46 701 46Q726 46 726 36Q726 34 723 22Q720 7 718 4T704 0Q701 0 690 0T651 1T578 2Q484 2 455 0H443Q437 6 437 9T439 27Q443 40 445 43L449 46H469Q523 49 533 63L521 213H283L249 155Q208 86 208 74ZM516 260Q516 271 504 416T490 562L463 519Q447 492 400 412L310 260L413 259Q516 259 516 260Z"></path></g><g data-mml-node="mo" transform="translate(4835.2,0)"><path data-c="22C5" d="M78 250Q78 274 95 292T138 310Q162 310 180 294T199 251Q199 226 182 208T139 190T96 207T78 250Z"></path></g><g data-mml-node="mi" transform="translate(5335.4,0)"><path data-c="1D446" d="M308 24Q367 24 416 76T466 197Q466 260 414 284Q308 311 278 321T236 341Q176 383 176 462Q176 523 208 573T273 648Q302 673 343 688T407 704H418H425Q521 704 564 640Q565 640 577 653T603 682T623 704Q624 704 627 704T632 705Q645 705 645 698T617 577T585 459T569 456Q549 456 549 465Q549 471 550 475Q550 478 551 494T553 520Q553 554 544 579T526 616T501 641Q465 662 419 662Q362 662 313 616T263 510Q263 480 278 458T319 427Q323 425 389 408T456 390Q490 379 522 342T554 242Q554 216 546 186Q541 164 528 137T492 78T426 18T332 -20Q320 -22 298 -22Q199 -22 144 33L134 44L106 13Q83 -14 78 -18T65 -22Q52 -22 52 -14Q52 -11 110 221Q112 227 130 227H143Q149 221 149 216Q149 214 148 207T144 186T142 153Q144 114 160 87T203 47T255 29T308 24Z"></path></g><g data-mml-node="mspace" transform="translate(5980.4,0)"></g><g data-mml-node="mo" transform="translate(6980.4,0)"><path data-c="28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"></path></g><g data-mml-node="mi" transform="translate(7369.4,0)"><path data-c="6D" d="M41 46H55Q94 46 102 60V68Q102 77 102 91T102 122T103 161T103 203Q103 234 103 269T102 328V351Q99 370 88 376T43 385H25V408Q25 431 27 431L37 432Q47 433 65 434T102 436Q119 437 138 438T167 441T178 442H181V402Q181 364 182 364T187 369T199 384T218 402T247 421T285 437Q305 442 336 442Q351 442 364 440T387 434T406 426T421 417T432 406T441 395T448 384T452 374T455 366L457 361L460 365Q463 369 466 373T475 384T488 397T503 410T523 422T546 432T572 439T603 442Q729 442 740 329Q741 322 741 190V104Q741 66 743 59T754 49Q775 46 803 46H819V0H811L788 1Q764 2 737 2T699 3Q596 3 587 0H579V46H595Q656 46 656 62Q657 64 657 200Q656 335 655 343Q649 371 635 385T611 402T585 404Q540 404 506 370Q479 343 472 315T464 232V168V108Q464 78 465 68T468 55T477 49Q498 46 526 46H542V0H534L510 1Q487 2 460 2T422 3Q319 3 310 0H302V46H318Q379 46 379 62Q380 64 380 200Q379 335 378 343Q372 371 358 385T334 402T308 404Q263 404 229 370Q202 343 195 315T187 232V168V108Q187 78 188 68T191 55T200 49Q221 46 249 46H265V0H257L234 1Q210 2 183 2T145 3Q42 3 33 0H25V46H41Z"></path><path data-c="6F" d="M28 214Q28 309 93 378T250 448Q340 448 405 380T471 215Q471 120 407 55T250 -10Q153 -10 91 57T28 214ZM250 30Q372 30 372 193V225V250Q372 272 371 288T364 326T348 362T317 390T268 410Q263 411 252 411Q222 411 195 399Q152 377 139 338T126 246V226Q126 130 145 91Q177 30 250 30Z" transform="translate(833,0)"></path><path data-c="64" d="M376 495Q376 511 376 535T377 568Q377 613 367 624T316 637H298V660Q298 683 300 683L310 684Q320 685 339 686T376 688Q393 689 413 690T443 693T454 694H457V390Q457 84 458 81Q461 61 472 55T517 46H535V0Q533 0 459 -5T380 -11H373V44L365 37Q307 -11 235 -11Q158 -11 96 50T34 215Q34 315 97 378T244 442Q319 442 376 393V495ZM373 342Q328 405 260 405Q211 405 173 369Q146 341 139 305T131 211Q131 155 138 120T173 59Q203 26 251 26Q322 26 373 103V342Z" transform="translate(1333,0)"></path></g><g data-mml-node="mspace" transform="translate(9258.4,0)"></g><g data-mml-node="mi" transform="translate(9758.1,0)"><path data-c="1D45E" d="M33 157Q33 258 109 349T280 441Q340 441 372 389Q373 390 377 395T388 406T404 418Q438 442 450 442Q454 442 457 439T460 434Q460 425 391 149Q320 -135 320 -139Q320 -147 365 -148H390Q396 -156 396 -157T393 -175Q389 -188 383 -194H370Q339 -192 262 -192Q234 -192 211 -192T174 -192T157 -193Q143 -193 143 -185Q143 -182 145 -170Q149 -154 152 -151T172 -148Q220 -148 230 -141Q238 -136 258 -53T279 32Q279 33 272 29Q224 -10 172 -10Q117 -10 75 30T33 157ZM352 326Q329 405 277 405Q242 405 210 374T160 293Q131 214 119 129Q119 126 119 118T118 106Q118 61 136 44T179 26Q233 26 290 98L298 109L352 326Z"></path></g><g data-mml-node="mo" transform="translate(10218.1,0)"><path data-c="29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"></path></g></g></g></svg></mjx-container></p>
+<p>最后将结果映射回字节。</p>
+<h3 id="攻击脚本核心"><a href="#攻击脚本核心" class="headerlink" title="攻击脚本核心"></a>攻击脚本核心</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Q = <span class="number">65537</span></span><br><span class="line">DIMENSION = <span class="number">64</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">recv_line</span>(<span class="params">sock</span>):</span><br><span class="line">    data = <span class="built_in">bytearray</span>()</span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        byte = sock.recv(<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> byte:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        data.extend(byte)</span><br><span class="line">        <span class="keyword">if</span> byte == <span class="string">b"\n"</span>:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">    <span class="keyword">return</span> data.decode().strip()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">request</span>(<span class="params">sock, payload</span>):</span><br><span class="line">    sock.sendall(json.dumps(payload).encode() + <span class="string">b"\n"</span>)</span><br><span class="line">    <span class="keyword">return</span> json.loads(recv_line(sock))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">solve_mod</span>(<span class="params">matrix, values, modulus</span>):</span><br><span class="line">    augmented = [</span><br><span class="line">        [value % modulus <span class="keyword">for</span> value <span class="keyword">in</span> row] + [values[i] % modulus]</span><br><span class="line">        <span class="keyword">for</span> i, row <span class="keyword">in</span> <span class="built_in">enumerate</span>(matrix)</span><br><span class="line">    ]</span><br><span class="line">    row = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> column <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(matrix[<span class="number">0</span>])):</span><br><span class="line">        pivot = <span class="built_in">next</span>(</span><br><span class="line">            (i <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(row, <span class="built_in">len</span>(augmented))</span><br><span class="line">             <span class="keyword">if</span> augmented[i][column] % modulus),</span><br><span class="line">            <span class="literal">None</span>,</span><br><span class="line">        )</span><br><span class="line">        <span class="keyword">if</span> pivot <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">        augmented[row], augmented[pivot] = augmented[pivot], augmented[row]</span><br><span class="line">        inverse = <span class="built_in">pow</span>(augmented[row][column], modulus - <span class="number">2</span>, modulus)</span><br><span class="line">        augmented[row] = [</span><br><span class="line">            item * inverse % modulus <span class="keyword">for</span> item <span class="keyword">in</span> augmented[row]</span><br><span class="line">        ]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> other <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(augmented)):</span><br><span class="line">            <span class="keyword">if</span> other == row:</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            factor = augmented[other][column]</span><br><span class="line">            <span class="keyword">if</span> factor:</span><br><span class="line">                augmented[other] = [</span><br><span class="line">                    (left - factor * right) % modulus</span><br><span class="line">                    <span class="keyword">for</span> left, right <span class="keyword">in</span> <span class="built_in">zip</span>(augmented[other], augmented[row])</span><br><span class="line">                ]</span><br><span class="line">        row += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    solution = [<span class="number">0</span>] * <span class="built_in">len</span>(matrix[<span class="number">0</span>])</span><br><span class="line">    <span class="keyword">for</span> current <span class="keyword">in</span> augmented:</span><br><span class="line">        pivot = <span class="built_in">next</span>(</span><br><span class="line">            (i <span class="keyword">for</span> i, value <span class="keyword">in</span> <span class="built_in">enumerate</span>(current[:-<span class="number">1</span>]) <span class="keyword">if</span> value == <span class="number">1</span>),</span><br><span class="line">            <span class="literal">None</span>,</span><br><span class="line">        )</span><br><span class="line">        <span class="keyword">if</span> pivot <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            solution[pivot] = current[-<span class="number">1</span>]</span><br><span class="line">    <span class="keyword">return</span> solution</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">host = sys.argv[<span class="number">1</span>] <span class="keyword">if</span> <span class="built_in">len</span>(sys.argv) &gt; <span class="number">1</span> <span class="keyword">else</span> <span class="string">"socket.cryptohack.org"</span></span><br><span class="line">port = <span class="built_in">int</span>(sys.argv[<span class="number">2</span>]) <span class="keyword">if</span> <span class="built_in">len</span>(sys.argv) &gt; <span class="number">2</span> <span class="keyword">else</span> <span class="number">13411</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> socket.create_connection((host, port)) <span class="keyword">as</span> sock:</span><br><span class="line">    <span class="built_in">print</span>(recv_line(sock))</span><br><span class="line"></span><br><span class="line">    samples = [</span><br><span class="line">        request(sock, {<span class="string">"option"</span>: <span class="string">"encrypt"</span>, <span class="string">"message"</span>: <span class="number">0</span>})</span><br><span class="line">        <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">70</span>)</span><br><span class="line">    ]</span><br><span class="line">    matrix = [json.loads(sample[<span class="string">"A"</span>]) <span class="keyword">for</span> sample <span class="keyword">in</span> samples]</span><br><span class="line">    values = [<span class="built_in">int</span>(sample[<span class="string">"b"</span>]) <span class="keyword">for</span> sample <span class="keyword">in</span> samples]</span><br><span class="line">    secret = solve_mod(matrix, values, Q)</span><br><span class="line"></span><br><span class="line">    flag = []</span><br><span class="line">    <span class="keyword">for</span> index <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">100</span>):</span><br><span class="line">        result = request(sock, {<span class="string">"option"</span>: <span class="string">"get_flag"</span>, <span class="string">"index"</span>: index})</span><br><span class="line">        <span class="keyword">if</span> <span class="string">"error"</span> <span class="keyword">in</span> result:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        vector = json.loads(result[<span class="string">"A"</span>])</span><br><span class="line">        value = <span class="built_in">int</span>(result[<span class="string">"b"</span>])</span><br><span class="line">        message = (value - <span class="built_in">sum</span>(</span><br><span class="line">            vector[i] * secret[i] <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(DIMENSION)</span><br><span class="line">        )) % Q</span><br><span class="line">        flag.append(<span class="built_in">chr</span>(message % <span class="number">257</span>))</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">""</span>.join(flag))</span><br></pre></td></tr></table></figure>
+
+<p>这道题的核心不是噪声分析，而是发现服务端允许选择明文 <code>0</code>，从而把私钥恢复转化成一个线性方程组。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/RSA/" rel="tag"># RSA</a>
+              <a href="/tags/CryptoHack/" rel="tag"># CryptoHack</a>
+              <a href="/tags/mathematics/" rel="tag"># mathematics</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/09/21/HGAME-2026-%E5%A4%8D%E7%8E%B0/" rel="prev" title="HGAME 2026 复现">
+                  <i class="fa fa-angle-left"></i> HGAME 2026 复现
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/09/21/%E6%98%A5%E7%A7%8B%E6%9D%AF%E4%B8%8ETrinity-Masquerade/" rel="next" title="春秋杯与 Trinity Masquerade 题解">
+                  春秋杯与 Trinity Masquerade 题解 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+  
+  
+  <section class="post-comments">
+    <div class="comments-header">
+      <h2>
+        <span>💬</span>
+        评论与讨论
+      </h2>
+      <p>
+        分享你的想法和见解
+      </p>
+    </div>
+
+    
+    <div class="comments-container">
+    </div>
+  </section>
+  
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Mofan</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<div id="aplayer" aria-label="全局音乐播放器"></div>
+
+<script>
+(function() {
+  const THEME = {
+    cream: '#FFF3C9',
+    pink: '#F3B3CC',
+    cyan: '#ABE5E8',
+    ink: '#236c73'
+  };
+  const APLAYER_JS = 'https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js';
+  const APLAYER_CSS = 'https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css';
+  const GSAP_JS = 'https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js';
+  const SCROLL_TRIGGER_JS = 'https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js';
+
+  window.PinkodeEnhance = window.PinkodeEnhance || {};
+  const app = window.PinkodeEnhance;
+  app.pageTweens = app.pageTweens || [];
+  app.scrollTriggers = app.scrollTriggers || [];
+  app.bgTweens = app.bgTweens || [];
+
+  function loadStyle(href) {
+    if ([...document.styleSheets].some(sheet => sheet.href && sheet.href.includes(href))) {
+      return Promise.resolve();
+    }
+    if (document.querySelector(`link[href="${href}"]`)) return Promise.resolve();
+    return new Promise((resolve, reject) => {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = href;
+      link.onload = resolve;
+      link.onerror = reject;
+      document.head.appendChild(link);
+    });
+  }
+
+  function loadScript(src, globalName) {
+    if (globalName && window[globalName]) return Promise.resolve(window[globalName]);
+    const existing = document.querySelector(`script[src="${src}"]`);
+    if (existing) {
+      return new Promise(resolve => {
+        if (!globalName || window[globalName]) {
+          resolve(window[globalName]);
+          return;
+        }
+        existing.addEventListener('load', () => resolve(window[globalName]), { once: true });
+      });
+    }
+    return new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = src;
+      script.defer = true;
+      script.onload = () => resolve(globalName ? window[globalName] : true);
+      script.onerror = reject;
+      document.head.appendChild(script);
+    });
+  }
+
+  function ensureAPlayer() {
+    return loadStyle(APLAYER_CSS)
+      .then(() => loadScript(APLAYER_JS, 'APlayer'))
+      .then(() => {
+        if (app.aplayerInstance) return app.aplayerInstance;
+        const container = document.getElementById('aplayer');
+        if (!container || typeof APlayer === 'undefined') return null;
+        app.aplayerInstance = new APlayer({
+          container,
+          fixed: true,
+          mini: false,
+          autoplay: false,
+          theme: THEME.pink,
+          loop: 'all',
+          order: 'list',
+          preload: 'auto',
+          volume: 0.65,
+          mutex: true,
+          lrcType: 0,
+          audio: [{
+            name: 'My Foolish Heart~',
+            artist: '椎名林檎',
+            url: '/music/bg-music.mp3',
+            cover: '/images/music-covers/R.jpg',
+            theme: THEME.cyan
+          }]
+        });
+        return app.aplayerInstance;
+      })
+      .catch(error => console.warn('[PinkodeEnhance] APlayer load failed:', error));
+  }
+
+  function ensureGSAP() {
+    return loadScript(GSAP_JS, 'gsap')
+      .then(() => loadScript(SCROLL_TRIGGER_JS, 'ScrollTrigger'))
+      .then(() => {
+        if (window.gsap && window.ScrollTrigger) {
+          gsap.registerPlugin(ScrollTrigger);
+          gsap.defaults({ duration: 0.65, ease: 'power3.out' });
+        }
+        return window.gsap;
+      })
+      .catch(error => console.warn('[PinkodeEnhance] GSAP load failed:', error));
+  }
+
+  function clearPageMotion() {
+    app.pageTweens.forEach(tween => tween && tween.kill && tween.kill());
+    app.pageTweens = [];
+    if (window.ScrollTrigger) {
+      app.scrollTriggers.forEach(trigger => trigger && trigger.kill && trigger.kill());
+      app.scrollTriggers = [];
+    }
+  }
+
+  function ensureCuteBackground() {
+    let layer = document.querySelector('.pinkode-bg-layer');
+    if (!layer) {
+      layer = document.createElement('div');
+      layer.className = 'pinkode-bg-layer';
+      layer.setAttribute('aria-hidden', 'true');
+      document.body.prepend(layer);
+    }
+    if (layer.dataset.pinkodeReady) return;
+    layer.dataset.pinkodeReady = 'true';
+
+    const specs = [
+      ['star', 'pink', 5, 10, 30, 0.72], ['heart', 'cyan', 18, 16, 34, 0.64],
+      ['flower', 'pink', 33, 9, 42, 0.62], ['bubble', 'cyan', 52, 13, 54, 0.46],
+      ['petal', 'pink', 68, 8, 30, 0.68], ['bow', 'cyan', 84, 16, 48, 0.56],
+      ['star', 'cyan', 94, 6, 28, 0.66], ['heart', 'pink', 8, 34, 38, 0.64],
+      ['flower', 'cyan', 23, 46, 44, 0.56], ['bubble', 'pink', 40, 33, 64, 0.38],
+      ['petal', 'cyan', 58, 43, 28, 0.62], ['bow', 'pink', 76, 36, 46, 0.58],
+      ['star', 'pink', 91, 48, 26, 0.64], ['heart', 'cyan', 4, 65, 34, 0.58],
+      ['flower', 'pink', 17, 82, 40, 0.58], ['bubble', 'cyan', 32, 68, 58, 0.4],
+      ['petal', 'pink', 49, 78, 30, 0.62], ['bow', 'cyan', 64, 68, 44, 0.52],
+      ['star', 'cyan', 80, 86, 28, 0.62], ['heart', 'pink', 94, 76, 36, 0.58],
+      ['flower', 'cyan', 2, 92, 36, 0.5], ['bubble', 'pink', 88, 96, 62, 0.34],
+      ['petal', 'cyan', 44, 4, 22, 0.58], ['bow', 'pink', 56, 94, 38, 0.5],
+      ['star', 'pink', 72, 58, 22, 0.6], ['heart', 'cyan', 28, 92, 30, 0.52],
+      ['flower', 'pink', 98, 28, 34, 0.5], ['bubble', 'cyan', 12, 52, 48, 0.38]
+    ];
+
+    const fragment = document.createDocumentFragment();
+    specs.forEach(([shape, colorName, x, y, size, opacity], index) => {
+      const item = document.createElement('i');
+      item.className = `pinkode-floatie pinkode-floatie--${shape}`;
+      item.style.setProperty('--x', `${x}%`);
+      item.style.setProperty('--y', `${y}%`);
+      item.style.setProperty('--s', `${size}px`);
+      item.style.setProperty('--o', opacity);
+      item.style.setProperty('--c', colorName === 'pink' ? THEME.pink : THEME.cyan);
+      item.dataset.floatIndex = index;
+      if (shape === 'bow') item.appendChild(document.createElement('span'));
+      fragment.appendChild(item);
+    });
+    layer.appendChild(fragment);
+  }
+
+  function animateCuteBackground() {
+    if (!window.gsap || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    ensureCuteBackground();
+    if (app.bgTweens.length) return;
+    const items = document.querySelectorAll('.pinkode-floatie');
+    items.forEach((item, index) => {
+      const driftX = index % 2 ? 58 : -58;
+      const driftY = index % 3 ? -70 : 70;
+      const duration = 4.8 + (index % 6) * 0.72;
+      app.bgTweens.push(gsap.to(item, {
+        x: driftX,
+        y: driftY,
+        rotation: index % 2 ? 36 : -36,
+        scale: 1.08 + (index % 4) * 0.08,
+        duration,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+        delay: index * 0.16
+      }));
+    });
+  }
+
+  function animatePage() {
+    if (!window.gsap) return;
+    clearPageMotion();
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const main = document.querySelector('.main-inner');
+    const headerItems = document.querySelectorAll('.brand, .menu-item, .site-search');
+    const heroParts = document.querySelectorAll('.home-hero__copy, .home-hero__mark, .home-hero__actions');
+    const cards = document.querySelectorAll('.featured-post, .post-item, .post-block, .collection-title, .category-list-item, .tag-cloud a, .archive .post-header');
+    const buttons = document.querySelectorAll('.btn, .post-button .btn, .pagination a, .featured-post a, .post-item a, .menu-item a, .sidebar-button a');
+
+    gsap.set([main, ...cards], { willChange: 'transform, opacity' });
+    app.pageTweens.push(gsap.fromTo(main, {
+      autoAlpha: 0,
+      y: reduceMotion ? 0 : 18,
+      filter: reduceMotion ? 'none' : 'blur(8px)'
+    }, {
+      autoAlpha: 1,
+      y: 0,
+      filter: 'blur(0px)',
+      duration: reduceMotion ? 0.01 : 0.7,
+      clearProps: 'filter,willChange'
+    }));
+
+    if (headerItems.length) {
+      app.pageTweens.push(gsap.fromTo(headerItems, {
+        autoAlpha: 0,
+        y: reduceMotion ? 0 : -12
+      }, {
+        autoAlpha: 1,
+        y: 0,
+        stagger: 0.04,
+        duration: reduceMotion ? 0.01 : 0.55,
+        clearProps: 'willChange'
+      }));
+    }
+
+    if (heroParts.length) {
+      app.pageTweens.push(gsap.fromTo(heroParts, {
+        autoAlpha: 0,
+        y: reduceMotion ? 0 : 24,
+        scale: reduceMotion ? 1 : 0.98
+      }, {
+        autoAlpha: 1,
+        y: 0,
+        scale: 1,
+        stagger: 0.08,
+        duration: reduceMotion ? 0.01 : 0.78,
+        ease: 'expo.out'
+      }));
+    }
+
+    if (cards.length && window.ScrollTrigger && !reduceMotion) {
+      const batch = ScrollTrigger.batch(cards, {
+        start: 'top 86%',
+        once: true,
+        onEnter: elements => gsap.fromTo(elements, {
+          autoAlpha: 0,
+          y: 32,
+          scale: 0.985
+        }, {
+          autoAlpha: 1,
+          y: 0,
+          scale: 1,
+          stagger: 0.08,
+          duration: 0.8,
+          overwrite: true,
+          clearProps: 'willChange'
+        })
+      });
+      app.scrollTriggers.push(...batch);
+    }
+
+    buttons.forEach(button => {
+      if (button.dataset.pinkodeHover) return;
+      button.dataset.pinkodeHover = 'true';
+      button.addEventListener('mouseenter', () => gsap.to(button, { y: -2, scale: 1.018, duration: 0.22, overwrite: 'auto' }));
+      button.addEventListener('mouseleave', () => gsap.to(button, { y: 0, scale: 1, duration: 0.22, overwrite: 'auto' }));
+    });
+
+    if (window.ScrollTrigger) {
+      setTimeout(() => ScrollTrigger.refresh(), 120);
+    }
+  }
+
+  function enhanceBackToTop() {
+    const button = document.querySelector('.back-to-top');
+    if (!button || button.dataset.pinkodeBackTop) return;
+    button.dataset.pinkodeBackTop = 'true';
+    button.setAttribute('title', '回到顶部');
+    if (!window.gsap) return;
+
+    gsap.set(button, { autoAlpha: 0, y: 16, scale: 0.88, pointerEvents: 'none' });
+    const setVisible = visible => {
+      gsap.to(button, {
+        autoAlpha: visible ? 1 : 0,
+        y: visible ? 0 : 16,
+        scale: visible ? 1 : 0.88,
+        pointerEvents: visible ? 'auto' : 'none',
+        duration: 0.28,
+        overwrite: 'auto'
+      });
+    };
+    const onScroll = () => setVisible(window.scrollY > Math.min(360, window.innerHeight * 0.45));
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    button.addEventListener('click', event => {
+      event.preventDefault();
+      const scrollState = { y: window.scrollY };
+      gsap.to(scrollState, {
+        y: 0,
+        duration: 0.75,
+        ease: 'power3.inOut',
+        onUpdate: () => window.scrollTo(0, scrollState.y)
+      });
+    });
+  }
+
+  function enhanceMenus() {
+    const toggle = document.querySelector('.site-nav-toggle .toggle');
+    const siteNav = document.querySelector('.site-nav');
+    if (!toggle || !siteNav || toggle.dataset.pinkodeMenu) return;
+    toggle.dataset.pinkodeMenu = 'true';
+    toggle.addEventListener('click', () => {
+      if (!window.gsap || !document.body.classList.contains('site-nav-on')) return;
+      gsap.fromTo('.site-nav .menu-item', {
+        autoAlpha: 0,
+        y: -10
+      }, {
+        autoAlpha: 1,
+        y: 0,
+        stagger: 0.045,
+        duration: 0.35,
+        overwrite: true
+      });
+    });
+  }
+
+  function refreshComments() {
+    const container = document.querySelector('.comments-container');
+    if (!container) return;
+    const giscus = container.querySelector('script[src*="giscus.app/client.js"], iframe.giscus-frame');
+    if (giscus) return;
+    const script = document.createElement('script');
+    script.src = 'https://giscus.app/client.js';
+    script.setAttribute('data-repo', 'P1nk0d3/P1nk0d3.github.io');
+    script.setAttribute('data-repo-id', 'R_kgDOQm6oMw');
+    script.setAttribute('data-category', 'Announcements');
+    script.setAttribute('data-category-id', 'DIC_kwDOQm6oM84CzxkR');
+    script.setAttribute('data-mapping', 'pathname');
+    script.setAttribute('data-strict', '0');
+    script.setAttribute('data-reactions-enabled', '1');
+    script.setAttribute('data-emit-metadata', '0');
+    script.setAttribute('data-input-position', 'top');
+    script.setAttribute('data-theme', 'preferred_color_scheme');
+    script.setAttribute('data-lang', 'zh-CN');
+    script.setAttribute('data-loading', 'lazy');
+    script.crossOrigin = 'anonymous';
+    script.async = true;
+    container.appendChild(script);
+  }
+
+  function fixCompatibility() {
+    if (/firefox/i.test(navigator.userAgent)) {
+      document.querySelector('meta[name="theme-color"]')?.setAttribute('content', THEME.cream);
+    }
+    if (/safari/i.test(navigator.userAgent) && !/chrome/i.test(navigator.userAgent)) {
+      document.querySelectorAll('input[autocapitalize]').forEach(input => input.removeAttribute('autocapitalize'));
+    }
+  }
+
+  function initPageEnhancements() {
+    ensureCuteBackground();
+    ensureGSAP().then(() => {
+      animateCuteBackground();
+      animatePage();
+      enhanceBackToTop();
+      enhanceMenus();
+    });
+    refreshComments();
+    fixCompatibility();
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    ensureAPlayer();
+    initPageEnhancements();
+  });
+  document.addEventListener('page:loaded', initPageEnhancements);
+  document.addEventListener('pjax:send', clearPageMotion);
+  document.addEventListener('click', () => {
+    document.querySelectorAll('audio').forEach(audio => { audio.volume = Math.min(audio.volume || 0.65, 0.65); });
+  }, { once: true });
+})();
+</script>
+
+</body>
+</html>

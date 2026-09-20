@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css">
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#FFF3C9"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#FFF3C9">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"giscus","storage":true,"lazyload":true,"nav":{"giscus":{"text":"GitHub 评论","order":1}}},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="TexSAW 2026 Writeup本文整理 TexSAW 2026 中两道题的解题过程。图片和附件本身没有随文章保存，因此只保留可以复现的文字、命令和代码。 题目索引 Secret Word A Different Side Channel Docker-ception Lost my keys Broken Quest  Secret Word解法题目附件是一个 DOCX 文件。DOCX 本">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TexSAW 2026 Writeup">
+<meta property="og:url" content="http://example.com/2026/09/20/TexSAW-2026-Writeup/index.html">
+<meta property="og:site_name" content="Pinkode神秘小作坊">
+<meta property="og:description" content="TexSAW 2026 Writeup本文整理 TexSAW 2026 中两道题的解题过程。图片和附件本身没有随文章保存，因此只保留可以复现的文字、命令和代码。 题目索引 Secret Word A Different Side Channel Docker-ception Lost my keys Broken Quest  Secret Word解法题目附件是一个 DOCX 文件。DOCX 本">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-09-20T12:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-20T16:13:59.135Z">
+<meta property="article:author" content="Mofan">
+<meta property="article:tag" content="CTF">
+<meta property="article:tag" content="crypto">
+<meta property="article:tag" content="TexSAW">
+<meta property="article:tag" content="side-channel">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2026/09/20/TexSAW-2026-Writeup/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2026/09/20/TexSAW-2026-Writeup/","path":"2026/09/20/TexSAW-2026-Writeup/","title":"TexSAW 2026 Writeup"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>TexSAW 2026 Writeup | Pinkode神秘小作坊</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/bookmark.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","cdn":"//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Pinkode神秘小作坊</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">学习记录</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TexSAW-2026-Writeup"><span class="nav-number">1.</span> <span class="nav-text">TexSAW 2026 Writeup</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E7%B4%A2%E5%BC%95"><span class="nav-number">1.1.</span> <span class="nav-text">题目索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Secret-Word"><span class="nav-number">1.2.</span> <span class="nav-text">Secret Word</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E6%B3%95"><span class="nav-number">1.2.1.</span> <span class="nav-text">解法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#A-Different-Side-Channel"><span class="nav-number">1.3.</span> <span class="nav-text">A Different Side Channel</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E5%88%86%E6%9E%90"><span class="nav-number">1.3.1.</span> <span class="nav-text">题目分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CPA-%E8%84%9A%E6%9C%AC"><span class="nav-number">1.3.2.</span> <span class="nav-text">CPA 脚本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E5%AF%86%E8%BF%87%E7%A8%8B"><span class="nav-number">1.3.3.</span> <span class="nav-text">解密过程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker-ception"><span class="nav-number">1.4.</span> <span class="nav-text">Docker-ception</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF"><span class="nav-number">1.4.1.</span> <span class="nav-text">解题思路</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lost-my-keys"><span class="nav-number">1.5.</span> <span class="nav-text">Lost my keys</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Broken-Quest"><span class="nav-number">1.6.</span> <span class="nav-text">Broken Quest</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8A%B6%E6%80%81%E6%9C%BA%E5%88%86%E6%9E%90"><span class="nav-number">1.6.1.</span> <span class="nav-text">状态机分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E5%AF%86"><span class="nav-number">1.6.2.</span> <span class="nav-text">解密</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Mofan"
+      src="/images/1.jpg">
+  <p class="site-author-name" itemprop="name">Mofan</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">30</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/P1nk0d3" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;P1nk0d3" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:3513728203@qq.com" title="E-Mail → mailto:3513728203@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2026/09/20/TexSAW-2026-Writeup/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/1.jpg">
+      <meta itemprop="name" content="Mofan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pinkode神秘小作坊">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="TexSAW 2026 Writeup | Pinkode神秘小作坊">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          TexSAW 2026 Writeup
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-09-20 20:00:00" itemprop="dateCreated datePublished" datetime="2026-09-20T20:00:00+08:00">2026-09-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-09-21 00:13:59" itemprop="dateModified" datetime="2026-09-21T00:13:59+08:00">2026-09-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="TexSAW-2026-Writeup"><a href="#TexSAW-2026-Writeup" class="headerlink" title="TexSAW 2026 Writeup"></a>TexSAW 2026 Writeup</h1><p>本文整理 TexSAW 2026 中两道题的解题过程。图片和附件本身没有随文章保存，因此只保留可以复现的文字、命令和代码。</p>
+<h2 id="题目索引"><a href="#题目索引" class="headerlink" title="题目索引"></a>题目索引</h2><ul>
+<li><a href="#Secret-Word">Secret Word</a></li>
+<li><a href="#A-Different-Side-Channel">A Different Side Channel</a></li>
+<li><a href="#Docker-ception">Docker-ception</a></li>
+<li><a href="#Lost-my-keys">Lost my keys</a></li>
+<li><a href="#Broken-Quest">Broken Quest</a></li>
+</ul>
+<h2 id="Secret-Word"><a href="#Secret-Word" class="headerlink" title="Secret Word"></a>Secret Word</h2><h3 id="解法"><a href="#解法" class="headerlink" title="解法"></a>解法</h3><p>题目附件是一个 DOCX 文件。DOCX 本质上是一个 ZIP 容器，直接解压即可查看其中的文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">unzip challenge.docx -d challenge</span><br><span class="line">find challenge -<span class="built_in">type</span> f -name <span class="string">'secret.txt'</span> -<span class="built_in">print</span></span><br></pre></td></tr></table></figure>
+
+<p>找到 <code>secret.txt</code> 后，对其内容进行 Base64 解码：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">base64</span> -d challenge/secret.txt</span><br></pre></td></tr></table></figure>
+
+<p>解码后的内容就是题目需要提交的 secret word。</p>
+<h2 id="A-Different-Side-Channel"><a href="#A-Different-Side-Channel" class="headerlink" title="A Different Side Channel"></a>A Different Side Channel</h2><h3 id="题目分析"><a href="#题目分析" class="headerlink" title="题目分析"></a>题目分析</h3><p>题目提供了：</p>
+<ul>
+<li>500 条功耗轨迹，<code>traces.npy</code> 的形状为 <code>500 × 100</code>；</li>
+<li>与轨迹对应的明文，<code>plaintexts.npy</code> 的形状为 <code>500 × 16</code>；</li>
+<li>一个 64 字节的加密 flag。</li>
+</ul>
+<p>这是一个典型的相关功耗分析（Correlation Power Analysis，CPA）场景。攻击 AES 第一轮的中间值：</p>
+<p><mjx-container class="MathJax" jax="SVG" display="true"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="22.296ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 9854.9 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msub"><g data-mml-node="mi"><path data-c="1D463" d="M173 380Q173 405 154 405Q130 405 104 376T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Q21 294 29 316T53 368T97 419T160 441Q202 441 225 417T249 361Q249 344 246 335Q246 329 231 291T200 202T182 113Q182 86 187 69Q200 26 250 26Q287 26 319 60T369 139T398 222T409 277Q409 300 401 317T383 343T365 361T357 383Q357 405 376 424T417 443Q436 443 451 425T467 367Q467 340 455 284T418 159T347 40T241 -11Q177 -11 139 22Q102 54 102 117Q102 148 110 181T151 298Q173 362 173 380Z"></path></g><g data-mml-node="mi" transform="translate(518,-150) scale(0.707)"><path data-c="1D456" d="M184 600Q184 624 203 642T247 661Q265 661 277 649T290 619Q290 596 270 577T226 557Q211 557 198 567T184 600ZM21 287Q21 295 30 318T54 369T98 420T158 442Q197 442 223 419T250 357Q250 340 236 301T196 196T154 83Q149 61 149 51Q149 26 166 26Q175 26 185 29T208 43T235 78T260 137Q263 149 265 151T282 153Q302 153 302 143Q302 135 293 112T268 61T223 11T161 -11Q129 -11 102 10T74 74Q74 91 79 106T122 220Q160 321 166 341T173 380Q173 404 156 404H154Q124 404 99 371T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Z"></path></g></g><g data-mml-node="mo" transform="translate(1089.7,0)"><path data-c="3D" d="M56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153Z"></path></g><g data-mml-node="mi" transform="translate(2145.5,0)"><path data-c="1D446" d="M308 24Q367 24 416 76T466 197Q466 260 414 284Q308 311 278 321T236 341Q176 383 176 462Q176 523 208 573T273 648Q302 673 343 688T407 704H418H425Q521 704 564 640Q565 640 577 653T603 682T623 704Q624 704 627 704T632 705Q645 705 645 698T617 577T585 459T569 456Q549 456 549 465Q549 471 550 475Q550 478 551 494T553 520Q553 554 544 579T526 616T501 641Q465 662 419 662Q362 662 313 616T263 510Q263 480 278 458T319 427Q323 425 389 408T456 390Q490 379 522 342T554 242Q554 216 546 186Q541 164 528 137T492 78T426 18T332 -20Q320 -22 298 -22Q199 -22 144 33L134 44L106 13Q83 -14 78 -18T65 -22Q52 -22 52 -14Q52 -11 110 221Q112 227 130 227H143Q149 221 149 216Q149 214 148 207T144 186T142 153Q144 114 160 87T203 47T255 29T308 24Z"></path></g><g data-mml-node="mtext" transform="translate(2790.5,0)"><path data-c="2D" d="M11 179V252H277V179H11Z"></path><path data-c="42" d="M131 622Q124 629 120 631T104 634T61 637H28V683H229H267H346Q423 683 459 678T531 651Q574 627 599 590T624 512Q624 461 583 419T476 360L466 357Q539 348 595 302T651 187Q651 119 600 67T469 3Q456 1 242 0H28V46H61Q103 47 112 49T131 61V622ZM511 513Q511 560 485 594T416 636Q415 636 403 636T371 636T333 637Q266 637 251 636T232 628Q229 624 229 499V374H312L396 375L406 377Q410 378 417 380T442 393T474 417T499 456T511 513ZM537 188Q537 239 509 282T430 336L329 337H229V200V116Q229 57 234 52Q240 47 334 47H383Q425 47 443 53Q486 67 511 104T537 188Z" transform="translate(333,0)"></path><path data-c="6F" d="M28 214Q28 309 93 378T250 448Q340 448 405 380T471 215Q471 120 407 55T250 -10Q153 -10 91 57T28 214ZM250 30Q372 30 372 193V225V250Q372 272 371 288T364 326T348 362T317 390T268 410Q263 411 252 411Q222 411 195 399Q152 377 139 338T126 246V226Q126 130 145 91Q177 30 250 30Z" transform="translate(1041,0)"></path><path data-c="78" d="M201 0Q189 3 102 3Q26 3 17 0H11V46H25Q48 47 67 52T96 61T121 78T139 96T160 122T180 150L226 210L168 288Q159 301 149 315T133 336T122 351T113 363T107 370T100 376T94 379T88 381T80 383Q74 383 44 385H16V431H23Q59 429 126 429Q219 429 229 431H237V385Q201 381 201 369Q201 367 211 353T239 315T268 274L272 270L297 304Q329 345 329 358Q329 364 327 369T322 376T317 380T310 384L307 385H302V431H309Q324 428 408 428Q487 428 493 431H499V385H492Q443 385 411 368Q394 360 377 341T312 257L296 236L358 151Q424 61 429 57T446 50Q464 46 499 46H516V0H510H502Q494 1 482 1T457 2T432 2T414 3Q403 3 377 3T327 1L304 0H295V46H298Q309 46 320 51T331 63Q331 65 291 120L250 175Q249 174 219 133T185 88Q181 83 181 74Q181 63 188 55T206 46Q208 46 208 23V0H201Z" transform="translate(1541,0)"></path></g><g data-mml-node="mo" transform="translate(4859.5,0)"><path data-c="28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"></path></g><g data-mml-node="mi" transform="translate(5248.5,0)"><path data-c="1D45D" d="M23 287Q24 290 25 295T30 317T40 348T55 381T75 411T101 433T134 442Q209 442 230 378L240 387Q302 442 358 442Q423 442 460 395T497 281Q497 173 421 82T249 -10Q227 -10 210 -4Q199 1 187 11T168 28L161 36Q160 35 139 -51T118 -138Q118 -144 126 -145T163 -148H188Q194 -155 194 -157T191 -175Q188 -187 185 -190T172 -194Q170 -194 161 -194T127 -193T65 -192Q-5 -192 -24 -194H-32Q-39 -187 -39 -183Q-37 -156 -26 -148H-6Q28 -147 33 -136Q36 -130 94 103T155 350Q156 355 156 364Q156 405 131 405Q109 405 94 377T71 316T59 280Q57 278 43 278H29Q23 284 23 287ZM178 102Q200 26 252 26Q282 26 310 49T356 107Q374 141 392 215T411 325V331Q411 405 350 405Q339 405 328 402T306 393T286 380T269 365T254 350T243 336T235 326L232 322Q232 321 229 308T218 264T204 212Q178 106 178 102Z"></path></g><g data-mml-node="msub" transform="translate(5751.5,0)"><g data-mml-node="mi"><path data-c="1D461" d="M26 385Q19 392 19 395Q19 399 22 411T27 425Q29 430 36 430T87 431H140L159 511Q162 522 166 540T173 566T179 586T187 603T197 615T211 624T229 626Q247 625 254 615T261 596Q261 589 252 549T232 470L222 433Q222 431 272 431H323Q330 424 330 420Q330 398 317 385H210L174 240Q135 80 135 68Q135 26 162 26Q197 26 230 60T283 144Q285 150 288 151T303 153H307Q322 153 322 145Q322 142 319 133Q314 117 301 95T267 48T216 6T155 -11Q125 -11 98 4T59 56Q57 64 57 83V101L92 241Q127 382 128 383Q128 385 77 385H26Z"></path></g><g data-mml-node="mi" transform="translate(394,-150) scale(0.707)"><path data-c="1D456" d="M184 600Q184 624 203 642T247 661Q265 661 277 649T290 619Q290 596 270 577T226 557Q211 557 198 567T184 600ZM21 287Q21 295 30 318T54 369T98 420T158 442Q197 442 223 419T250 357Q250 340 236 301T196 196T154 83Q149 61 149 51Q149 26 166 26Q175 26 185 29T208 43T235 78T260 137Q263 149 265 151T282 153Q302 153 302 143Q302 135 293 112T268 61T223 11T161 -11Q129 -11 102 10T74 74Q74 91 79 106T122 220Q160 321 166 341T173 380Q173 404 156 404H154Q124 404 99 371T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Z"></path></g></g><g data-mml-node="mo" transform="translate(6661.7,0)"><path data-c="2295" d="M56 250Q56 394 156 488T384 583Q530 583 626 485T722 250Q722 110 625 14T390 -83Q249 -83 153 14T56 250ZM364 542Q308 539 251 509T148 418T96 278V270H369V542H364ZM681 278Q675 338 650 386T592 462T522 509T458 535T412 542H409V270H681V278ZM96 222Q104 150 139 95T219 12T302 -29T366 -42H369V230H96V222ZM681 222V230H409V-42H412Q429 -42 456 -36T521 -10T590 37T649 113T681 222Z"></path></g><g data-mml-node="mi" transform="translate(7661.9,0)"><path data-c="1D458" d="M121 647Q121 657 125 670T137 683Q138 683 209 688T282 694Q294 694 294 686Q294 679 244 477Q194 279 194 272Q213 282 223 291Q247 309 292 354T362 415Q402 442 438 442Q468 442 485 423T503 369Q503 344 496 327T477 302T456 291T438 288Q418 288 406 299T394 328Q394 353 410 369T442 390L458 393Q446 405 434 405H430Q398 402 367 380T294 316T228 255Q230 254 243 252T267 246T293 238T320 224T342 206T359 180T365 147Q365 130 360 106T354 66Q354 26 381 26Q429 26 459 145Q461 153 479 153H483Q499 153 499 144Q499 139 496 130Q455 -11 378 -11Q333 -11 305 15T277 90Q277 108 280 121T283 145Q283 167 269 183T234 206T200 217T182 220H180Q168 178 159 139T145 81T136 44T129 20T122 7T111 -2Q98 -11 83 -11Q66 -11 57 -1T48 16Q48 26 85 176T158 471L195 616Q196 629 188 632T149 637H144Q134 637 131 637T124 640T121 647Z"></path></g><g data-mml-node="mi" transform="translate(8182.9,0)"><path data-c="1D452" d="M39 168Q39 225 58 272T107 350T174 402T244 433T307 442H310Q355 442 388 420T421 355Q421 265 310 237Q261 224 176 223Q139 223 138 221Q138 219 132 186T125 128Q125 81 146 54T209 26T302 45T394 111Q403 121 406 121Q410 121 419 112T429 98T420 82T390 55T344 24T281 -1T205 -11Q126 -11 83 42T39 168ZM373 353Q367 405 305 405Q272 405 244 391T199 357T170 316T154 280T149 261Q149 260 169 260Q282 260 327 284T373 353Z"></path></g><g data-mml-node="msub" transform="translate(8648.9,0)"><g data-mml-node="mi"><path data-c="1D466" d="M21 287Q21 301 36 335T84 406T158 442Q199 442 224 419T250 355Q248 336 247 334Q247 331 231 288T198 191T182 105Q182 62 196 45T238 27Q261 27 281 38T312 61T339 94Q339 95 344 114T358 173T377 247Q415 397 419 404Q432 431 462 431Q475 431 483 424T494 412T496 403Q496 390 447 193T391 -23Q363 -106 294 -155T156 -205Q111 -205 77 -183T43 -117Q43 -95 50 -80T69 -58T89 -48T106 -45Q150 -45 150 -87Q150 -107 138 -122T115 -142T102 -147L99 -148Q101 -153 118 -160T152 -167H160Q177 -167 186 -165Q219 -156 247 -127T290 -65T313 -9T321 21L315 17Q309 13 296 6T270 -6Q250 -11 231 -11Q185 -11 150 11T104 82Q103 89 103 113Q103 170 138 262T173 379Q173 380 173 381Q173 390 173 393T169 400T158 404H154Q131 404 112 385T82 344T65 302T57 280Q55 278 41 278H27Q21 284 21 287Z"></path></g><g data-mml-node="mi" transform="translate(523,-150) scale(0.707)"><path data-c="1D456" d="M184 600Q184 624 203 642T247 661Q265 661 277 649T290 619Q290 596 270 577T226 557Q211 557 198 567T184 600ZM21 287Q21 295 30 318T54 369T98 420T158 442Q197 442 223 419T250 357Q250 340 236 301T196 196T154 83Q149 61 149 51Q149 26 166 26Q175 26 185 29T208 43T235 78T260 137Q263 149 265 151T282 153Q302 153 302 143Q302 135 293 112T268 61T223 11T161 -11Q129 -11 102 10T74 74Q74 91 79 106T122 220Q160 321 166 341T173 380Q173 404 156 404H154Q124 404 99 371T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Z"></path></g></g><g data-mml-node="mo" transform="translate(9465.9,0)"><path data-c="29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"></path></g></g></g></svg></mjx-container></p>
+<p>功耗模型采用汉明重量：</p>
+<p><mjx-container class="MathJax" jax="SVG" display="true"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="28.645ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 12661 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D43B" d="M228 637Q194 637 192 641Q191 643 191 649Q191 673 202 682Q204 683 219 683Q260 681 355 681Q389 681 418 681T463 682T483 682Q499 682 499 672Q499 670 497 658Q492 641 487 638H485Q483 638 480 638T473 638T464 637T455 637Q416 636 405 634T387 623Q384 619 355 500Q348 474 340 442T328 395L324 380Q324 378 469 378H614L615 381Q615 384 646 504Q674 619 674 627T617 637Q594 637 587 639T580 648Q580 650 582 660Q586 677 588 679T604 682Q609 682 646 681T740 680Q802 680 835 681T871 682Q888 682 888 672Q888 645 876 638H874Q872 638 869 638T862 638T853 637T844 637Q805 636 794 634T776 623Q773 618 704 340T634 58Q634 51 638 51Q646 48 692 46H723Q729 38 729 37T726 19Q722 6 716 0H701Q664 2 567 2Q533 2 504 2T458 2T437 1Q420 1 420 10Q420 15 423 24Q428 43 433 45Q437 46 448 46H454Q481 46 514 49Q520 50 522 50T528 55T534 64T540 82T547 110T558 153Q565 181 569 198Q602 330 602 331T457 332H312L279 197Q245 63 245 58Q245 51 253 49T303 46H334Q340 38 340 37T337 19Q333 6 327 0H312Q275 2 178 2Q144 2 115 2T69 2T48 1Q31 1 31 10Q31 12 34 24Q39 43 44 45Q48 46 59 46H65Q92 46 125 49Q139 52 144 61Q147 65 216 339T285 628Q285 635 228 637Z"></path></g><g data-mml-node="mo" transform="translate(888,0)"><path data-c="28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"></path></g><g data-mml-node="mi" transform="translate(1277,0)"><path data-c="1D458" d="M121 647Q121 657 125 670T137 683Q138 683 209 688T282 694Q294 694 294 686Q294 679 244 477Q194 279 194 272Q213 282 223 291Q247 309 292 354T362 415Q402 442 438 442Q468 442 485 423T503 369Q503 344 496 327T477 302T456 291T438 288Q418 288 406 299T394 328Q394 353 410 369T442 390L458 393Q446 405 434 405H430Q398 402 367 380T294 316T228 255Q230 254 243 252T267 246T293 238T320 224T342 206T359 180T365 147Q365 130 360 106T354 66Q354 26 381 26Q429 26 459 145Q461 153 479 153H483Q499 153 499 144Q499 139 496 130Q455 -11 378 -11Q333 -11 305 15T277 90Q277 108 280 121T283 145Q283 167 269 183T234 206T200 217T182 220H180Q168 178 159 139T145 81T136 44T129 20T122 7T111 -2Q98 -11 83 -11Q66 -11 57 -1T48 16Q48 26 85 176T158 471L195 616Q196 629 188 632T149 637H144Q134 637 131 637T124 640T121 647Z"></path></g><g data-mml-node="mo" transform="translate(1798,0)"><path data-c="29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"></path></g><g data-mml-node="mo" transform="translate(2464.8,0)"><path data-c="3D" d="M56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153Z"></path></g><g data-mml-node="mi" transform="translate(3520.6,0)"><path data-c="1D43B" d="M228 637Q194 637 192 641Q191 643 191 649Q191 673 202 682Q204 683 219 683Q260 681 355 681Q389 681 418 681T463 682T483 682Q499 682 499 672Q499 670 497 658Q492 641 487 638H485Q483 638 480 638T473 638T464 637T455 637Q416 636 405 634T387 623Q384 619 355 500Q348 474 340 442T328 395L324 380Q324 378 469 378H614L615 381Q615 384 646 504Q674 619 674 627T617 637Q594 637 587 639T580 648Q580 650 582 660Q586 677 588 679T604 682Q609 682 646 681T740 680Q802 680 835 681T871 682Q888 682 888 672Q888 645 876 638H874Q872 638 869 638T862 638T853 637T844 637Q805 636 794 634T776 623Q773 618 704 340T634 58Q634 51 638 51Q646 48 692 46H723Q729 38 729 37T726 19Q722 6 716 0H701Q664 2 567 2Q533 2 504 2T458 2T437 1Q420 1 420 10Q420 15 423 24Q428 43 433 45Q437 46 448 46H454Q481 46 514 49Q520 50 522 50T528 55T534 64T540 82T547 110T558 153Q565 181 569 198Q602 330 602 331T457 332H312L279 197Q245 63 245 58Q245 51 253 49T303 46H334Q340 38 340 37T337 19Q333 6 327 0H312Q275 2 178 2Q144 2 115 2T69 2T48 1Q31 1 31 10Q31 12 34 24Q39 43 44 45Q48 46 59 46H65Q92 46 125 49Q139 52 144 61Q147 65 216 339T285 628Q285 635 228 637Z"></path></g><g data-mml-node="mi" transform="translate(4408.6,0)"><path data-c="1D44A" d="M436 683Q450 683 486 682T553 680Q604 680 638 681T677 682Q695 682 695 674Q695 670 692 659Q687 641 683 639T661 637Q636 636 621 632T600 624T597 615Q597 603 613 377T629 138L631 141Q633 144 637 151T649 170T666 200T690 241T720 295T759 362Q863 546 877 572T892 604Q892 619 873 628T831 637Q817 637 817 647Q817 650 819 660Q823 676 825 679T839 682Q842 682 856 682T895 682T949 681Q1015 681 1034 683Q1048 683 1048 672Q1048 666 1045 655T1038 640T1028 637Q1006 637 988 631T958 617T939 600T927 584L923 578L754 282Q586 -14 585 -15Q579 -22 561 -22Q546 -22 542 -17Q539 -14 523 229T506 480L494 462Q472 425 366 239Q222 -13 220 -15T215 -19Q210 -22 197 -22Q178 -22 176 -15Q176 -12 154 304T131 622Q129 631 121 633T82 637H58Q51 644 51 648Q52 671 64 683H76Q118 680 176 680Q301 680 313 683H323Q329 677 329 674T327 656Q322 641 318 637H297Q236 634 232 620Q262 160 266 136L501 550L499 587Q496 629 489 632Q483 636 447 637Q428 637 422 639T416 648Q416 650 418 660Q419 664 420 669T421 676T424 680T428 682T436 683Z"></path></g><g data-mml-node="mo" transform="translate(5456.6,0)"><path data-c="28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"></path></g><g data-mml-node="mi" transform="translate(5845.6,0)"><path data-c="1D446" d="M308 24Q367 24 416 76T466 197Q466 260 414 284Q308 311 278 321T236 341Q176 383 176 462Q176 523 208 573T273 648Q302 673 343 688T407 704H418H425Q521 704 564 640Q565 640 577 653T603 682T623 704Q624 704 627 704T632 705Q645 705 645 698T617 577T585 459T569 456Q549 456 549 465Q549 471 550 475Q550 478 551 494T553 520Q553 554 544 579T526 616T501 641Q465 662 419 662Q362 662 313 616T263 510Q263 480 278 458T319 427Q323 425 389 408T456 390Q490 379 522 342T554 242Q554 216 546 186Q541 164 528 137T492 78T426 18T332 -20Q320 -22 298 -22Q199 -22 144 33L134 44L106 13Q83 -14 78 -18T65 -22Q52 -22 52 -14Q52 -11 110 221Q112 227 130 227H143Q149 221 149 216Q149 214 148 207T144 186T142 153Q144 114 160 87T203 47T255 29T308 24Z"></path></g><g data-mml-node="mtext" transform="translate(6490.6,0)"><path data-c="2D" d="M11 179V252H277V179H11Z"></path><path data-c="42" d="M131 622Q124 629 120 631T104 634T61 637H28V683H229H267H346Q423 683 459 678T531 651Q574 627 599 590T624 512Q624 461 583 419T476 360L466 357Q539 348 595 302T651 187Q651 119 600 67T469 3Q456 1 242 0H28V46H61Q103 47 112 49T131 61V622ZM511 513Q511 560 485 594T416 636Q415 636 403 636T371 636T333 637Q266 637 251 636T232 628Q229 624 229 499V374H312L396 375L406 377Q410 378 417 380T442 393T474 417T499 456T511 513ZM537 188Q537 239 509 282T430 336L329 337H229V200V116Q229 57 234 52Q240 47 334 47H383Q425 47 443 53Q486 67 511 104T537 188Z" transform="translate(333,0)"></path><path data-c="6F" d="M28 214Q28 309 93 378T250 448Q340 448 405 380T471 215Q471 120 407 55T250 -10Q153 -10 91 57T28 214ZM250 30Q372 30 372 193V225V250Q372 272 371 288T364 326T348 362T317 390T268 410Q263 411 252 411Q222 411 195 399Q152 377 139 338T126 246V226Q126 130 145 91Q177 30 250 30Z" transform="translate(1041,0)"></path><path data-c="78" d="M201 0Q189 3 102 3Q26 3 17 0H11V46H25Q48 47 67 52T96 61T121 78T139 96T160 122T180 150L226 210L168 288Q159 301 149 315T133 336T122 351T113 363T107 370T100 376T94 379T88 381T80 383Q74 383 44 385H16V431H23Q59 429 126 429Q219 429 229 431H237V385Q201 381 201 369Q201 367 211 353T239 315T268 274L272 270L297 304Q329 345 329 358Q329 364 327 369T322 376T317 380T310 384L307 385H302V431H309Q324 428 408 428Q487 428 493 431H499V385H492Q443 385 411 368Q394 360 377 341T312 257L296 236L358 151Q424 61 429 57T446 50Q464 46 499 46H516V0H510H502Q494 1 482 1T457 2T432 2T414 3Q403 3 377 3T327 1L304 0H295V46H298Q309 46 320 51T331 63Q331 65 291 120L250 175Q249 174 219 133T185 88Q181 83 181 74Q181 63 188 55T206 46Q208 46 208 23V0H201Z" transform="translate(1541,0)"></path></g><g data-mml-node="mo" transform="translate(8559.6,0)"><path data-c="28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"></path></g><g data-mml-node="mi" transform="translate(8948.6,0)"><path data-c="1D45D" d="M23 287Q24 290 25 295T30 317T40 348T55 381T75 411T101 433T134 442Q209 442 230 378L240 387Q302 442 358 442Q423 442 460 395T497 281Q497 173 421 82T249 -10Q227 -10 210 -4Q199 1 187 11T168 28L161 36Q160 35 139 -51T118 -138Q118 -144 126 -145T163 -148H188Q194 -155 194 -157T191 -175Q188 -187 185 -190T172 -194Q170 -194 161 -194T127 -193T65 -192Q-5 -192 -24 -194H-32Q-39 -187 -39 -183Q-37 -156 -26 -148H-6Q28 -147 33 -136Q36 -130 94 103T155 350Q156 355 156 364Q156 405 131 405Q109 405 94 377T71 316T59 280Q57 278 43 278H29Q23 284 23 287ZM178 102Q200 26 252 26Q282 26 310 49T356 107Q374 141 392 215T411 325V331Q411 405 350 405Q339 405 328 402T306 393T286 380T269 365T254 350T243 336T235 326L232 322Q232 321 229 308T218 264T204 212Q178 106 178 102Z"></path></g><g data-mml-node="msub" transform="translate(9451.6,0)"><g data-mml-node="mi"><path data-c="1D461" d="M26 385Q19 392 19 395Q19 399 22 411T27 425Q29 430 36 430T87 431H140L159 511Q162 522 166 540T173 566T179 586T187 603T197 615T211 624T229 626Q247 625 254 615T261 596Q261 589 252 549T232 470L222 433Q222 431 272 431H323Q330 424 330 420Q330 398 317 385H210L174 240Q135 80 135 68Q135 26 162 26Q197 26 230 60T283 144Q285 150 288 151T303 153H307Q322 153 322 145Q322 142 319 133Q314 117 301 95T267 48T216 6T155 -11Q125 -11 98 4T59 56Q57 64 57 83V101L92 241Q127 382 128 383Q128 385 77 385H26Z"></path></g><g data-mml-node="mi" transform="translate(394,-150) scale(0.707)"><path data-c="1D456" d="M184 600Q184 624 203 642T247 661Q265 661 277 649T290 619Q290 596 270 577T226 557Q211 557 198 567T184 600ZM21 287Q21 295 30 318T54 369T98 420T158 442Q197 442 223 419T250 357Q250 340 236 301T196 196T154 83Q149 61 149 51Q149 26 166 26Q175 26 185 29T208 43T235 78T260 137Q263 149 265 151T282 153Q302 153 302 143Q302 135 293 112T268 61T223 11T161 -11Q129 -11 102 10T74 74Q74 91 79 106T122 220Q160 321 166 341T173 380Q173 404 156 404H154Q124 404 99 371T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Z"></path></g></g><g data-mml-node="mo" transform="translate(10361.7,0)"><path data-c="2295" d="M56 250Q56 394 156 488T384 583Q530 583 626 485T722 250Q722 110 625 14T390 -83Q249 -83 153 14T56 250ZM364 542Q308 539 251 509T148 418T96 278V270H369V542H364ZM681 278Q675 338 650 386T592 462T522 509T458 535T412 542H409V270H681V278ZM96 222Q104 150 139 95T219 12T302 -29T366 -42H369V230H96V222ZM681 222V230H409V-42H412Q429 -42 456 -36T521 -10T590 37T649 113T681 222Z"></path></g><g data-mml-node="mi" transform="translate(11362,0)"><path data-c="1D458" d="M121 647Q121 657 125 670T137 683Q138 683 209 688T282 694Q294 694 294 686Q294 679 244 477Q194 279 194 272Q213 282 223 291Q247 309 292 354T362 415Q402 442 438 442Q468 442 485 423T503 369Q503 344 496 327T477 302T456 291T438 288Q418 288 406 299T394 328Q394 353 410 369T442 390L458 393Q446 405 434 405H430Q398 402 367 380T294 316T228 255Q230 254 243 252T267 246T293 238T320 224T342 206T359 180T365 147Q365 130 360 106T354 66Q354 26 381 26Q429 26 459 145Q461 153 479 153H483Q499 153 499 144Q499 139 496 130Q455 -11 378 -11Q333 -11 305 15T277 90Q277 108 280 121T283 145Q283 167 269 183T234 206T200 217T182 220H180Q168 178 159 139T145 81T136 44T129 20T122 7T111 -2Q98 -11 83 -11Q66 -11 57 -1T48 16Q48 26 85 176T158 471L195 616Q196 629 188 632T149 637H144Q134 637 131 637T124 640T121 647Z"></path></g><g data-mml-node="mo" transform="translate(11883,0)"><path data-c="29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"></path></g><g data-mml-node="mo" transform="translate(12272,0)"><path data-c="29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"></path></g></g></g></svg></mjx-container></p>
+<p>对每个字节枚举 <code>k</code> 的 256 种可能值，计算假设功耗和真实轨迹之间的皮尔逊相关系数。相关系数绝对值最大的候选就是该字节最可能的密钥值。</p>
+<h3 id="CPA-脚本"><a href="#CPA-脚本" class="headerlink" title="CPA 脚本"></a>CPA 脚本</h3><p>下面是整理并修正缩进后的脚本。AES S-Box 使用标准的 256 项查找表：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> Crypto.Cipher <span class="keyword">import</span> AES</span><br><span class="line"><span class="keyword">from</span> Crypto.Util.Padding <span class="keyword">import</span> unpad</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">SBOX = np.array(</span><br><span class="line">    [</span><br><span class="line">        <span class="number">0x63</span>, <span class="number">0x7C</span>, <span class="number">0x77</span>, <span class="number">0x7B</span>, <span class="number">0xF2</span>, <span class="number">0x6B</span>, <span class="number">0x6F</span>, <span class="number">0xC5</span>,</span><br><span class="line">        <span class="number">0x30</span>, <span class="number">0x01</span>, <span class="number">0x67</span>, <span class="number">0x2B</span>, <span class="number">0xFE</span>, <span class="number">0xD7</span>, <span class="number">0xAB</span>, <span class="number">0x76</span>,</span><br><span class="line">        <span class="number">0xCA</span>, <span class="number">0x82</span>, <span class="number">0xC9</span>, <span class="number">0x7D</span>, <span class="number">0xFA</span>, <span class="number">0x59</span>, <span class="number">0x47</span>, <span class="number">0xF0</span>,</span><br><span class="line">        <span class="number">0xAD</span>, <span class="number">0xD4</span>, <span class="number">0xA2</span>, <span class="number">0xAF</span>, <span class="number">0x9C</span>, <span class="number">0xA4</span>, <span class="number">0x72</span>, <span class="number">0xC0</span>,</span><br><span class="line">        <span class="number">0xB7</span>, <span class="number">0xFD</span>, <span class="number">0x93</span>, <span class="number">0x26</span>, <span class="number">0x36</span>, <span class="number">0x3F</span>, <span class="number">0xF7</span>, <span class="number">0xCC</span>,</span><br><span class="line">        <span class="number">0x34</span>, <span class="number">0xA5</span>, <span class="number">0xE5</span>, <span class="number">0xF1</span>, <span class="number">0x71</span>, <span class="number">0xD8</span>, <span class="number">0x31</span>, <span class="number">0x15</span>,</span><br><span class="line">        <span class="number">0x04</span>, <span class="number">0xC7</span>, <span class="number">0x23</span>, <span class="number">0xC3</span>, <span class="number">0x18</span>, <span class="number">0x96</span>, <span class="number">0x05</span>, <span class="number">0x9A</span>,</span><br><span class="line">        <span class="number">0x07</span>, <span class="number">0x12</span>, <span class="number">0x80</span>, <span class="number">0xE2</span>, <span class="number">0xEB</span>, <span class="number">0x27</span>, <span class="number">0xB2</span>, <span class="number">0x75</span>,</span><br><span class="line">        <span class="number">0x09</span>, <span class="number">0x83</span>, <span class="number">0x2C</span>, <span class="number">0x1A</span>, <span class="number">0x1B</span>, <span class="number">0x6E</span>, <span class="number">0x5A</span>, <span class="number">0xA0</span>,</span><br><span class="line">        <span class="number">0x52</span>, <span class="number">0x3B</span>, <span class="number">0xD6</span>, <span class="number">0xB3</span>, <span class="number">0x29</span>, <span class="number">0xE3</span>, <span class="number">0x2F</span>, <span class="number">0x84</span>,</span><br><span class="line">        <span class="number">0x53</span>, <span class="number">0xD1</span>, <span class="number">0x00</span>, <span class="number">0xED</span>, <span class="number">0x20</span>, <span class="number">0xFC</span>, <span class="number">0xB1</span>, <span class="number">0x5B</span>,</span><br><span class="line">        <span class="number">0x6A</span>, <span class="number">0xCB</span>, <span class="number">0xBE</span>, <span class="number">0x39</span>, <span class="number">0x4A</span>, <span class="number">0x4C</span>, <span class="number">0x58</span>, <span class="number">0xCF</span>,</span><br><span class="line">        <span class="number">0xD0</span>, <span class="number">0xEF</span>, <span class="number">0xAA</span>, <span class="number">0xFB</span>, <span class="number">0x43</span>, <span class="number">0x4D</span>, <span class="number">0x33</span>, <span class="number">0x85</span>,</span><br><span class="line">        <span class="number">0x45</span>, <span class="number">0xF9</span>, <span class="number">0x02</span>, <span class="number">0x7F</span>, <span class="number">0x50</span>, <span class="number">0x3C</span>, <span class="number">0x9F</span>, <span class="number">0xA8</span>,</span><br><span class="line">        <span class="number">0x51</span>, <span class="number">0xA3</span>, <span class="number">0x40</span>, <span class="number">0x8F</span>, <span class="number">0x92</span>, <span class="number">0x9D</span>, <span class="number">0x38</span>, <span class="number">0xF5</span>,</span><br><span class="line">        <span class="number">0xBC</span>, <span class="number">0xB6</span>, <span class="number">0xDA</span>, <span class="number">0x21</span>, <span class="number">0x10</span>, <span class="number">0xFF</span>, <span class="number">0xF3</span>, <span class="number">0xD2</span>,</span><br><span class="line">        <span class="number">0xCD</span>, <span class="number">0x0C</span>, <span class="number">0x13</span>, <span class="number">0xEC</span>, <span class="number">0x5F</span>, <span class="number">0x97</span>, <span class="number">0x44</span>, <span class="number">0x17</span>,</span><br><span class="line">        <span class="number">0xC4</span>, <span class="number">0xA7</span>, <span class="number">0x7E</span>, <span class="number">0x3D</span>, <span class="number">0x64</span>, <span class="number">0x5D</span>, <span class="number">0x19</span>, <span class="number">0x73</span>,</span><br><span class="line">        <span class="number">0x60</span>, <span class="number">0x81</span>, <span class="number">0x4F</span>, <span class="number">0xDC</span>, <span class="number">0x22</span>, <span class="number">0x2A</span>, <span class="number">0x90</span>, <span class="number">0x88</span>,</span><br><span class="line">        <span class="number">0x46</span>, <span class="number">0xEE</span>, <span class="number">0xB8</span>, <span class="number">0x14</span>, <span class="number">0xDE</span>, <span class="number">0x5E</span>, <span class="number">0x0B</span>, <span class="number">0xDB</span>,</span><br><span class="line">        <span class="number">0xE0</span>, <span class="number">0x32</span>, <span class="number">0x3A</span>, <span class="number">0x0A</span>, <span class="number">0x49</span>, <span class="number">0x06</span>, <span class="number">0x24</span>, <span class="number">0x5C</span>,</span><br><span class="line">        <span class="number">0xC2</span>, <span class="number">0xD3</span>, <span class="number">0xAC</span>, <span class="number">0x62</span>, <span class="number">0x91</span>, <span class="number">0x95</span>, <span class="number">0xE4</span>, <span class="number">0x79</span>,</span><br><span class="line">        <span class="number">0xE7</span>, <span class="number">0xC8</span>, <span class="number">0x37</span>, <span class="number">0x6D</span>, <span class="number">0x8D</span>, <span class="number">0xD5</span>, <span class="number">0x4E</span>, <span class="number">0xA9</span>,</span><br><span class="line">        <span class="number">0x6C</span>, <span class="number">0x56</span>, <span class="number">0xF4</span>, <span class="number">0xEA</span>, <span class="number">0x65</span>, <span class="number">0x7A</span>, <span class="number">0xAE</span>, <span class="number">0x08</span>,</span><br><span class="line">        <span class="number">0xBA</span>, <span class="number">0x78</span>, <span class="number">0x25</span>, <span class="number">0x2E</span>, <span class="number">0x1C</span>, <span class="number">0xA6</span>, <span class="number">0xB4</span>, <span class="number">0xC6</span>,</span><br><span class="line">        <span class="number">0xE8</span>, <span class="number">0xDD</span>, <span class="number">0x74</span>, <span class="number">0x1F</span>, <span class="number">0x4B</span>, <span class="number">0xBD</span>, <span class="number">0x8B</span>, <span class="number">0x8A</span>,</span><br><span class="line">        <span class="number">0x70</span>, <span class="number">0x3E</span>, <span class="number">0xB5</span>, <span class="number">0x66</span>, <span class="number">0x48</span>, <span class="number">0x03</span>, <span class="number">0xF6</span>, <span class="number">0x0E</span>,</span><br><span class="line">        <span class="number">0x61</span>, <span class="number">0x35</span>, <span class="number">0x57</span>, <span class="number">0xB9</span>, <span class="number">0x86</span>, <span class="number">0xC1</span>, <span class="number">0x1D</span>, <span class="number">0x9E</span>,</span><br><span class="line">        <span class="number">0xE1</span>, <span class="number">0xF8</span>, <span class="number">0x98</span>, <span class="number">0x11</span>, <span class="number">0x69</span>, <span class="number">0xD9</span>, <span class="number">0x8E</span>, <span class="number">0x94</span>,</span><br><span class="line">        <span class="number">0x9B</span>, <span class="number">0x1E</span>, <span class="number">0x87</span>, <span class="number">0xE9</span>, <span class="number">0xCE</span>, <span class="number">0x55</span>, <span class="number">0x28</span>, <span class="number">0xDF</span>,</span><br><span class="line">        <span class="number">0x8C</span>, <span class="number">0xA1</span>, <span class="number">0x89</span>, <span class="number">0x0D</span>, <span class="number">0xBF</span>, <span class="number">0xE6</span>, <span class="number">0x42</span>, <span class="number">0x68</span>,</span><br><span class="line">        <span class="number">0x41</span>, <span class="number">0x99</span>, <span class="number">0x2D</span>, <span class="number">0x0F</span>, <span class="number">0xB0</span>, <span class="number">0x54</span>, <span class="number">0xBB</span>, <span class="number">0x16</span>,</span><br><span class="line">    ],</span><br><span class="line">    dtype=np.uint8,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">HW = np.array([<span class="built_in">bin</span>(value).count(<span class="string">"1"</span>) <span class="keyword">for</span> value <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">256</span>)])</span><br><span class="line"></span><br><span class="line">plaintexts = np.load(<span class="string">"plaintexts.npy"</span>)</span><br><span class="line">traces = np.load(<span class="string">"traces.npy"</span>)</span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">"encrypted_flag.bin"</span>, <span class="string">"rb"</span>) <span class="keyword">as</span> file:</span><br><span class="line">    encrypted_flag = file.read()</span><br><span class="line"></span><br><span class="line">n_traces, n_samples = traces.shape</span><br><span class="line">trace_centered = traces - traces.mean(axis=<span class="number">0</span>)</span><br><span class="line">trace_std = traces.std(axis=<span class="number">0</span>)</span><br><span class="line">recovered_key = []</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> byte_index <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">16</span>):</span><br><span class="line">    plaintext_byte = plaintexts[:, byte_index].astype(np.uint8)</span><br><span class="line">    max_correlations = np.zeros(<span class="number">256</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> candidate <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">256</span>):</span><br><span class="line">        hypothesis = HW[SBOX[plaintext_byte ^ candidate]].astype(<span class="built_in">float</span>)</span><br><span class="line">        hypothesis_centered = hypothesis - hypothesis.mean()</span><br><span class="line">        covariance = hypothesis_centered @ trace_centered / n_traces</span><br><span class="line">        correlation = np.<span class="built_in">abs</span>(</span><br><span class="line">            covariance / (hypothesis.std() * trace_std + <span class="number">1e-10</span>)</span><br><span class="line">        )</span><br><span class="line">        max_correlations[candidate] = correlation.<span class="built_in">max</span>()</span><br><span class="line"></span><br><span class="line">    best = <span class="built_in">int</span>(np.argmax(max_correlations))</span><br><span class="line">    recovered_key.append(best)</span><br><span class="line">    <span class="built_in">print</span>(</span><br><span class="line">        <span class="string">f"Byte <span class="subst">{byte_index:2d}</span>: "</span></span><br><span class="line">        <span class="string">f"0x<span class="subst">{best:02x}</span>, corr=<span class="subst">{max_correlations[best]:<span class="number">.4</span>f}</span>"</span></span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">key = <span class="built_in">bytes</span>(recovered_key)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f"\nKey: <span class="subst">{key.<span class="built_in">hex</span>()}</span>"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 文件的前 16 字节是 IV，剩余部分是 CBC 密文。</span></span><br><span class="line">iv = encrypted_flag[:<span class="number">16</span>]</span><br><span class="line">ciphertext = encrypted_flag[<span class="number">16</span>:]</span><br><span class="line">flag = unpad(AES.new(key, AES.MODE_CBC, iv).decrypt(ciphertext), <span class="number">16</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f"Flag: <span class="subst">{flag.decode()}</span>"</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="解密过程"><a href="#解密过程" class="headerlink" title="解密过程"></a>解密过程</h3><p>加密文件长度为 64 字节，其中前 16 字节可以作为 IV，剩下 48 字节是 AES-CBC 密文。恢复 16 字节密钥后，使用 CBC 模式解密并去除 PKCS#7 padding 即可得到 flag。</p>
+<p>题目材料给出了运行结果：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">texsaw{d1ffer3nti&amp;!*p0w3r*@n4!y51s}</span><br></pre></td></tr></table></figure>
+
+<h2 id="Docker-ception"><a href="#Docker-ception" class="headerlink" title="Docker-ception"></a>Docker-ception</h2><h3 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h3><p>后端会执行类似 <code>ping admin</code> 的操作，输入没有被正确限制，因此可以从主机名或参数位置尝试命令注入。利用注入读取 <code>/home/ctfer</code> 目录，找到其中保存的 flag。</p>
+<p>原始材料没有记录具体的 Payload 和最终 flag，因此这里只保留攻击方向。</p>
+<h2 id="Lost-my-keys"><a href="#Lost-my-keys" class="headerlink" title="Lost my keys"></a>Lost my keys</h2><p>题目提供了两张看起来完全相同的 PNG。将两张图片逐像素比较，把不同像素转换成二进制序列，再按 ASCII 解码即可得到 flag。</p>
+<p>图片附件没有随文章保存，因此没有在文章中添加图片引用；原始材料也没有记录解码后的具体 flag。</p>
+<h2 id="Broken-Quest"><a href="#Broken-Quest" class="headerlink" title="Broken Quest"></a>Broken Quest</h2><h3 id="状态机分析"><a href="#状态机分析" class="headerlink" title="状态机分析"></a>状态机分析</h3><p>这是一个“任务”模拟器。玩家通过 0 到 8 号操作改变一个包含 8 个整数的状态数组，满足目标状态后执行 <code>turn_in</code>。</p>
+<p>关键函数如下：</p>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>turn_in</code></td>
+<td>用 <code>memcmp</code> 比较状态前 8 字节，要求 <code>state[0] == 2</code>、<code>state[1] == 6</code>，通过后调用 <code>handle_flag</code>。</td>
+</tr>
+<tr>
+<td><code>handle_flag</code></td>
+<td>使用完整状态作为密钥，通过置换矩阵和 8 种运算解密数据。</td>
+</tr>
+<tr>
+<td><code>transform</code></td>
+<td>对密文逐字节执行 <code>key_byte XOR enc_byte</code>。</td>
+</tr>
+<tr>
+<td><code>calc_val</code></td>
+<td>循环调用 <code>op0</code> 到 <code>op7</code>，生成每个字节的密钥。</td>
+</tr>
+</tbody></table>
+<p>从 <code>main</code> 中提取出的目标状态为：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[2, 6, -4, 6, 0, 4, -3, 1]</span><br></pre></td></tr></table></figure>
+
+<h3 id="解密"><a href="#解密" class="headerlink" title="解密"></a>解密</h3><p>将 8 个状态值按置换矩阵展开为 8×8 矩阵，然后分成 8 段解密，每段使用不同的行、偏移和长度。最终得到：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">texsaw{1t_ju5t_work5_m0r3_l1k3_!t_d0e5nt_w0rk}</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CTF/" rel="tag"># CTF</a>
+              <a href="/tags/crypto/" rel="tag"># crypto</a>
+              <a href="/tags/TexSAW/" rel="tag"># TexSAW</a>
+              <a href="/tags/side-channel/" rel="tag"># side-channel</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/09/19/UMassCTF-2026-Writeup/" rel="prev" title="UMassCTF 2026 Writeup">
+                  <i class="fa fa-angle-left"></i> UMassCTF 2026 Writeup
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/09/21/HGAME-2026-%E5%A4%8D%E7%8E%B0/" rel="next" title="HGAME 2026 复现">
+                  HGAME 2026 复现 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+  
+  
+  <section class="post-comments">
+    <div class="comments-header">
+      <h2>
+        <span>💬</span>
+        评论与讨论
+      </h2>
+      <p>
+        分享你的想法和见解
+      </p>
+    </div>
+
+    
+    <div class="comments-container">
+    </div>
+  </section>
+  
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Mofan</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<div id="aplayer" aria-label="全局音乐播放器"></div>
+
+<script>
+(function() {
+  const THEME = {
+    cream: '#FFF3C9',
+    pink: '#F3B3CC',
+    cyan: '#ABE5E8',
+    ink: '#236c73'
+  };
+  const APLAYER_JS = 'https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js';
+  const APLAYER_CSS = 'https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css';
+  const GSAP_JS = 'https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js';
+  const SCROLL_TRIGGER_JS = 'https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js';
+
+  window.PinkodeEnhance = window.PinkodeEnhance || {};
+  const app = window.PinkodeEnhance;
+  app.pageTweens = app.pageTweens || [];
+  app.scrollTriggers = app.scrollTriggers || [];
+  app.bgTweens = app.bgTweens || [];
+
+  function loadStyle(href) {
+    if ([...document.styleSheets].some(sheet => sheet.href && sheet.href.includes(href))) {
+      return Promise.resolve();
+    }
+    if (document.querySelector(`link[href="${href}"]`)) return Promise.resolve();
+    return new Promise((resolve, reject) => {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = href;
+      link.onload = resolve;
+      link.onerror = reject;
+      document.head.appendChild(link);
+    });
+  }
+
+  function loadScript(src, globalName) {
+    if (globalName && window[globalName]) return Promise.resolve(window[globalName]);
+    const existing = document.querySelector(`script[src="${src}"]`);
+    if (existing) {
+      return new Promise(resolve => {
+        if (!globalName || window[globalName]) {
+          resolve(window[globalName]);
+          return;
+        }
+        existing.addEventListener('load', () => resolve(window[globalName]), { once: true });
+      });
+    }
+    return new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = src;
+      script.defer = true;
+      script.onload = () => resolve(globalName ? window[globalName] : true);
+      script.onerror = reject;
+      document.head.appendChild(script);
+    });
+  }
+
+  function ensureAPlayer() {
+    return loadStyle(APLAYER_CSS)
+      .then(() => loadScript(APLAYER_JS, 'APlayer'))
+      .then(() => {
+        if (app.aplayerInstance) return app.aplayerInstance;
+        const container = document.getElementById('aplayer');
+        if (!container || typeof APlayer === 'undefined') return null;
+        app.aplayerInstance = new APlayer({
+          container,
+          fixed: true,
+          mini: false,
+          autoplay: false,
+          theme: THEME.pink,
+          loop: 'all',
+          order: 'list',
+          preload: 'auto',
+          volume: 0.65,
+          mutex: true,
+          lrcType: 0,
+          audio: [{
+            name: 'My Foolish Heart~',
+            artist: '椎名林檎',
+            url: '/music/bg-music.mp3',
+            cover: '/images/music-covers/R.jpg',
+            theme: THEME.cyan
+          }]
+        });
+        return app.aplayerInstance;
+      })
+      .catch(error => console.warn('[PinkodeEnhance] APlayer load failed:', error));
+  }
+
+  function ensureGSAP() {
+    return loadScript(GSAP_JS, 'gsap')
+      .then(() => loadScript(SCROLL_TRIGGER_JS, 'ScrollTrigger'))
+      .then(() => {
+        if (window.gsap && window.ScrollTrigger) {
+          gsap.registerPlugin(ScrollTrigger);
+          gsap.defaults({ duration: 0.65, ease: 'power3.out' });
+        }
+        return window.gsap;
+      })
+      .catch(error => console.warn('[PinkodeEnhance] GSAP load failed:', error));
+  }
+
+  function clearPageMotion() {
+    app.pageTweens.forEach(tween => tween && tween.kill && tween.kill());
+    app.pageTweens = [];
+    if (window.ScrollTrigger) {
+      app.scrollTriggers.forEach(trigger => trigger && trigger.kill && trigger.kill());
+      app.scrollTriggers = [];
+    }
+  }
+
+  function ensureCuteBackground() {
+    let layer = document.querySelector('.pinkode-bg-layer');
+    if (!layer) {
+      layer = document.createElement('div');
+      layer.className = 'pinkode-bg-layer';
+      layer.setAttribute('aria-hidden', 'true');
+      document.body.prepend(layer);
+    }
+    if (layer.dataset.pinkodeReady) return;
+    layer.dataset.pinkodeReady = 'true';
+
+    const specs = [
+      ['star', 'pink', 5, 10, 30, 0.72], ['heart', 'cyan', 18, 16, 34, 0.64],
+      ['flower', 'pink', 33, 9, 42, 0.62], ['bubble', 'cyan', 52, 13, 54, 0.46],
+      ['petal', 'pink', 68, 8, 30, 0.68], ['bow', 'cyan', 84, 16, 48, 0.56],
+      ['star', 'cyan', 94, 6, 28, 0.66], ['heart', 'pink', 8, 34, 38, 0.64],
+      ['flower', 'cyan', 23, 46, 44, 0.56], ['bubble', 'pink', 40, 33, 64, 0.38],
+      ['petal', 'cyan', 58, 43, 28, 0.62], ['bow', 'pink', 76, 36, 46, 0.58],
+      ['star', 'pink', 91, 48, 26, 0.64], ['heart', 'cyan', 4, 65, 34, 0.58],
+      ['flower', 'pink', 17, 82, 40, 0.58], ['bubble', 'cyan', 32, 68, 58, 0.4],
+      ['petal', 'pink', 49, 78, 30, 0.62], ['bow', 'cyan', 64, 68, 44, 0.52],
+      ['star', 'cyan', 80, 86, 28, 0.62], ['heart', 'pink', 94, 76, 36, 0.58],
+      ['flower', 'cyan', 2, 92, 36, 0.5], ['bubble', 'pink', 88, 96, 62, 0.34],
+      ['petal', 'cyan', 44, 4, 22, 0.58], ['bow', 'pink', 56, 94, 38, 0.5],
+      ['star', 'pink', 72, 58, 22, 0.6], ['heart', 'cyan', 28, 92, 30, 0.52],
+      ['flower', 'pink', 98, 28, 34, 0.5], ['bubble', 'cyan', 12, 52, 48, 0.38]
+    ];
+
+    const fragment = document.createDocumentFragment();
+    specs.forEach(([shape, colorName, x, y, size, opacity], index) => {
+      const item = document.createElement('i');
+      item.className = `pinkode-floatie pinkode-floatie--${shape}`;
+      item.style.setProperty('--x', `${x}%`);
+      item.style.setProperty('--y', `${y}%`);
+      item.style.setProperty('--s', `${size}px`);
+      item.style.setProperty('--o', opacity);
+      item.style.setProperty('--c', colorName === 'pink' ? THEME.pink : THEME.cyan);
+      item.dataset.floatIndex = index;
+      if (shape === 'bow') item.appendChild(document.createElement('span'));
+      fragment.appendChild(item);
+    });
+    layer.appendChild(fragment);
+  }
+
+  function animateCuteBackground() {
+    if (!window.gsap || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    ensureCuteBackground();
+    if (app.bgTweens.length) return;
+    const items = document.querySelectorAll('.pinkode-floatie');
+    items.forEach((item, index) => {
+      const driftX = index % 2 ? 58 : -58;
+      const driftY = index % 3 ? -70 : 70;
+      const duration = 4.8 + (index % 6) * 0.72;
+      app.bgTweens.push(gsap.to(item, {
+        x: driftX,
+        y: driftY,
+        rotation: index % 2 ? 36 : -36,
+        scale: 1.08 + (index % 4) * 0.08,
+        duration,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+        delay: index * 0.16
+      }));
+    });
+  }
+
+  function animatePage() {
+    if (!window.gsap) return;
+    clearPageMotion();
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const main = document.querySelector('.main-inner');
+    const headerItems = document.querySelectorAll('.brand, .menu-item, .site-search');
+    const heroParts = document.querySelectorAll('.home-hero__copy, .home-hero__mark, .home-hero__actions');
+    const cards = document.querySelectorAll('.featured-post, .post-item, .post-block, .collection-title, .category-list-item, .tag-cloud a, .archive .post-header');
+    const buttons = document.querySelectorAll('.btn, .post-button .btn, .pagination a, .featured-post a, .post-item a, .menu-item a, .sidebar-button a');
+
+    gsap.set([main, ...cards], { willChange: 'transform, opacity' });
+    app.pageTweens.push(gsap.fromTo(main, {
+      autoAlpha: 0,
+      y: reduceMotion ? 0 : 18,
+      filter: reduceMotion ? 'none' : 'blur(8px)'
+    }, {
+      autoAlpha: 1,
+      y: 0,
+      filter: 'blur(0px)',
+      duration: reduceMotion ? 0.01 : 0.7,
+      clearProps: 'filter,willChange'
+    }));
+
+    if (headerItems.length) {
+      app.pageTweens.push(gsap.fromTo(headerItems, {
+        autoAlpha: 0,
+        y: reduceMotion ? 0 : -12
+      }, {
+        autoAlpha: 1,
+        y: 0,
+        stagger: 0.04,
+        duration: reduceMotion ? 0.01 : 0.55,
+        clearProps: 'willChange'
+      }));
+    }
+
+    if (heroParts.length) {
+      app.pageTweens.push(gsap.fromTo(heroParts, {
+        autoAlpha: 0,
+        y: reduceMotion ? 0 : 24,
+        scale: reduceMotion ? 1 : 0.98
+      }, {
+        autoAlpha: 1,
+        y: 0,
+        scale: 1,
+        stagger: 0.08,
+        duration: reduceMotion ? 0.01 : 0.78,
+        ease: 'expo.out'
+      }));
+    }
+
+    if (cards.length && window.ScrollTrigger && !reduceMotion) {
+      const batch = ScrollTrigger.batch(cards, {
+        start: 'top 86%',
+        once: true,
+        onEnter: elements => gsap.fromTo(elements, {
+          autoAlpha: 0,
+          y: 32,
+          scale: 0.985
+        }, {
+          autoAlpha: 1,
+          y: 0,
+          scale: 1,
+          stagger: 0.08,
+          duration: 0.8,
+          overwrite: true,
+          clearProps: 'willChange'
+        })
+      });
+      app.scrollTriggers.push(...batch);
+    }
+
+    buttons.forEach(button => {
+      if (button.dataset.pinkodeHover) return;
+      button.dataset.pinkodeHover = 'true';
+      button.addEventListener('mouseenter', () => gsap.to(button, { y: -2, scale: 1.018, duration: 0.22, overwrite: 'auto' }));
+      button.addEventListener('mouseleave', () => gsap.to(button, { y: 0, scale: 1, duration: 0.22, overwrite: 'auto' }));
+    });
+
+    if (window.ScrollTrigger) {
+      setTimeout(() => ScrollTrigger.refresh(), 120);
+    }
+  }
+
+  function enhanceBackToTop() {
+    const button = document.querySelector('.back-to-top');
+    if (!button || button.dataset.pinkodeBackTop) return;
+    button.dataset.pinkodeBackTop = 'true';
+    button.setAttribute('title', '回到顶部');
+    if (!window.gsap) return;
+
+    gsap.set(button, { autoAlpha: 0, y: 16, scale: 0.88, pointerEvents: 'none' });
+    const setVisible = visible => {
+      gsap.to(button, {
+        autoAlpha: visible ? 1 : 0,
+        y: visible ? 0 : 16,
+        scale: visible ? 1 : 0.88,
+        pointerEvents: visible ? 'auto' : 'none',
+        duration: 0.28,
+        overwrite: 'auto'
+      });
+    };
+    const onScroll = () => setVisible(window.scrollY > Math.min(360, window.innerHeight * 0.45));
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    button.addEventListener('click', event => {
+      event.preventDefault();
+      const scrollState = { y: window.scrollY };
+      gsap.to(scrollState, {
+        y: 0,
+        duration: 0.75,
+        ease: 'power3.inOut',
+        onUpdate: () => window.scrollTo(0, scrollState.y)
+      });
+    });
+  }
+
+  function enhanceMenus() {
+    const toggle = document.querySelector('.site-nav-toggle .toggle');
+    const siteNav = document.querySelector('.site-nav');
+    if (!toggle || !siteNav || toggle.dataset.pinkodeMenu) return;
+    toggle.dataset.pinkodeMenu = 'true';
+    toggle.addEventListener('click', () => {
+      if (!window.gsap || !document.body.classList.contains('site-nav-on')) return;
+      gsap.fromTo('.site-nav .menu-item', {
+        autoAlpha: 0,
+        y: -10
+      }, {
+        autoAlpha: 1,
+        y: 0,
+        stagger: 0.045,
+        duration: 0.35,
+        overwrite: true
+      });
+    });
+  }
+
+  function refreshComments() {
+    const container = document.querySelector('.comments-container');
+    if (!container) return;
+    const giscus = container.querySelector('script[src*="giscus.app/client.js"], iframe.giscus-frame');
+    if (giscus) return;
+    const script = document.createElement('script');
+    script.src = 'https://giscus.app/client.js';
+    script.setAttribute('data-repo', 'P1nk0d3/P1nk0d3.github.io');
+    script.setAttribute('data-repo-id', 'R_kgDOQm6oMw');
+    script.setAttribute('data-category', 'Announcements');
+    script.setAttribute('data-category-id', 'DIC_kwDOQm6oM84CzxkR');
+    script.setAttribute('data-mapping', 'pathname');
+    script.setAttribute('data-strict', '0');
+    script.setAttribute('data-reactions-enabled', '1');
+    script.setAttribute('data-emit-metadata', '0');
+    script.setAttribute('data-input-position', 'top');
+    script.setAttribute('data-theme', 'preferred_color_scheme');
+    script.setAttribute('data-lang', 'zh-CN');
+    script.setAttribute('data-loading', 'lazy');
+    script.crossOrigin = 'anonymous';
+    script.async = true;
+    container.appendChild(script);
+  }
+
+  function fixCompatibility() {
+    if (/firefox/i.test(navigator.userAgent)) {
+      document.querySelector('meta[name="theme-color"]')?.setAttribute('content', THEME.cream);
+    }
+    if (/safari/i.test(navigator.userAgent) && !/chrome/i.test(navigator.userAgent)) {
+      document.querySelectorAll('input[autocapitalize]').forEach(input => input.removeAttribute('autocapitalize'));
+    }
+  }
+
+  function initPageEnhancements() {
+    ensureCuteBackground();
+    ensureGSAP().then(() => {
+      animateCuteBackground();
+      animatePage();
+      enhanceBackToTop();
+      enhanceMenus();
+    });
+    refreshComments();
+    fixCompatibility();
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    ensureAPlayer();
+    initPageEnhancements();
+  });
+  document.addEventListener('page:loaded', initPageEnhancements);
+  document.addEventListener('pjax:send', clearPageMotion);
+  document.addEventListener('click', () => {
+    document.querySelectorAll('audio').forEach(audio => { audio.volume = Math.min(audio.volume || 0.65, 0.65); });
+  }, { once: true });
+})();
+</script>
+
+</body>
+</html>

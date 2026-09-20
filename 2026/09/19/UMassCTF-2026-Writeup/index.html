@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css">
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#FFF3C9"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#FFF3C9">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"giscus","storage":true,"lazyload":true,"nav":{"giscus":{"text":"GitHub 评论","order":1}}},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="UMassCTF 2026 Writeup这篇文章整理 UMassCTF 2026 的几道题目。题目按照比赛名称集中记录，并在开头提供索引。 题目索引 BrOWSER BOSS FIGHT The Accursed Lego Bin Batcave Bitflips Son of a Sith Brick by Brick  BrOWSER BOSS FIGHT题目分析服务响应中直接提示了正确 k">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UMassCTF 2026 Writeup">
+<meta property="og:url" content="http://example.com/2026/09/19/UMassCTF-2026-Writeup/index.html">
+<meta property="og:site_name" content="Pinkode神秘小作坊">
+<meta property="og:description" content="UMassCTF 2026 Writeup这篇文章整理 UMassCTF 2026 的几道题目。题目按照比赛名称集中记录，并在开头提供索引。 题目索引 BrOWSER BOSS FIGHT The Accursed Lego Bin Batcave Bitflips Son of a Sith Brick by Brick  BrOWSER BOSS FIGHT题目分析服务响应中直接提示了正确 k">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-09-19T12:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-20T16:11:35.646Z">
+<meta property="article:author" content="Mofan">
+<meta property="article:tag" content="CTF">
+<meta property="article:tag" content="web">
+<meta property="article:tag" content="reverse">
+<meta property="article:tag" content="misc">
+<meta property="article:tag" content="UMassCTF">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2026/09/19/UMassCTF-2026-Writeup/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2026/09/19/UMassCTF-2026-Writeup/","path":"2026/09/19/UMassCTF-2026-Writeup/","title":"UMassCTF 2026 Writeup"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>UMassCTF 2026 Writeup | Pinkode神秘小作坊</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/bookmark.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","cdn":"//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Pinkode神秘小作坊</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">学习记录</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#UMassCTF-2026-Writeup"><span class="nav-number">1.</span> <span class="nav-text">UMassCTF 2026 Writeup</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E7%B4%A2%E5%BC%95"><span class="nav-number">1.1.</span> <span class="nav-text">题目索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BrOWSER-BOSS-FIGHT"><span class="nav-number">1.2.</span> <span class="nav-text">BrOWSER BOSS FIGHT</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E5%88%86%E6%9E%90"><span class="nav-number">1.2.1.</span> <span class="nav-text">题目分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E6%B3%95"><span class="nav-number">1.2.2.</span> <span class="nav-text">解法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#The-Accursed-Lego-Bin"><span class="nav-number">1.3.</span> <span class="nav-text">The Accursed Lego Bin</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#RSA-%E7%A7%8D%E5%AD%90%E6%81%A2%E5%A4%8D"><span class="nav-number">1.3.1.</span> <span class="nav-text">RSA 种子恢复</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%8D%E7%8E%B0%E6%B4%97%E7%89%8C%E5%B9%B6%E9%80%86%E5%90%91%E8%BF%98%E5%8E%9F"><span class="nav-number">1.3.2.</span> <span class="nav-text">复现洗牌并逆向还原</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Batcave-Bitflips"><span class="nav-number">1.4.</span> <span class="nav-text">Batcave Bitflips</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E5%88%86%E6%9E%90-1"><span class="nav-number">1.4.1.</span> <span class="nav-text">题目分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E5%A4%8D%E4%B8%89%E4%B8%AA-bug"><span class="nav-number">1.4.2.</span> <span class="nav-text">修复三个 bug</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Son-of-a-Sith"><span class="nav-number">1.5.</span> <span class="nav-text">Son of a Sith</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%BF%E7%B4%A2%E5%88%86%E6%9E%90"><span class="nav-number">1.5.1.</span> <span class="nav-text">线索分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E6%B3%95-1"><span class="nav-number">1.5.2.</span> <span class="nav-text">解法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Brick-by-Brick"><span class="nav-number">1.6.</span> <span class="nav-text">Brick by Brick</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF"><span class="nav-number">1.6.1.</span> <span class="nav-text">解题思路</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Mofan"
+      src="/images/1.jpg">
+  <p class="site-author-name" itemprop="name">Mofan</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">30</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/P1nk0d3" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;P1nk0d3" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:3513728203@qq.com" title="E-Mail → mailto:3513728203@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2026/09/19/UMassCTF-2026-Writeup/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/1.jpg">
+      <meta itemprop="name" content="Mofan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pinkode神秘小作坊">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="UMassCTF 2026 Writeup | Pinkode神秘小作坊">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          UMassCTF 2026 Writeup
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-09-19 20:00:00" itemprop="dateCreated datePublished" datetime="2026-09-19T20:00:00+08:00">2026-09-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-09-21 00:11:35" itemprop="dateModified" datetime="2026-09-21T00:11:35+08:00">2026-09-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="UMassCTF-2026-Writeup"><a href="#UMassCTF-2026-Writeup" class="headerlink" title="UMassCTF 2026 Writeup"></a>UMassCTF 2026 Writeup</h1><p>这篇文章整理 UMassCTF 2026 的几道题目。题目按照比赛名称集中记录，并在开头提供索引。</p>
+<h2 id="题目索引"><a href="#题目索引" class="headerlink" title="题目索引"></a>题目索引</h2><ul>
+<li><a href="#BrOWSER-BOSS-FIGHT">BrOWSER BOSS FIGHT</a></li>
+<li><a href="#The-Accursed-Lego-Bin">The Accursed Lego Bin</a></li>
+<li><a href="#Batcave-Bitflips">Batcave Bitflips</a></li>
+<li><a href="#Son-of-a-Sith">Son of a Sith</a></li>
+<li><a href="#Brick-by-Brick">Brick by Brick</a></li>
+</ul>
+<h2 id="BrOWSER-BOSS-FIGHT"><a href="#BrOWSER-BOSS-FIGHT" class="headerlink" title="BrOWSER BOSS FIGHT"></a>BrOWSER BOSS FIGHT</h2><h3 id="题目分析"><a href="#题目分析" class="headerlink" title="题目分析"></a>题目分析</h3><p>服务响应中直接提示了正确 key：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">under_the_doormat</span><br></pre></td></tr></table></figure>
+
+<p>但是前端表单提交逻辑把 key 改成了错误值，然后再进行重定向。因此问题不在 key 本身，而在前端校验流程。</p>
+<h3 id="解法"><a href="#解法" class="headerlink" title="解法"></a>解法</h3><p>打开浏览器控制台，临时覆盖表单的 <code>onsubmit</code>，让浏览器直接提交原始输入：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">'key-form'</span>).<span class="property">onsubmit</span> = <span class="function">() =&gt;</span> <span class="literal">true</span>;</span><br></pre></td></tr></table></figure>
+
+<p>进入 Castle 页面：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://browser-boss-fight.web.ctf.umasscybersec.org:48003/bowsers_castle.html</span><br></pre></td></tr></table></figure>
+
+<p>接下来需要找到一把斧子，砍断铁索桥的铁索。查看页面响应和脚本时，可以发现状态变量：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hasAxe = <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+
+<p>在控制台设置 Cookie 后刷新页面：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">document</span>.<span class="property">cookie</span> = <span class="string">"hasAxe=true; path=/"</span>;</span><br><span class="line">location.<span class="title function_">reload</span>();</span><br></pre></td></tr></table></figure>
+
+<p>刷新后即可获得页面中的 flag。原始材料没有记录具体 flag 字符串。</p>
+<h2 id="The-Accursed-Lego-Bin"><a href="#The-Accursed-Lego-Bin" class="headerlink" title="The Accursed Lego Bin"></a>The Accursed Lego Bin</h2><h3 id="RSA-种子恢复"><a href="#RSA-种子恢复" class="headerlink" title="RSA 种子恢复"></a>RSA 种子恢复</h3><p>明文 <code>I_LOVE_RNG</code> 只有 80 bit，而模数 <code>n</code> 为 4096 bit，因此：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">m^7 &lt; n</span><br><span class="line">m^49 &lt; n</span><br></pre></td></tr></table></figure>
+
+<p>题目中 RSA 加密的种子可以直接还原为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">plaintext = <span class="string">b"I_LOVE_RNG"</span></span><br><span class="line">m = <span class="built_in">int</span>.from_bytes(plaintext, <span class="string">"big"</span>)</span><br><span class="line">seed = m ** <span class="number">7</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="复现洗牌并逆向还原"><a href="#复现洗牌并逆向还原" class="headerlink" title="复现洗牌并逆向还原"></a>复现洗牌并逆向还原</h3><p>程序使用 Python 的伪随机数生成器，以 <code>seed * round</code> 作为种子，对 flag 的二进制位连续洗牌 10 次。恢复时按相反顺序重建逆置换：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> random</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">encrypted = <span class="built_in">bytes</span>.fromhex(</span><br><span class="line">    <span class="string">"a9fa3c5e51d4cea498554399848ad14aa0764e15"</span></span><br><span class="line">    <span class="string">"a6a2110b6613f5dc87fa70f17fafbba7eb5a2a5179"</span></span><br><span class="line">)</span><br><span class="line">seed = <span class="built_in">int</span>.from_bytes(<span class="string">b"I_LOVE_RNG"</span>, <span class="string">"big"</span>) ** <span class="number">7</span></span><br><span class="line"></span><br><span class="line">bits = []</span><br><span class="line"><span class="keyword">for</span> byte <span class="keyword">in</span> encrypted:</span><br><span class="line">    bits.extend(<span class="string">f"<span class="subst">{byte:08b}</span>"</span>)</span><br><span class="line"></span><br><span class="line">history = []</span><br><span class="line"><span class="keyword">for</span> round_number <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">11</span>):</span><br><span class="line">    indices = <span class="built_in">list</span>(<span class="built_in">range</span>(<span class="built_in">len</span>(bits)))</span><br><span class="line">    random.seed(seed * round_number)</span><br><span class="line">    random.shuffle(indices)</span><br><span class="line">    history.append(indices)</span><br><span class="line"></span><br><span class="line">current = bits[:]</span><br><span class="line"><span class="keyword">for</span> indices <span class="keyword">in</span> <span class="built_in">reversed</span>(history):</span><br><span class="line">    inverse = [<span class="number">0</span>] * <span class="built_in">len</span>(indices)</span><br><span class="line">    <span class="keyword">for</span> old_position, new_position <span class="keyword">in</span> <span class="built_in">enumerate</span>(indices):</span><br><span class="line">        inverse[new_position] = old_position</span><br><span class="line">    current = [current[inverse[i]] <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(current))]</span><br><span class="line"></span><br><span class="line">plaintext = <span class="built_in">bytes</span>(</span><br><span class="line">    <span class="built_in">int</span>(<span class="string">""</span>.join(current[i:i + <span class="number">8</span>]), <span class="number">2</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="built_in">len</span>(current), <span class="number">8</span>)</span><br><span class="line">)</span><br><span class="line"><span class="built_in">print</span>(plaintext.decode())</span><br></pre></td></tr></table></figure>
+
+<h2 id="Batcave-Bitflips"><a href="#Batcave-Bitflips" class="headerlink" title="Batcave Bitflips"></a>Batcave Bitflips</h2><h3 id="题目分析-1"><a href="#题目分析-1" class="headerlink" title="题目分析"></a>题目分析</h3><p>使用下面的命令查看 <code>.data</code> 段：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">objdump -s -j .data ./batcave</span><br></pre></td></tr></table></figure>
+
+<p>可以找到 <code>LICENSE_KEY</code>、<code>EXPECTED</code>、<code>FLAG</code> 和 <code>SBOX</code>。其中 <code>LICENSE_KEY</code> 是明文存储的。</p>
+<p>继续反汇编并还原流程，可以得到：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">expand_state -&gt; substitute -&gt; mix -&gt; rotate -&gt; derive_final</span><br></pre></td></tr></table></figure>
+
+<p>题目提示程序中存在三个 bug，需要分别修复。</p>
+<h3 id="修复三个-bug"><a href="#修复三个-bug" class="headerlink" title="修复三个 bug"></a>修复三个 bug</h3><ol>
+<li><p><strong><code>rotate()</code> 的移位量不一致</strong></p>
+<p>原代码左移 3 位、右移 6 位，两者之和不是 8，不能构成正确的 8 bit 循环左移。将右移量改为 5，使其成为循环左移 3 位。</p>
+</li>
+<li><p><strong>SBOX 存在重复值</strong></p>
+<p><code>SBOX[24]</code> 和 <code>SBOX[92]</code> 都是 <code>0x43</code>，同时缺少 <code>0x44</code>。将 <code>SBOX[24]</code> 改为 <code>0x44</code>，恢复 S 盒的双射性。</p>
+</li>
+<li><p><strong>解密使用了 OR</strong></p>
+<p><code>decrypt_flag()</code> 中使用 <code>|</code> 无法实现对称解密。将其改为 <code>^</code>，使用异或完成密钥解密。</p>
+</li>
+</ol>
+<p>修复后输入密钥：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">!_batman-robin-alfred_((67||67))</span><br></pre></td></tr></table></figure>
+
+<p>得到 flag：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UMASS{__p4tche5_0n_p4tche$__#}</span><br></pre></td></tr></table></figure>
+
+<h2 id="Son-of-a-Sith"><a href="#Son-of-a-Sith" class="headerlink" title="Son of a Sith"></a>Son of a Sith</h2><h3 id="线索分析"><a href="#线索分析" class="headerlink" title="线索分析"></a>线索分析</h3><p>题目台词：</p>
+<blockquote>
+<p>if there’s one thing I know, it’s that I hate sand</p>
+</blockquote>
+<p>这句台词指向《星球大战》中的阿纳金·天行者和塔图因。题目场景中的沙漠洞穴里有一个红色的 2×2 乐高砖块，也就是游戏中的 Red Power Brick。</p>
+<h3 id="解法-1"><a href="#解法-1" class="headerlink" title="解法"></a>解法</h3><p>在《乐高星球大战》系列中，Red Power Bricks 是关卡中的收集品。塔图因的关卡 <strong>Through the Jundland Wastes</strong> 中，红色砖块正好位于洞穴内，与题目场景相符。</p>
+<p>该红色砖块解锁的能力是 <strong>Fast Force</strong>，因此 flag 为：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UMASS{Fast_Force}</span><br></pre></td></tr></table></figure>
+
+<h2 id="Brick-by-Brick"><a href="#Brick-by-Brick" class="headerlink" title="Brick by Brick"></a>Brick by Brick</h2><h3 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h3><p>先访问 <code>robots.txt</code>，根据其中列出的路径找到第二个文件。题目的根目录存在文件读取参数：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/?file=</span><br></pre></td></tr></table></figure>
+
+<p>读取 <code>config.php</code> 后，可以发现管理员后台路径：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/dashboard-admin.php</span><br></pre></td></tr></table></figure>
+
+<p>直接读取该页面：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/?file=dashboard-admin.php</span><br></pre></td></tr></table></figure>
+
+<p>管理员页面会直接返回 flag。</p>
+<p>这道题的关键是先从 <code>robots.txt</code> 获得文件名，再利用 <code>file</code> 参数读取后台页面，而不是继续围绕前端页面寻找复杂的认证绕过。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CTF/" rel="tag"># CTF</a>
+              <a href="/tags/web/" rel="tag"># web</a>
+              <a href="/tags/reverse/" rel="tag"># reverse</a>
+              <a href="/tags/misc/" rel="tag"># misc</a>
+              <a href="/tags/UMassCTF/" rel="tag"># UMassCTF</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/09/18/BSidesSF-CTF-2026-Writeup/" rel="prev" title="BSidesSF CTF 2026 Writeup">
+                  <i class="fa fa-angle-left"></i> BSidesSF CTF 2026 Writeup
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/09/20/TexSAW-2026-Writeup/" rel="next" title="TexSAW 2026 Writeup">
+                  TexSAW 2026 Writeup <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+  
+  
+  <section class="post-comments">
+    <div class="comments-header">
+      <h2>
+        <span>💬</span>
+        评论与讨论
+      </h2>
+      <p>
+        分享你的想法和见解
+      </p>
+    </div>
+
+    
+    <div class="comments-container">
+    </div>
+  </section>
+  
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Mofan</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<div id="aplayer" aria-label="全局音乐播放器"></div>
+
+<script>
+(function() {
+  const THEME = {
+    cream: '#FFF3C9',
+    pink: '#F3B3CC',
+    cyan: '#ABE5E8',
+    ink: '#236c73'
+  };
+  const APLAYER_JS = 'https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js';
+  const APLAYER_CSS = 'https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css';
+  const GSAP_JS = 'https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js';
+  const SCROLL_TRIGGER_JS = 'https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js';
+
+  window.PinkodeEnhance = window.PinkodeEnhance || {};
+  const app = window.PinkodeEnhance;
+  app.pageTweens = app.pageTweens || [];
+  app.scrollTriggers = app.scrollTriggers || [];
+  app.bgTweens = app.bgTweens || [];
+
+  function loadStyle(href) {
+    if ([...document.styleSheets].some(sheet => sheet.href && sheet.href.includes(href))) {
+      return Promise.resolve();
+    }
+    if (document.querySelector(`link[href="${href}"]`)) return Promise.resolve();
+    return new Promise((resolve, reject) => {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = href;
+      link.onload = resolve;
+      link.onerror = reject;
+      document.head.appendChild(link);
+    });
+  }
+
+  function loadScript(src, globalName) {
+    if (globalName && window[globalName]) return Promise.resolve(window[globalName]);
+    const existing = document.querySelector(`script[src="${src}"]`);
+    if (existing) {
+      return new Promise(resolve => {
+        if (!globalName || window[globalName]) {
+          resolve(window[globalName]);
+          return;
+        }
+        existing.addEventListener('load', () => resolve(window[globalName]), { once: true });
+      });
+    }
+    return new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = src;
+      script.defer = true;
+      script.onload = () => resolve(globalName ? window[globalName] : true);
+      script.onerror = reject;
+      document.head.appendChild(script);
+    });
+  }
+
+  function ensureAPlayer() {
+    return loadStyle(APLAYER_CSS)
+      .then(() => loadScript(APLAYER_JS, 'APlayer'))
+      .then(() => {
+        if (app.aplayerInstance) return app.aplayerInstance;
+        const container = document.getElementById('aplayer');
+        if (!container || typeof APlayer === 'undefined') return null;
+        app.aplayerInstance = new APlayer({
+          container,
+          fixed: true,
+          mini: false,
+          autoplay: false,
+          theme: THEME.pink,
+          loop: 'all',
+          order: 'list',
+          preload: 'auto',
+          volume: 0.65,
+          mutex: true,
+          lrcType: 0,
+          audio: [{
+            name: 'My Foolish Heart~',
+            artist: '椎名林檎',
+            url: '/music/bg-music.mp3',
+            cover: '/images/music-covers/R.jpg',
+            theme: THEME.cyan
+          }]
+        });
+        return app.aplayerInstance;
+      })
+      .catch(error => console.warn('[PinkodeEnhance] APlayer load failed:', error));
+  }
+
+  function ensureGSAP() {
+    return loadScript(GSAP_JS, 'gsap')
+      .then(() => loadScript(SCROLL_TRIGGER_JS, 'ScrollTrigger'))
+      .then(() => {
+        if (window.gsap && window.ScrollTrigger) {
+          gsap.registerPlugin(ScrollTrigger);
+          gsap.defaults({ duration: 0.65, ease: 'power3.out' });
+        }
+        return window.gsap;
+      })
+      .catch(error => console.warn('[PinkodeEnhance] GSAP load failed:', error));
+  }
+
+  function clearPageMotion() {
+    app.pageTweens.forEach(tween => tween && tween.kill && tween.kill());
+    app.pageTweens = [];
+    if (window.ScrollTrigger) {
+      app.scrollTriggers.forEach(trigger => trigger && trigger.kill && trigger.kill());
+      app.scrollTriggers = [];
+    }
+  }
+
+  function ensureCuteBackground() {
+    let layer = document.querySelector('.pinkode-bg-layer');
+    if (!layer) {
+      layer = document.createElement('div');
+      layer.className = 'pinkode-bg-layer';
+      layer.setAttribute('aria-hidden', 'true');
+      document.body.prepend(layer);
+    }
+    if (layer.dataset.pinkodeReady) return;
+    layer.dataset.pinkodeReady = 'true';
+
+    const specs = [
+      ['star', 'pink', 5, 10, 30, 0.72], ['heart', 'cyan', 18, 16, 34, 0.64],
+      ['flower', 'pink', 33, 9, 42, 0.62], ['bubble', 'cyan', 52, 13, 54, 0.46],
+      ['petal', 'pink', 68, 8, 30, 0.68], ['bow', 'cyan', 84, 16, 48, 0.56],
+      ['star', 'cyan', 94, 6, 28, 0.66], ['heart', 'pink', 8, 34, 38, 0.64],
+      ['flower', 'cyan', 23, 46, 44, 0.56], ['bubble', 'pink', 40, 33, 64, 0.38],
+      ['petal', 'cyan', 58, 43, 28, 0.62], ['bow', 'pink', 76, 36, 46, 0.58],
+      ['star', 'pink', 91, 48, 26, 0.64], ['heart', 'cyan', 4, 65, 34, 0.58],
+      ['flower', 'pink', 17, 82, 40, 0.58], ['bubble', 'cyan', 32, 68, 58, 0.4],
+      ['petal', 'pink', 49, 78, 30, 0.62], ['bow', 'cyan', 64, 68, 44, 0.52],
+      ['star', 'cyan', 80, 86, 28, 0.62], ['heart', 'pink', 94, 76, 36, 0.58],
+      ['flower', 'cyan', 2, 92, 36, 0.5], ['bubble', 'pink', 88, 96, 62, 0.34],
+      ['petal', 'cyan', 44, 4, 22, 0.58], ['bow', 'pink', 56, 94, 38, 0.5],
+      ['star', 'pink', 72, 58, 22, 0.6], ['heart', 'cyan', 28, 92, 30, 0.52],
+      ['flower', 'pink', 98, 28, 34, 0.5], ['bubble', 'cyan', 12, 52, 48, 0.38]
+    ];
+
+    const fragment = document.createDocumentFragment();
+    specs.forEach(([shape, colorName, x, y, size, opacity], index) => {
+      const item = document.createElement('i');
+      item.className = `pinkode-floatie pinkode-floatie--${shape}`;
+      item.style.setProperty('--x', `${x}%`);
+      item.style.setProperty('--y', `${y}%`);
+      item.style.setProperty('--s', `${size}px`);
+      item.style.setProperty('--o', opacity);
+      item.style.setProperty('--c', colorName === 'pink' ? THEME.pink : THEME.cyan);
+      item.dataset.floatIndex = index;
+      if (shape === 'bow') item.appendChild(document.createElement('span'));
+      fragment.appendChild(item);
+    });
+    layer.appendChild(fragment);
+  }
+
+  function animateCuteBackground() {
+    if (!window.gsap || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    ensureCuteBackground();
+    if (app.bgTweens.length) return;
+    const items = document.querySelectorAll('.pinkode-floatie');
+    items.forEach((item, index) => {
+      const driftX = index % 2 ? 58 : -58;
+      const driftY = index % 3 ? -70 : 70;
+      const duration = 4.8 + (index % 6) * 0.72;
+      app.bgTweens.push(gsap.to(item, {
+        x: driftX,
+        y: driftY,
+        rotation: index % 2 ? 36 : -36,
+        scale: 1.08 + (index % 4) * 0.08,
+        duration,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+        delay: index * 0.16
+      }));
+    });
+  }
+
+  function animatePage() {
+    if (!window.gsap) return;
+    clearPageMotion();
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const main = document.querySelector('.main-inner');
+    const headerItems = document.querySelectorAll('.brand, .menu-item, .site-search');
+    const heroParts = document.querySelectorAll('.home-hero__copy, .home-hero__mark, .home-hero__actions');
+    const cards = document.querySelectorAll('.featured-post, .post-item, .post-block, .collection-title, .category-list-item, .tag-cloud a, .archive .post-header');
+    const buttons = document.querySelectorAll('.btn, .post-button .btn, .pagination a, .featured-post a, .post-item a, .menu-item a, .sidebar-button a');
+
+    gsap.set([main, ...cards], { willChange: 'transform, opacity' });
+    app.pageTweens.push(gsap.fromTo(main, {
+      autoAlpha: 0,
+      y: reduceMotion ? 0 : 18,
+      filter: reduceMotion ? 'none' : 'blur(8px)'
+    }, {
+      autoAlpha: 1,
+      y: 0,
+      filter: 'blur(0px)',
+      duration: reduceMotion ? 0.01 : 0.7,
+      clearProps: 'filter,willChange'
+    }));
+
+    if (headerItems.length) {
+      app.pageTweens.push(gsap.fromTo(headerItems, {
+        autoAlpha: 0,
+        y: reduceMotion ? 0 : -12
+      }, {
+        autoAlpha: 1,
+        y: 0,
+        stagger: 0.04,
+        duration: reduceMotion ? 0.01 : 0.55,
+        clearProps: 'willChange'
+      }));
+    }
+
+    if (heroParts.length) {
+      app.pageTweens.push(gsap.fromTo(heroParts, {
+        autoAlpha: 0,
+        y: reduceMotion ? 0 : 24,
+        scale: reduceMotion ? 1 : 0.98
+      }, {
+        autoAlpha: 1,
+        y: 0,
+        scale: 1,
+        stagger: 0.08,
+        duration: reduceMotion ? 0.01 : 0.78,
+        ease: 'expo.out'
+      }));
+    }
+
+    if (cards.length && window.ScrollTrigger && !reduceMotion) {
+      const batch = ScrollTrigger.batch(cards, {
+        start: 'top 86%',
+        once: true,
+        onEnter: elements => gsap.fromTo(elements, {
+          autoAlpha: 0,
+          y: 32,
+          scale: 0.985
+        }, {
+          autoAlpha: 1,
+          y: 0,
+          scale: 1,
+          stagger: 0.08,
+          duration: 0.8,
+          overwrite: true,
+          clearProps: 'willChange'
+        })
+      });
+      app.scrollTriggers.push(...batch);
+    }
+
+    buttons.forEach(button => {
+      if (button.dataset.pinkodeHover) return;
+      button.dataset.pinkodeHover = 'true';
+      button.addEventListener('mouseenter', () => gsap.to(button, { y: -2, scale: 1.018, duration: 0.22, overwrite: 'auto' }));
+      button.addEventListener('mouseleave', () => gsap.to(button, { y: 0, scale: 1, duration: 0.22, overwrite: 'auto' }));
+    });
+
+    if (window.ScrollTrigger) {
+      setTimeout(() => ScrollTrigger.refresh(), 120);
+    }
+  }
+
+  function enhanceBackToTop() {
+    const button = document.querySelector('.back-to-top');
+    if (!button || button.dataset.pinkodeBackTop) return;
+    button.dataset.pinkodeBackTop = 'true';
+    button.setAttribute('title', '回到顶部');
+    if (!window.gsap) return;
+
+    gsap.set(button, { autoAlpha: 0, y: 16, scale: 0.88, pointerEvents: 'none' });
+    const setVisible = visible => {
+      gsap.to(button, {
+        autoAlpha: visible ? 1 : 0,
+        y: visible ? 0 : 16,
+        scale: visible ? 1 : 0.88,
+        pointerEvents: visible ? 'auto' : 'none',
+        duration: 0.28,
+        overwrite: 'auto'
+      });
+    };
+    const onScroll = () => setVisible(window.scrollY > Math.min(360, window.innerHeight * 0.45));
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    button.addEventListener('click', event => {
+      event.preventDefault();
+      const scrollState = { y: window.scrollY };
+      gsap.to(scrollState, {
+        y: 0,
+        duration: 0.75,
+        ease: 'power3.inOut',
+        onUpdate: () => window.scrollTo(0, scrollState.y)
+      });
+    });
+  }
+
+  function enhanceMenus() {
+    const toggle = document.querySelector('.site-nav-toggle .toggle');
+    const siteNav = document.querySelector('.site-nav');
+    if (!toggle || !siteNav || toggle.dataset.pinkodeMenu) return;
+    toggle.dataset.pinkodeMenu = 'true';
+    toggle.addEventListener('click', () => {
+      if (!window.gsap || !document.body.classList.contains('site-nav-on')) return;
+      gsap.fromTo('.site-nav .menu-item', {
+        autoAlpha: 0,
+        y: -10
+      }, {
+        autoAlpha: 1,
+        y: 0,
+        stagger: 0.045,
+        duration: 0.35,
+        overwrite: true
+      });
+    });
+  }
+
+  function refreshComments() {
+    const container = document.querySelector('.comments-container');
+    if (!container) return;
+    const giscus = container.querySelector('script[src*="giscus.app/client.js"], iframe.giscus-frame');
+    if (giscus) return;
+    const script = document.createElement('script');
+    script.src = 'https://giscus.app/client.js';
+    script.setAttribute('data-repo', 'P1nk0d3/P1nk0d3.github.io');
+    script.setAttribute('data-repo-id', 'R_kgDOQm6oMw');
+    script.setAttribute('data-category', 'Announcements');
+    script.setAttribute('data-category-id', 'DIC_kwDOQm6oM84CzxkR');
+    script.setAttribute('data-mapping', 'pathname');
+    script.setAttribute('data-strict', '0');
+    script.setAttribute('data-reactions-enabled', '1');
+    script.setAttribute('data-emit-metadata', '0');
+    script.setAttribute('data-input-position', 'top');
+    script.setAttribute('data-theme', 'preferred_color_scheme');
+    script.setAttribute('data-lang', 'zh-CN');
+    script.setAttribute('data-loading', 'lazy');
+    script.crossOrigin = 'anonymous';
+    script.async = true;
+    container.appendChild(script);
+  }
+
+  function fixCompatibility() {
+    if (/firefox/i.test(navigator.userAgent)) {
+      document.querySelector('meta[name="theme-color"]')?.setAttribute('content', THEME.cream);
+    }
+    if (/safari/i.test(navigator.userAgent) && !/chrome/i.test(navigator.userAgent)) {
+      document.querySelectorAll('input[autocapitalize]').forEach(input => input.removeAttribute('autocapitalize'));
+    }
+  }
+
+  function initPageEnhancements() {
+    ensureCuteBackground();
+    ensureGSAP().then(() => {
+      animateCuteBackground();
+      animatePage();
+      enhanceBackToTop();
+      enhanceMenus();
+    });
+    refreshComments();
+    fixCompatibility();
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    ensureAPlayer();
+    initPageEnhancements();
+  });
+  document.addEventListener('page:loaded', initPageEnhancements);
+  document.addEventListener('pjax:send', clearPageMotion);
+  document.addEventListener('click', () => {
+    document.querySelectorAll('audio').forEach(audio => { audio.volume = Math.min(audio.volume || 0.65, 0.65); });
+  }, { once: true });
+})();
+</script>
+
+</body>
+</html>

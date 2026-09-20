@@ -290,7 +290,7 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="从-0-开始的微服务开发"><a href="#从-0-开始的微服务开发" class="headerlink" title="从 0 开始的微服务开发"></a>从 0 开始的微服务开发</h1><h2 id="第一轮：先把服务跑起来"><a href="#第一轮：先把服务跑起来" class="headerlink" title="第一轮：先把服务跑起来"></a>第一轮：先把服务跑起来</h2><p>Spring Boot 代理服务器没有使用 HTTP，URL 又自动隐藏了 HTTPS 前缀，结果子模块重复构建了 7 次仍然失败。</p>
+    <div class="post-body" itemprop="articleBody"><link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="从-0-开始的微服务开发"><a href="#从-0-开始的微服务开发" class="headerlink" title="从 0 开始的微服务开发"></a>从 0 开始的微服务开发</h1><h2 id="第一轮：先把服务跑起来"><a href="#第一轮：先把服务跑起来" class="headerlink" title="第一轮：先把服务跑起来"></a>第一轮：先把服务跑起来</h2><p>Spring Boot 代理服务器没有使用 HTTP，URL 又自动隐藏了 HTTPS 前缀，结果子模块重复构建了 7 次仍然失败。</p>
 <p>更离谱的是，<code>pom.xml</code>、项目 SDK 和 Maven 分别使用 Java 17、Java 25 和 Java 11。我也不知道自己是怎么把它们拼到一起的，反正 <code>package</code> 报错像烟花一样到处绽放。</p>
 <p>还挺好玩。</p>
 <h2 id="第二轮：从彩叶看见电线杆里的八千代"><a href="#第二轮：从彩叶看见电线杆里的八千代" class="headerlink" title="第二轮：从彩叶看见电线杆里的八千代"></a>第二轮：从彩叶看见电线杆里的八千代</h2><p>为什么同一套 package 配置，一部分请求走代理，一部分请求走原服务器？气笑了。</p>

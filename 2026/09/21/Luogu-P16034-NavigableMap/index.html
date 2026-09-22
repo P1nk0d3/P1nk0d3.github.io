@@ -190,12 +190,12 @@
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-count">47</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -289,7 +289,7 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="Luogu-P16034：NavigableMap-与连锁更新"><a href="#Luogu-P16034：NavigableMap-与连锁更新" class="headerlink" title="Luogu P16034：NavigableMap 与连锁更新"></a>Luogu P16034：NavigableMap 与连锁更新</h1><p>题目地址：<a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P16034">P16034</a></p>
+    <div class="post-body" itemprop="articleBody"><h1 id="Luogu-P16034：NavigableMap-与连锁更新"><a href="#Luogu-P16034：NavigableMap-与连锁更新" class="headerlink" title="Luogu P16034：NavigableMap 与连锁更新"></a>Luogu P16034：NavigableMap 与连锁更新</h1><p>题目地址：<a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P16034">P16034</a></p>
 <p>这题使用 <code>NavigableMap</code> 维护有序 key 及其计数。当某个 key 的计数达到 5 后，它会被移除，同时把相邻 key 的计数各增加 1；相邻 key 达到阈值后继续递归处理。</p>
 <h2 id="实现要点"><a href="#实现要点" class="headerlink" title="实现要点"></a>实现要点</h2><ul>
 <li>使用 <code>TreeMap</code> 维护 key 的有序关系。</li>

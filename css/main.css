@@ -1251,7 +1251,7 @@ pre code {
     vertical-align: middle;
   }
   .links-of-author a::before {
-    background: #f5ff2b;
+    background: #34088b;
     display: inline-block;
     margin-right: 3px;
     transform: translateY(-2px);
@@ -3104,6 +3104,25 @@ body {
 .post-body a:hover {
   background: var(--pinkode-pink) !important;
   color: var(--pinkode-blue-dark) !important;
+}
+.essay-post .post-body {
+  line-height: 2.05;
+}
+.essay-post .post-body p {
+  margin: 0 0 1.05em;
+  text-indent: 2em;
+  line-height: inherit;
+}
+.essay-post .post-body p:last-child {
+  margin-bottom: 0;
+}
+@media (max-width: 767px) {
+  .essay-post .post-body {
+    line-height: 1.95;
+  }
+  .essay-post .post-body p {
+    text-indent: 1.5em;
+  }
 }
 .menu .menu-item a,
 .sidebar-nav li {

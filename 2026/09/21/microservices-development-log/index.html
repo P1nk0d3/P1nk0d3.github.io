@@ -20,15 +20,15 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"giscus","storage":true,"lazyload":true,"nav":{"giscus":{"text":"GitHub 评论","order":1}}},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="从0开始的微服务开发spring boot代理服务器没用http，然后url自动隐藏https前缀，导致子模块重复构建7次仍失败pom，项目sdk，maven分别使用java17，25，11，我也不知道我怎么做到的，package的报错满天飞hhh太好玩了 从彩叶看见电线杆里的八千代开始的微服务开发为什么package一部分走代理一部分走原服务器啊气笑了还有我建立子模块不应该自动在父模块中modu">
+    <meta name="description" content="从0开始的微服务开发　　spring boot代理服务器没用http，然后url自动隐藏https前缀，导致子模块重复构建7次仍失败　　pom，项目sdk，maven分别使用java17，25，11，我也不知道我怎么做到的，package的报错满天飞　　hhh太好玩了 　　从彩叶看见电线杆里的八千代开始的微服务开发　　为什么package一部分走代理一部分走原服务器啊气笑了　　还有我建立子模块">
 <meta property="og:type" content="article">
 <meta property="og:title" content="从0开始的微服务开发">
 <meta property="og:url" content="http://example.com/2026/09/21/microservices-development-log/index.html">
 <meta property="og:site_name" content="Pinkode神秘小作坊">
-<meta property="og:description" content="从0开始的微服务开发spring boot代理服务器没用http，然后url自动隐藏https前缀，导致子模块重复构建7次仍失败pom，项目sdk，maven分别使用java17，25，11，我也不知道我怎么做到的，package的报错满天飞hhh太好玩了 从彩叶看见电线杆里的八千代开始的微服务开发为什么package一部分走代理一部分走原服务器啊气笑了还有我建立子模块不应该自动在父模块中modu">
+<meta property="og:description" content="从0开始的微服务开发　　spring boot代理服务器没用http，然后url自动隐藏https前缀，导致子模块重复构建7次仍失败　　pom，项目sdk，maven分别使用java17，25，11，我也不知道我怎么做到的，package的报错满天飞　　hhh太好玩了 　　从彩叶看见电线杆里的八千代开始的微服务开发　　为什么package一部分走代理一部分走原服务器啊气笑了　　还有我建立子模块">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-09-21T10:00:00.000Z">
-<meta property="article:modified_time" content="2026-09-22T15:43:58.641Z">
+<meta property="article:modified_time" content="2026-09-23T05:53:32.224Z">
 <meta property="article:author" content="Mofan">
 <meta property="article:tag" content="微服务">
 <meta property="article:tag" content="Spring Boot">
@@ -266,7 +266,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-09-22 23:43:58" itemprop="dateModified" datetime="2026-09-22T23:43:58+08:00">2026-09-22</time>
+      <time title="修改时间：2026-09-23 13:53:32" itemprop="dateModified" datetime="2026-09-23T13:53:32+08:00">2026-09-23</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -294,9 +294,9 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>从0开始的微服务开发<br>spring boot代理服务器没用http，然后url自动隐藏https前缀，导致子模块重复构建7次仍失败<br>pom，项目sdk，maven分别使用java17，25，11，我也不知道我怎么做到的，package的报错满天飞<br>hhh太好玩了</p>
-<p>从彩叶看见电线杆里的八千代开始的微服务开发<br>为什么package一部分走代理一部分走原服务器啊气笑了<br>还有我建立子模块不应该自动在父模块中modules进行子模块管理吗<br>然后子模块对父模块的依赖也要自己手写拉完了要是codex在全干完了<br>还有ideaj里为啥不能在软件包下新建软件包<br>比如我有个pinkode.framework.common<br>我要在下面新建exception和response两个包<br>我新建response后就变成pinkode.framework.common.response，我还要在上一级目录的下面新建个pinkode.framework.common.exception包，但如果上一级目录也是个软件包那就要再上一级目录气笑了</p>
-<p>第 1 章 纵身亡魔心仍不悔<br>“pinkode，乖乖地交出春秋蝉，我给你个痛快！”<br>最低0.03元&#x2F;天开通知乎盐选会员…<br>如果此书侵犯了您的权益，请点击访问作者版权投诉快速通道<br>从群敌环伺开始的微服务开发<br>今天手贱更新了一下idea立马刷新出超多神秘特性<br>注意到在软件包a.b.c下新建目录d会被idea直接合并成a.b.c.d<br>但我这真没搞懂软件包和文件目录有啥区别<br>下面那个是我新建一个目录a.b，然后这个目录名字就是a.b，上面那个我直接访问文件夹在文件夹里建了目录a和下面的目录b，然后idea又帮我自动合并了，但这又不是软件包啊，我还以为软件包才能支持这个语法呢，然后我昨天的被合并的包名更新完又不给我合并了，hyw<br>不管了能跑就行<br>可恶啊跑不掉了只能自爆了，希望这刚炼成的春秋蝉有用</p>
+    <div class="post-body" itemprop="articleBody"><link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>　　从0开始的微服务开发<br>　　spring boot代理服务器没用http，然后url自动隐藏https前缀，导致子模块重复构建7次仍失败<br>　　pom，项目sdk，maven分别使用java17，25，11，我也不知道我怎么做到的，package的报错满天飞<br>　　hhh太好玩了</p>
+<p>　　从彩叶看见电线杆里的八千代开始的微服务开发<br>　　为什么package一部分走代理一部分走原服务器啊气笑了<br>　　还有我建立子模块不应该自动在父模块中modules进行子模块管理吗<br>　　然后子模块对父模块的依赖也要自己手写拉完了要是codex在全干完了<br>　　还有ideaj里为啥不能在软件包下新建软件包<br>　　比如我有个pinkode.framework.common<br>　　我要在下面新建exception和response两个包<br>　　我新建response后就变成pinkode.framework.common.response，我还要在上一级目录的下面新建个pinkode.framework.common.exception包，但如果上一级目录也是个软件包那就要再上一级目录气笑了</p>
+<p>　　第 1 章 纵身亡魔心仍不悔<br>　　“pinkode，乖乖地交出春秋蝉，我给你个痛快！”<br>　　最低0.03元&#x2F;天开通知乎盐选会员…<br>　　如果此书侵犯了您的权益，请点击访问作者版权投诉快速通道<br>　　从群敌环伺开始的微服务开发<br>　　今天手贱更新了一下idea立马刷新出超多神秘特性<br>　　注意到在软件包a.b.c下新建目录d会被idea直接合并成a.b.c.d<br>　　但我这真没搞懂软件包和文件目录有啥区别<br>　　下面那个是我新建一个目录a.b，然后这个目录名字就是a.b，上面那个我直接访问文件夹在文件夹里建了目录a和下面的目录b，然后idea又帮我自动合并了，但这又不是软件包啊，我还以为软件包才能支持这个语法呢，然后我昨天的被合并的包名更新完又不给我合并了，hyw<br>　　不管了能跑就行<br>　　可恶啊跑不掉了只能自爆了，希望这刚炼成的春秋蝉有用</p>
 
     </div>
 

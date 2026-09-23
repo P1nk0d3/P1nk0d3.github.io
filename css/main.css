@@ -1251,7 +1251,7 @@ pre code {
     vertical-align: middle;
   }
   .links-of-author a::before {
-    background: #34088b;
+    background: #5745ff;
     display: inline-block;
     margin-right: 3px;
     transform: translateY(-2px);
@@ -3110,7 +3110,7 @@ body {
 }
 .essay-post .post-body p {
   margin: 0 0 1.05em;
-  text-indent: 2em;
+  text-indent: 0;
   line-height: inherit;
 }
 .essay-post .post-body p:last-child {
@@ -3121,7 +3121,7 @@ body {
     line-height: 1.95;
   }
   .essay-post .post-body p {
-    text-indent: 1.5em;
+    text-indent: 0;
   }
 }
 .menu .menu-item a,

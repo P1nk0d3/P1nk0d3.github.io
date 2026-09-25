@@ -28,7 +28,7 @@
 <meta property="og:description" content="近况 🐾对不起，我不学 Crypto 了喵！不学网安了喵！网安完蛋了喵！！！ 一切大概都从我没能在截止日期前提交纸质成绩单开始。后来我被数院拒了，于是来到了网安。先摆了半年，接着开始打 CTF、学 Crypto，又转头刷算法，大二下学期甚至开始考虑考研。 直到某一天，一个用豆包编程的猫娘让我试了一次 Codex。 啊啊啊，毁灭吧。 接下来想做什么 ✨我准备随便速成一下 Java 后端，先捞几年米">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-12-11T09:21:14.000Z">
-<meta property="article:modified_time" content="2026-09-20T16:10:23.351Z">
+<meta property="article:modified_time" content="2026-09-25T04:32:04.772Z">
 <meta property="article:author" content="Mofan">
 <meta property="article:tag" content="CRYPTO,ai安全">
 <meta name="twitter:card" content="summary">
@@ -168,7 +168,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%91%E5%86%B5-%F0%9F%90%BE"><span class="nav-number">1.</span> <span class="nav-text">近况 🐾</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A5%E4%B8%8B%E6%9D%A5%E6%83%B3%E5%81%9A%E4%BB%80%E4%B9%88-%E2%9C%A8"><span class="nav-number">2.</span> <span class="nav-text">接下来想做什么 ✨</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%91%E5%86%B5-%F0%9F%90%BE"><span class="nav-number">1.</span> <span class="nav-text">近况 🐾</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A5%E4%B8%8B%E6%9D%A5%E6%83%B3%E5%81%9A%E4%BB%80%E4%B9%88-%E2%9C%A8"><span class="nav-number">2.</span> <span class="nav-text">接下来想做什么 ✨</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%AD%E8%A8%80%E5%8F%88%E8%BD%AC%E4%BA%86%E5%96%B5-%F0%9F%90%B9"><span class="nav-number">3.</span> <span class="nav-text">语言又转了喵 🐹</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web4-%E9%87%8C%E5%9C%A8%E5%81%9A%E4%BB%80%E4%B9%88-%F0%9F%9B%A0%EF%B8%8F"><span class="nav-number">4.</span> <span class="nav-text">web4 里在做什么 🛠️</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -246,6 +246,21 @@
 <p>可是，这也不是我真正想要的哇。</p>
 <p>我想看到的是：AI 机器人取代绝大多数岗位，然后人类狠狠享福的世界口牙！也许那才是自由吧。</p>
 <p>所以，哪怕现在看起来有点乱，我还是会为了一个有未来的未来，努力把能学的东西学一点，把想做的东西做一点。</p>
+<h2 id="语言又转了喵-🐹"><a href="#语言又转了喵-🐹" class="headerlink" title="语言又转了喵 🐹"></a>语言又转了喵 🐹</h2><p>在写了三个月 Java 之后，我又进行了一番深刻的思考：决定转 Go 后端。</p>
+<p>不是 Java 不好，主要是我突然又想做点不太像传统业务系统的东西了。比如让 Agent 自己理解需求，去发现合适的物理机器，锁定资源，派发任务，然后拿着执行证据去验证结果，最后再结算费用。</p>
+<p>这听起来已经不像“写几个接口然后连数据库”了，比较像是把机器、任务、Agent、验证和钱全都塞进同一个状态机里，想想就很适合把自己折磨得很开心。</p>
+<h2 id="web4-里在做什么-🛠️"><a href="#web4-里在做什么-🛠️" class="headerlink" title="web4 里在做什么 🛠️"></a>web4 里在做什么 🛠️</h2><p>我最近在 <code>D:\codex小项目\web4</code> 里做了一个叫 <strong>PHYSIO</strong> 的原型。它的目标是做一个去中心化的物理资源调度协议：用户只需要提出需求，Agent 负责寻找资源、购买资源、调用机器、提交证据，验证层确认任务确实按约完成之后，才进入结算。</p>
+<p>目前里面主要有几部分：</p>
+<ul>
+<li>用 Go 作为 PoC 的主要方向，计划让 Linux Daemon 和任务运行时常驻在物理机器上；</li>
+<li>把任务拆成 <code>Discover</code>、<code>Reserve</code>、<code>Execute</code>、<code>Verify</code>、<code>Settle</code> 几个阶段；</li>
+<li>记录资源规格、区域、价格、可用性和可信度，不让“看起来在线”直接等于“可以安全执行任务”；</li>
+<li>给每次执行生成 receipt、输入清单、输出承诺和验证结果，让机器说自己做完了不再是唯一证据；</li>
+<li>设计托管、验证、挑战和结算流程，避免任务还没验证就把钱直接发出去。</li>
+</ul>
+<p>现在的 <code>web4</code> 还不是一个已经接上真实链、真实硬件和真实支付的生产系统。它更像是协议研究、架构草图和控制台 Demo：界面里可以看到资源市场、任务流水线、验证证据、Escrow 和事件流，底层事件目前是模拟的。</p>
+<p>但我好像终于找到一点比单纯写业务更想做的东西了。Go 只是语言，真正让我感兴趣的是：能不能把现实里的机器变成 Agent 可以理解、调用、验证和结算的资源。</p>
+<p>所以，Java 写到这里先放一放，接下来去写 Go。希望这次不要三个月后又突然宣布转 Rust 喵。</p>
 <p>先这样喵。 </p>
 
       </div>
